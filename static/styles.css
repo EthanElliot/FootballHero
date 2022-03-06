@@ -17,13 +17,19 @@
   --text-color-3: #ffffff;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 nav {
-  position: sticky;
-  -webkit-position: sticky;
   width: 100%;
   height: 80px;
   top: 0;
   transition: 0.2s ease-in-out;
+  position: fixed;
+  -webkit-position: fixed;
+  z-index: 10;
+  background-color: var(--background-colour);
 }
 
 .navigation {
@@ -47,7 +53,6 @@ nav {
   display: flex;
 }
 .nav-button {
-  margin-left: 10px;
   height: 40px;
   width: 90px;
   padding: auto;
@@ -60,6 +65,7 @@ nav {
 }
 
 #signin-button {
+  margin-left: 10px;
   background-color: var(--main-color);
   color: var(--text-color-3);
 }
@@ -71,5 +77,108 @@ nav {
 }
 
 .hero {
-  height: 200vh;
+  height: Calc(100vh - 80px);
+  width: 60%;
+  display: flex;
+  align-items: center;
+  transform: translateY(-10%);
+  margin: 0px auto;
+  margin-top: 5%;
+  justify-content: space-between;
+}
+
+.hero-text h2 {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 80px;
+  margin-bottom: 5%;
+}
+
+.hero-text h3 {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 30px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-color-2);
+  margin-bottom: 8%;
+}
+
+#hero-button {
+  background-color: var(--main-color);
+  color: var(--text-color-3);
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#hero-button span {
+  transform: translate(50%, 50%);
+  width: 10px;
+  align-self: center;
+}
+
+.hero-image {
+  display: flex;
+  align-items: center;
+}
+
+.hero-image img {
+  height: 100%;
+
+  float: left;
+  position: absolute;
+  z-index: -100;
+  transform: translate(-100%, 10%);
+}
+
+.hero-down-arrow {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 20px);
+  font-size: 30px;
+  color: var(--secondary-color);
+}
+
+.about {
+  height: 50vh;
+  display: flex;
+  z-index: 100;
+}
+
+.about-section {
+  width: 50%;
+  height: 100%;
+}
+
+.our-story {
+  background-color: var(--main-color);
+}
+
+.our-people {
+  background-color: var(--secondary-color);
+}
+
+.our-product {
+  height: 100vh;
+}
+
+footer {
+  height: 50px;
+  width: 100%;
+  box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--main-color);
+}
+
+@media screen and (max-width: 1200px) {
+  .hero-image {
+    display: none;
+  }
 }
