@@ -9,13 +9,13 @@
 </head>
 <body>
     <div class="sign-wrapper signin-wrapper">
-        <div class="signin">
+        <div class="sign">
             <div class="sign-section"> 
-                <div>
-                    <p>Sign Up</p>
+                <div class="sign-formwrapper ">
+                    <p>Sign In.</p>
                     <form action="" method="post">
-                        <input type="text">
-                        <input type="text">
+                        <input type="text" placeholder='username' class="sign-text signin-text">
+                        <input type="text"  placeholder='password' class="sign-text signin-text">
                         <br>
                         <label for="fogot-password"> <a href=""> forgot my password?</a></label>
                         <br>
@@ -27,10 +27,10 @@
                     </form>
                 </div>
             </div>
-            <div class="sign-section sign-section-blue">
-                <div>
+            <div class="sign-section sign-section-blue ">
+                <div class="signin-section-blue">
                     <p>Dont Have a <br>account?</p>
-                    <button class="button sign-button" onclick="location.href='/signup';">Sign Up<span class="iconify" data-icon="akar-icons:arrow-right"></span></button>
+                    <button class="button signin-button" onclick="location.href='/signup';">Sign In<span class="iconify" data-icon="akar-icons:arrow-right"></span></button>
                 </div>
             </div>
         </div>
