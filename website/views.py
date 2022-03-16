@@ -13,7 +13,6 @@ def home():
 def dashboard():
     if 'user' in session:
         user = session['user']
-        print(user)
         return render_template('dashboard.html', username=user)
     else:
         return redirect((url_for('auth.signin')))

@@ -14,6 +14,15 @@
                 <div class="sign-section sign-section-blue"> 
                     <div class="sign-formwrapper">
                         <p>Sign Up.</p>
+                        {%with messages = get_flashed_messages()%}
+                            {% if messages %}
+                                {% for message in messages %} 
+                                    <div class="form_errormessage_wrapper" id='form_error'> 
+                                        <p class="form_errormessage">{{ message }} <span id="close_message" onclick="form_error.style.display ='none' ">&times;</span></p> 
+                                    </div>  
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
                         <form method="POST">
                             <div>
                                 <input type="text" class="sign-text" placeholder="username" name="username" id="username">
