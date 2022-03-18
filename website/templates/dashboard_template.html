@@ -1,17 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FootballHero</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'styles.css') }}" />
+    <script src="https://code.iconify.design/2/2.1.2/iconify.min.js"></script>
 </head>
+
 <body>
-    <div>
-        {% block content %}
-        
-        {% endblock %}
+    <div class="dashboard-wrapper">
+        <div class="dashboard-navtop">
+            <div class="dashboard-navsearch">
+                <input type="text" placeholder="Search" />
+                <span class="iconify" data-icon="ant-design:search-outlined" style="font-size: 20px"></span>
+            </div>
+        </div>
+
+        <div class="dashboard-nav-sticky dashboard-navleft">
+            <div class="dashboard-navlogo">
+                <p>business-Name</p>
+            </div>
+
+            <ul class="dashboard-navnavigation">
+                <li>
+                    <div class="dashboard-nav-navelement">
+                        <div>
+                            <span class="iconify" data-icon="carbon:dashboard" style="font-size: 20px"></span>
+                        </div>
+                        <p>Home</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="dashboard-nav-navelement">
+                        <div>
+                            <span class="iconify" data-icon="ant-design:search-outlined" style="font-size: 20px"></span>
+                        </div>
+                        <p>Account</p>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="dashboard-nav-navelement">
+                        <div>
+                            <span class="iconify" data-icon="bx:user" style="font-size: 20px"></span>
+                        </div>
+                        <p>Browse</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="dashboard-nav-navelement">
+                        <div>
+                            <span class="iconify" data-icon="charm:plus" style="font-size: 20px"></span>
+                        </div>
+                        <p>Create</p>
+                    </div>
+                </li>
+            </ul>
+            <a class="dashboard-navlogout" href="/signout">
+                <span class="iconify" data-icon="ooui:log-out-ltr"></span> Log Out</a>
+        </div>
+
+        <div class="dashboard-body">{% block content %} {% endblock %}</div>
     </div>
 </body>
+
 </html>

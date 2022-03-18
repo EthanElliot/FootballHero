@@ -70,3 +70,9 @@ def signin():
                 flash('incorrect password')
 
     return render_template('signin.html')
+
+
+@auth.route('/signout')
+def signout():
+    session.pop('user', None)
+    return redirect(url_for('auth.signin'))
