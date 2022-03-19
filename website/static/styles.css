@@ -484,7 +484,8 @@ footer {
 .dashboard-nav-navelement:hover {
   cursor: pointer;
 }
-.dashboard-nav-navelement div {
+
+.dashboard-nav-navelement-icn {
   border-radius: 50%;
   background-color: var(--background-colour);
   filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1));
@@ -495,6 +496,11 @@ footer {
   align-items: center;
   margin-right: 10px;
   color: var(--main-color);
+}
+
+.dashboard-nav-navelement-active {
+  background-color: var(--main-color);
+  color: var(--background-colour);
 }
 
 .dashboard-navlogout {

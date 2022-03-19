@@ -14,7 +14,7 @@ auth = Blueprint('auth', __name__)
 @auth.route("/signup", methods=['GET', 'POST'])
 def signup():
     if 'user' in session:
-        return redirect(url_for('views.dashboard'))
+        return redirect(url_for('dashboard.home'))
 
     if request.method == 'POST':
         email = request.form.get('email')
@@ -42,7 +42,7 @@ def signup():
                             password=generate_password_hash(password1))
             db.session.add(new_user)
             db.session.commit()
-            return redirect(url_for('views.dashboard'))
+            return redirect(url_for('dashboard.home'))
 
     return render_template('signup.html')
 
@@ -51,7 +51,7 @@ def signup():
 def signin():
 
     if 'user' in session:
-        return redirect(url_for('views.dashboard'))
+        return redirect(url_for('dashboard.home'))
 
     if request.method == 'POST':
         identifier = str(request.form.get('username'))
@@ -65,7 +65,7 @@ def signin():
         else:
             if check_password_hash(user.password, password) == True:
                 session['user'] = user.username
-                return redirect(url_for('views.dashboard'))
+                return redirect(url_for('dashboard.home'))
             else:
                 flash('incorrect password')
 

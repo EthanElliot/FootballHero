@@ -16,10 +16,12 @@ def create_app():
 
     from .views import views
     from .auth import auth
+    from .dashboard import dashboard
     from .models import User, Program, Exercise, Type, FavoriteProgram, ExerciseProgram
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
+    app.register_blueprint(dashboard, url_prefix='/')
 
     create_database(app)
 
