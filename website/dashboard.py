@@ -38,3 +38,12 @@ def create():
         return render_template('create.html', username=user)
     else:
         return redirect((url_for('auth.signin')))
+
+@dashboard.route('/exercise/<int:id>')
+def exercise(id):
+
+    if 'user' in session:
+        return render_template('exercise.html', id=id)
+    else:
+        return redirect((url_for('auth.signin')))
+    

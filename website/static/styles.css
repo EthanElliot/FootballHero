@@ -520,3 +520,50 @@ footer {
   height: 20px;
   margin-right: 5px;
 }
+
+
+.dashboard-body-first{
+  margin-top: 40px;
+} 
+
+
+.dashboard-body-element{
+  width: 96%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: var(--background-colour);
+  padding: 20px;
+  border-radius: 30px;
+}
+
+.dashboard-body-exercise-first{
+  display: flex;
+  align-items: center;
+
+}
+
+
+.dashboard-body-exercise-first div:not(:first-child){
+  margin-left: 30px;
+}
+.dashboard-body-icon{
+  height: 120px;
+  width:120px ;
+  background-color: var(--secondary-color);
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.dashboard-body-icon .iconify{
+  width: 60%;
+  height: 60%;
+  color: var(--text-color-2);
+
+}
+.dashboard-body-tag p:not(:first-child){
+  margin-top: 20px
+
+}
