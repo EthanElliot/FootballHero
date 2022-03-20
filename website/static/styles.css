@@ -403,14 +403,15 @@ footer {
   grid-template:
     "lefthead tophead"
     "lefthead body";
-  grid-template-columns: 17.5% auto;
-  grid-template-rows: 10% auto;
+  grid-template-columns: max(200px, 17.5%) auto;
+  grid-template-rows: max(80px, 10%) auto;
 }
 
 .dashboard-navtop {
   grid-area: tophead;
   position: sticky;
   top: 0;
+  height: max(80px, 10%);
   background-color: var(--background-colour);
   display: flex;
   align-items: center;
@@ -455,7 +456,7 @@ footer {
   height: 100%;
   display: grid;
   grid-template-rows: 10% 70% auto;
-  width: 17.5%;
+  width: max(200px, 17.5%);
 }
 
 .dashboard-navlogo {
