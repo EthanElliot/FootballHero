@@ -1,4 +1,7 @@
-from flask import Blueprint, render_template, session, redirect, url_for
+
+from flask import Blueprint, render_template, session, redirect, url_for, abort
+from .models import User, Exercise, Type
+from .import db
 
 
 dashboard = Blueprint('dashboard', __name__)
@@ -42,8 +45,12 @@ def create():
 @dashboard.route('/exercise/<int:id>')
 def exercise(id):
 
-    if 'user' in session:
-        return render_template('exercise.html', id=id)
+    exercise = db.session.query(Exercise, Type).join(Type).filter(Exercise.id == id).first()
+
+    if exercise: 
+        print(exercise)
+        return render_template('exercise.html', exercise=exercise)
+        
+
     else:
-        return redirect((url_for('auth.signin')))
-    
+        abort(404)

@@ -8,11 +8,16 @@
     </div>
     <div class="dashboard-body-tag-name dashboard-body-tag">
         <p><strong>Name</strong></p>
-        <p>{{id}}</p>
+        <p>{{exercise[0].name}}</p>
     </div>
     <div class="dashboard-body-tag-type dashboard-body-tag">
         <p><strong>Type</strong></p>
-        <p>{{id}}</p>
+        <p>{{exercise[1].type}}</p>
     </div>
+</div>
+<div class="dashboard-body-element dashboard-body-exercise">
+    <iframe width="60%" height="70%"
+        src="{{exercise[0].link}}">
+    </iframe>
 </div>
 {% endblock %}

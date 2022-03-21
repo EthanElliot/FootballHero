@@ -405,6 +405,9 @@ footer {
     "lefthead body";
   grid-template-columns: max(200px, 17.5%) auto;
   grid-template-rows: max(80px, 10%) auto;
+  height: 100vh;
+  width: 100vw;
+
 }
 
 .dashboard-navtop {
@@ -415,6 +418,7 @@ footer {
   background-color: var(--background-colour);
   display: flex;
   align-items: center;
+
 }
 
 .dashboard-navsearch {
@@ -444,8 +448,9 @@ footer {
   grid-area: body;
   background-color: var(--secondary-color);
   box-shadow: inset 3px 2px 4px rgba(0, 0, 0, 0.1);
-  height: 90vh;
+  min-height: 120vh;
   width: 100%;
+
 }
 
 .dashboard-navleft {
@@ -457,6 +462,7 @@ footer {
   display: grid;
   grid-template-rows: 10% 70% auto;
   width: max(200px, 17.5%);
+
 }
 
 .dashboard-navlogo {
@@ -566,4 +572,13 @@ footer {
 .dashboard-body-tag p:not(:first-child){
   margin-top: 20px
 
+}
+
+.dashboard-body-exercise{
+  margin-top: 20px;
+  margin-bottom: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70%;
 }
