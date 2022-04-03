@@ -585,8 +585,9 @@ footer {
 
 .dashboard-exercise-video{
   height: 90%;
-  width: 60%;
+  width: 70%;
   margin: auto;
+  margin-left: 0;
 
 }
 
@@ -607,6 +608,7 @@ footer {
   height: 90%;
   width: 60%;
   margin: auto;
+  margin-left: 0;
 }
 
 .dashboard-exercise-button:nth-child(1){

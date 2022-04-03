@@ -45,12 +45,17 @@ def create():
 @dashboard.route('/exercise/<int:id>')
 def exercise(id):
 
-    exercise = db.session.query(Exercise, Type).join(Type).filter(Exercise.id == id).first()
 
-    if exercise: 
-        print(exercise)
-        return render_template('exercise.html', exercise=exercise)
-        
+    if 'user' in session:
+        user = session['user']
 
+        exercise = db.session.query(Exercise, Type).join(Type).filter(Exercise.id == id).first()
+
+        if exercise: 
+            print(exercise)
+            return render_template('exercise.html', exercise=exercise)
+            
+        else:
+            abort(404)  
     else:
-        abort(404)
+        return redirect((url_for('auth.signin')))
