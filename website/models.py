@@ -1,7 +1,8 @@
-
+# imports
 from . import db
 
 
+# User table database model
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
@@ -10,6 +11,7 @@ class User(db.Model):
     programs = db.relationship('Program')
 
 
+# program table database model
 class Program(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), nullable=False)
@@ -17,6 +19,7 @@ class Program(db.Model):
     description = db.Column(db.String(3000))
 
 
+# exercise table database model
 class Exercise(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), nullable=False)
@@ -25,18 +28,21 @@ class Exercise(db.Model):
     Instructions = db.Column(db.String(1000))
 
 
+# Type table database model
 class Type(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String(150), nullable=False)
     exercise = db.relationship('Exercise')
 
 
+# FavoriteProgram table database model
 FavoriteProgram = db.Table('FavoriteProgram',
                            db.Column('user_id', db.Integer,
                                      db.ForeignKey('user.id')),
                            db.Column('program_id', db.Integer, db.ForeignKey('program.id')))
 
 
+# ExerciseProgram table database model
 ExerciseProgram = db.Table('ExerciseProgram',
                            db.Column('program_id', db.Integer,
                                      db.ForeignKey('program.id')),
