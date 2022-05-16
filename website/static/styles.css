@@ -626,3 +626,60 @@ footer {
   height: 100%; 
   
 }
+
+.dashboard-body-create{
+  height: 100%;
+  min-height: 600px;
+}
+
+.create-form-element{
+  background-color: var(--secondary-color);
+  border: none; 
+  margin: 5px 0;
+  border-radius: 15px;
+  padding-left: 15px;
+
+}
+
+.create-form-text{
+  height: 30px;
+  width: 75%;
+
+}
+
+.create-form-exercise{
+  width: 100%;
+  height: 70%;
+}
+.create-form {
+  height: 100%;
+}
+
+.create-form-submit{
+  background-color: var(--main-color);
+  border: none;
+}
+
+.create-form-button{
+  height: 40px;
+  width: 90px;
+  background-color: var(--main-color);
+  color: var(--background-colour);
+}
+
+.create-form-label{
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 10%;
+}
+
+.create-form-exercise-plus{
+  color: var(--text-color-2);
+}
+
+.create-form-exercise-activeplus{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}

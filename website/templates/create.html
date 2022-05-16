@@ -2,5 +2,29 @@
 
 
 {% block content %}
-{{username}}
+<div class=" dashboard-body-element dashboard-body-first dashboard-body-create">
+    <form class="create-form " action="" method="post">
+        <label for="" class="create-form-label">Create.</label> <br><br>
+        <input type="text" name="" id="" placeholder="Name" class="create-form-element create-form-text">
+        <br>
+        <input type="text" name="" id="" placeholder="Description" class="create-form-element create-form-text">
+        <br>
+        
+        <div class="create-form-element create-form-exercise create-form-exercise-activeplus">
+            <div class="create-form-exercise-plus">
+                <span  class="iconify" data-icon="charm:plus" style="font-size: 70px"></span>
+            </div>
+        </div>
+
+        <br> 
+        <input type="submit" value="Create" class="button create-form-button create-form-submit">
+        
+
+
+
+
+
+
+    </form>
+</div>
 {% endblock %}
