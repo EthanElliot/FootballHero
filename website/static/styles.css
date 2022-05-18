@@ -709,24 +709,29 @@ footer {
   width: 80%;
   height: 60%;
   border-radius: 30px;
-
-
 }
 
 .dashboard-create-modal-content{
   height: 90%;
 }
+
 .dashboard-create-modal-submit{
   height: 10%;
   display: flex;
   justify-content: space-between;
-  
+}
 
-
+.dashboard-create-modal-button{  
+  height: 40px;
+  width: 10%;
+  background-color: var(--main-color);
+  color: var(--background-colour);
 }
 
 
-.dashboard-create-modal-button{  height: 40px;
-  width: 90px;
-  background-color: var(--main-color);
-  color: var(--background-colour);}
+.dashboard-create-modal-button-cancel{
+  height: 40px;
+  width: 10%;
+  background-color: var(--secondary-color);
+  color: var(--text-color-1);
+}
