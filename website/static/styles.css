@@ -735,3 +735,47 @@ footer {
   background-color: var(--secondary-color);
   color: var(--text-color-1);
 }
+
+.dashboard-create-modal-form{
+  display: flex;
+  justify-content: space-between;
+}
+
+.dashboard-create-modal-forminputs{
+  display: flex;
+  align-items: center;
+}
+
+.dashboard-create-modal-select{
+  -webkit-appearance: none;
+  border: none;
+  background-color: rgb(240,240,240);
+  border-radius:  20px ; 
+  cursor: pointer;
+  background-image: url('data:image/svg+xml;utf8, <svg xmlns="http://www.w3.org/2000/svg" width="100" height ="50"><polygon points="0,0 100,0 50,50" style="fill:%23666666;" /></svg>');
+  background-position: right 10px top 50%;
+  background-repeat: no-repeat;
+  background-size: 10px;
+  width: 50%;
+  height: 40px;
+  padding-left: 20px;
+  
+  background-color: var(--secondary-color);
+
+}
+
+.dashboard-create-modal-select
+:nth-child(1){
+  color: var(--secondary-color);
+}
+
+.dashboard-create-modal-text{
+  height: 40px;
+  width: 75%;
+  border: none;
+  border-radius: 20px;
+  padding-left: 20px;
+
+  background-color: var(--secondary-color);
+  color: var(--text-color-2);
+}

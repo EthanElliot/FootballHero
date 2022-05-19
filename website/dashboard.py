@@ -45,7 +45,9 @@ def create():
     #check if user is logged in
     if 'user' in session:
         user = session['user']
-        return render_template('create.html', username=user)
+
+        types = Type.query.all()
+        return render_template('create.html', username=user,  types=types)
     else:
         return redirect((url_for('auth.signin')))
 

@@ -25,7 +25,28 @@
 
 <div id="dashboard-create-exercise-modal" class="dashboard-create-modal-wrapper">
     <div  class="dashboard-create-exercise-modal">
-        <div class="dashboard-create-modal-content"></div>
+        <div class="dashboard-create-modal-content">
+            <div class="dashboard-create-modal-form">
+                <div class="dashboard-create-modal-forminputs">
+                    <p>Filter by</p>
+                    <input type="text" class="dashboard-create-modal-text" name="" id="" placeholder="keywords">
+                    <select name="comp_select" class="dashboard-create-modal-select">
+                        <option selected="selected" >Type</option>
+    
+                        {% for type in types %}
+                            {% if type.type == output %}
+                            <option value="{{ type.type }}" selected>{{ type.type|capitalize }}</option>
+                            {% else %}
+                            <option value="{{ type.type}}">{{ type.type|capitalize }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <button class="dashboard-create-modal-button button" >Search</button>
+                
+            </div>
+        </div>
+
         <div  class="dashboard-create-modal-submit">
             <button class="dashboard-create-modal-button-cancel button" id="dasboard-create-modal-close">cancel</button>
             <button class="dashboard-create-modal-button button" >add</button>
