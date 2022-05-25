@@ -1,50 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FootballHero</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'styles.css') }}" />
 </head>
+
 <body>
     <div class="sign-wrapper signin-wrapper">
         <div class="sign">
-            <div class="sign-section"> 
-                <div class="sign-formwrapper ">
+            <div class="sign-section">
+                <div class="sign-formwrapper">
                     <p>Sign In.</p>
-                    {%with messages = get_flashed_messages()%}
-                        {% if messages %}
-                            {% for message in messages %} 
-                                <div class="form_errormessage_wrapper" id='form_error'> 
-                                    <p class="form_errormessage">{{ message }} <span id="close_message" onclick="form_error.style.display ='none' ">&times;</span></p> 
-                                </div>  
-                            {% endfor %}
-                        {% endif %}
-                    {% endwith %}
+                    {%with messages = get_flashed_messages()%} {% if messages %} {% for
+                    message in messages %}
+                    <div class="form_errormessage_wrapper" id="form_error">
+                        <p class="form_errormessage">
+                            {{ message }}
+                            <span id="close_message" onclick="form_error.style.display ='none' ">&times;</span>
+                        </p>
+                    </div>
+                    {% endfor %} {% endif %} {% endwith %}
                     <form method="post">
-                        <input type="text" placeholder='username or email' class="sign-text signin-text" maxlength="150" name ='username' id='username'>
-                        <input type="password"  placeholder='password' class="sign-text signin-text" maxlength="150" name='password' id='password'>
-                        <br>
-                        <label for="fogot-password" class="sign-forgotpassword"> <a href=""> forgot my password?</a></label>
-                        <br>
-                        <input type="submit" class="button signin-form-button" value="sign in">
+                        <input type="text" placeholder="username or email" class="sign-text signin-text" maxlength="150"
+                            name="username" id="username" />
+                        <input type="password" placeholder="password" class="sign-text signin-text" maxlength="150"
+                            name="password" id="password" />
+                        <br />
+                        <label for="fogot-password" class="sign-forgotpassword">
+                            <a href=""> forgot my password?</a></label>
+                        <br />
+                        <input type="submit" class="button signin-form-button" value="sign in" />
                         <div class="sign-google-login">
-                            <hr>
-                            <label for="google_login">Or</label> 
-                            <br>
-                            <input type="button" class="button signin-form-button" value="google signin">
+                            <hr />
+                            <label for="google_login">Or</label>
+                            <br />
+                            <input type="button" class="button signin-form-button" value="google signin" />
                         </div>
                     </form>
                 </div>
             </div>
-            <div class="sign-section sign-section-blue ">
+            <div class="sign-section sign-section-blue">
                 <div class="signin-section-blue">
-                    <p>Dont Have a <br>account?</p>
-                    <button class="button signin-button" onclick="location.href='/signup';">Sign Up<span class="iconify" data-icon="akar-icons:arrow-right"></span></button>
+                    <p>Dont Have a <br />account?</p>
+                    <button class="button signin-button" onclick="location.href='/signup';">
+                        Sign Up<span class="iconify" data-icon="akar-icons:arrow-right"></span>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </body>
+
 </html>

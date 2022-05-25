@@ -9,6 +9,8 @@ db = SQLAlchemy()
 DB_NAME = 'FootballHero.db'
 
 # create flask app function
+
+
 def create_app():
     # configure the flask app
     app = Flask(__name__)

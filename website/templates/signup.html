@@ -1,53 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FootballHero</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'styles.css') }}">
-</head>
-<body>
-    <div class="sign-wrapper signup-wrapper">
-        <div class="sign-wrapper signin-wrapper">
-            <div class="sign">
-                <div class="sign-section sign-section-blue"> 
-                    <div class="sign-formwrapper">
-                        <p>Sign Up.</p>
-                        {%with messages = get_flashed_messages()%}
-                            {% if messages %}
-                                {% for message in messages %} 
-                                    <div class="form_errormessage_wrapper" id='form_error'> 
-                                        <p class="form_errormessage">{{ message }} <span id="close_message" onclick="form_error.style.display ='none' ">&times;</span></p> 
-                                    </div>  
-                                {% endfor %}
-                            {% endif %}
-                        {% endwith %}
-                        <form method="POST">
-                            <div>
-                                <input type="text" class="sign-text" placeholder="username" name="username" id="username">
-                                <br>
-                                <input type="email" class="sign-text"  placeholder="email" name="email" id="email">
-                            </div>
-                            <div> 
-                                <input type="password" class="sign-text"  placeholder="password" name="password1" id="password1">
-                                <br>
-                                <input type="password" class="sign-text"  placeholder="confirm password" name="password2" id="password2">
-                            </div>
-                           
-                            <button  type="submit" class="button signin-button" > signup </button>
 
-                        </form>
-                    </div>
-                </div>
-                <div class="sign-section">
-                    <div class="signup-section-signin">
-                        <p>Already Have a <br>account?</p>
-                        <button class="button signup-button" onclick="location.href='/signin';">Sign in<span class="iconify" data-icon="akar-icons:arrow-right"></span></button>
-                    </div>
-                </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FootballHero</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'styles.css') }}" />
+</head>
+
+<body>
+  <div class="sign-wrapper signup-wrapper">
+    <div class="sign-wrapper signin-wrapper">
+      <div class="sign">
+        <div class="sign-section sign-section-blue">
+          <div class="sign-formwrapper">
+            <p>Sign Up.</p>
+            {%with messages = get_flashed_messages()%} {% if messages %} {%
+            for message in messages %}
+            <div class="form_errormessage_wrapper" id="form_error">
+              <p class="form_errormessage">
+                {{ message }}
+                <span id="close_message" onclick="form_error.style.display ='none' ">&times;</span>
+              </p>
             </div>
+            {% endfor %} {% endif %} {% endwith %}
+            <form method="POST">
+              <div>
+                <input type="text" class="sign-text" placeholder="username" name="username" id="username" />
+                <br />
+                <input type="email" class="sign-text" placeholder="email" name="email" id="email" />
+              </div>
+              <div>
+                <input type="password" class="sign-text" placeholder="password" name="password1" id="password1" />
+                <br />
+                <input type="password" class="sign-text" placeholder="confirm password" name="password2"
+                  id="password2" />
+              </div>
+
+              <button type="submit" class="button signin-button">
+                signup
+              </button>
+            </form>
+          </div>
         </div>
+        <div class="sign-section">
+          <div class="signup-section-signin">
+            <p>Already Have a <br />account?</p>
+            <button class="button signup-button" onclick="location.href='/signin';">
+              Sign in<span class="iconify" data-icon="akar-icons:arrow-right"></span>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </body>
+
 </html>

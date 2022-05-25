@@ -1,90 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FootballHero</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'styles.css') }}">
-</head>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename = 'styles.css') }}"
+    />
+  </head>
 
-<body>
+  <body>
     <nav>
-        <div class="navigation">
-            <div class="nav-name">
-                <h1>Business-Name</h1>
-            </div>
-
-            <div class="nav-butons">
-                <ul>
-                    <li><button id="signup-button" class="nav-button button" onclick="location.href='/signup';">Sign
-                            Up</button></li>
-                    <li><button id="signin-button" class="nav-button button" onclick="location.href='/signin';">Sign
-                            In</button></li>
-                </ul>
-            </div>
+      <div class="navigation">
+        <div class="nav-name">
+          <h1>Business-Name</h1>
         </div>
+
+        <div class="nav-butons">
+          <ul>
+            <li>
+              <button
+                id="signup-button"
+                class="nav-button button"
+                onclick="location.href='/signup';"
+              >
+                Sign Up
+              </button>
+            </li>
+            <li>
+              <button
+                id="signin-button"
+                class="nav-button button"
+                onclick="location.href='/signin';"
+              >
+                Sign In
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
     </nav>
 
     <div class="hero">
-        <div class="hero-text">
-            <h2>Enhance your<br>performance.</h2>
-            <h3>take your game to the<br>next level</h3>
-            <button id="hero-button" class="nav-button button" onclick="location.href='/signup';">Sign Up<span
-                    class="iconify" data-icon="akar-icons:arrow-right"></span></button>
-        </div>
-        <div class="hero-image">
-            <img src="../static/images/FAe0ohtXoA8Lx8b-PhotoRoom-edit.svg" alt="Ronaldo">
-        </div>
-        <span class="iconify hero-down-arrow" id="down-arrow" data-icon="ep:arrow-down-bold"
-            onclick="location='#down-arrow'"></span>
+      <div class="hero-text">
+        <h2>Enhance your<br />performance.</h2>
+        <h3>take your game to the<br />next level</h3>
+        <button
+          id="hero-button"
+          class="nav-button button"
+          onclick="location.href='/signup';"
+        >
+          Sign Up<span
+            class="iconify"
+            data-icon="akar-icons:arrow-right"
+          ></span>
+        </button>
+      </div>
+      <div class="hero-image">
+        <img
+          src="../static/images/FAe0ohtXoA8Lx8b-PhotoRoom-edit.svg"
+          alt="Ronaldo"
+        />
+      </div>
+      <span
+        class="iconify hero-down-arrow"
+        id="down-arrow"
+        data-icon="ep:arrow-down-bold"
+        onclick="location='#down-arrow'"
+      ></span>
     </div>
 
     <div class="about">
-        <div class="our-people about-section">
-
-        </div>
-        <div class="our-story about-section">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam odio, maxime soluta sed, vitae dolore
-                aliquid facilis aliquam, reiciendis blanditiis debitis quos harum doloribus architecto distinctio dicta
-                nam incidunt non molestias eveniet ut recusandae. Dolor architecto in pariatur eum, vel similique
-                corrupti quis alias aspernatur odio reiciendis est totam magnam repudiandae corporis, iure cupiditate ad
-                eveniet quibusdam. Minima, optio! Fuga nulla inventore eveniet, sint repellat aspernatur esse ratione
-                obcaecati sapiente nisi dolorem soluta porro, vero veniam labore aliquam. Recusandae non repudiandae
-                maxime velit, veniam voluptate doloribus optio nihil et quis architecto praesentium quia autem, debitis
-                ullam voluptatem accusamus ut quod ex ad minus labore, nulla distinctio molestiae. Earum a dignissimos,
-                molestiae, dolor dolore harum repudiandae pariatur ipsa est atque omnis dolorum provident natus sit
-                corporis mollitia officia doloremque id enim nesciunt unde nostrum praesentium. Perspiciatis deleniti
-                labore quibusdam, asperiores, animi odit laboriosam aliquid praesentium, quis eius esse libero. Eius,
-                consequuntur!</p>
-        </div>
-
+      <div class="our-people about-section"></div>
+      <div class="our-story about-section">
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam odio,
+          maxime soluta sed, vitae dolore aliquid facilis aliquam, reiciendis
+          blanditiis debitis quos harum doloribus architecto distinctio dicta
+          nam incidunt non molestias eveniet ut recusandae. Dolor architecto in
+          pariatur eum, vel similique corrupti quis alias aspernatur odio
+          reiciendis est totam magnam repudiandae corporis, iure cupiditate ad
+          eveniet quibusdam. Minima, optio! Fuga nulla inventore eveniet, sint
+          repellat aspernatur esse ratione obcaecati sapiente nisi dolorem
+          soluta porro, vero veniam labore aliquam. Recusandae non repudiandae
+          maxime velit, veniam voluptate doloribus optio nihil et quis
+          architecto praesentium quia autem, debitis ullam voluptatem accusamus
+          ut quod ex ad minus labore, nulla distinctio molestiae. Earum a
+          dignissimos, molestiae, dolor dolore harum repudiandae pariatur ipsa
+          est atque omnis dolorum provident natus sit corporis mollitia officia
+          doloremque id enim nesciunt unde nostrum praesentium. Perspiciatis
+          deleniti labore quibusdam, asperiores, animi odit laboriosam aliquid
+          praesentium, quis eius esse libero. Eius, consequuntur!
+        </p>
+      </div>
     </div>
 
-    <div class="our-product ">
-        <div class="product-image product-section">
-            <img src="../static/images/istockphoto-1169087681-612x612.jpg" alt="computer">
-        </div>
-        <div class="product-text product-section">
-            <h6>Business-name web view.</h6>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sollicitudin risus vitae mauris molestie,
-                in facilisis libero congue. In aliquam vitae libero sed commodo. Mauris maximus ut ligula vitae
-                pellentesque. Nulla ultricies quam ut sem pretium posuere. Vivamus interdum ligula et mi sollicitudin.
-            </p>
-            <button id="hero-button" class="nav-button button" onclick="location.href='/signup';">Sign Up<span
-                    class="iconify" data-icon="akar-icons:arrow-right"></span></button>
-
-        </div>
-
+    <div class="our-product">
+      <div class="product-image product-section">
+        <img
+          src="../static/images/istockphoto-1169087681-612x612.jpg"
+          alt="computer"
+        />
+      </div>
+      <div class="product-text product-section">
+        <h6>Business-name web view.</h6>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
+          sollicitudin risus vitae mauris molestie, in facilisis libero congue.
+          In aliquam vitae libero sed commodo. Mauris maximus ut ligula vitae
+          pellentesque. Nulla ultricies quam ut sem pretium posuere. Vivamus
+          interdum ligula et mi sollicitudin.
+        </p>
+        <button
+          id="hero-button"
+          class="nav-button button"
+          onclick="location.href='/signup';"
+        >
+          Sign Up<span
+            class="iconify"
+            data-icon="akar-icons:arrow-right"
+          ></span>
+        </button>
+      </div>
     </div>
 
     <footer>
-        <p>&#169;Business-name</p>
+      <p>&#169;Business-name</p>
     </footer>
     <script src="/static/javascript/home.js"></script>
     <script src="https://code.iconify.design/2/2.1.0/iconify.min.js"></script>
-
-</body>
-
+  </body>
 </html>
