@@ -1,13 +1,19 @@
 # imports
-from flask import Blueprint, render_template, session, redirect, url_for, abort
+import logging
+from flask import Blueprint, render_template, session, redirect, url_for, abort, request
 from .models import User, Exercise, Type
 from .import db
 
 # make flask blueprint
 dashboard = Blueprint('dashboard', __name__)
 
-# dashboard route
 
+# code for logging the sql queries (used for testing)
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+
+
+# dashboard route
 
 @dashboard.route("/dashboard")
 def home():
@@ -72,3 +78,18 @@ def exercise(id):
             abort(404)
     else:
         return redirect((url_for('auth.signin')))
+
+
+@dashboard.route('/exercise-get', methods=['GET'])
+def exerciseget():
+    filter = request.args.get('filter', default='', type=str)
+    filtertype = request.args.get('type', default='', type=str)
+
+    if type:
+        exercise_data = Exercise.query.join(Type).filter(
+            Type.type == filtertype).all()
+        print(exercise_data[0].name)
+        print(filtertype)
+        print('data found')
+
+    return 'data found'

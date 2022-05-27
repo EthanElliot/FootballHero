@@ -29,7 +29,7 @@
         <div class="dashboard-create-modal-content">
             <div class="dashboard-create-modal-form">
                 <div class="dashboard-create-modal-forminputs">
-                    <p>Filter by</p>
+                    <p> Filter by</p>
                     <input type="text" class="dashboard-create-modal-text" name="" id="" placeholder="keywords">
                     <select name="comp_select" id="dashboard-create-modal-select" class="dashboard-create-modal-select">
                         <option value="Type" selected="selected">Type</option>
@@ -42,18 +42,22 @@
                         {% endif %}
                         {% endfor %}
                     </select>
+                    <button class="dashboard-create-modal-search button">Search</button>
+
                 </div>
-                <button class="dashboard-create-modal-button button">Search</button>
 
             </div>
-        </div>
 
-        <div class="dashboard-create-modal-submit">
-            <button class="dashboard-create-modal-button-cancel button" id="dasboard-create-modal-close">cancel</button>
-            <button class="dashboard-create-modal-button button">add</button>
+            <div class="dashboard-create-modal-exercise">
+
+            </div>
+            <div class="dashboard-create-modal-submit">
+                <button class="dashboard-create-modal-button-cancel button"
+                    id="dasboard-create-modal-close">cancel</button>
+                <button class="dashboard-create-modal-button button">add</button>
+            </div>
         </div>
     </div>
-
 </div>
 
 <script src="{{url_for('static' , filename='javascript/dashboard-create.js')}}"></script>

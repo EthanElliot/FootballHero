@@ -57,11 +57,13 @@ nav {
   font-weight: bold;
   font-size: 15px;
 }
+
 .nav-butons ul {
   list-style: none;
   float: left;
   display: flex;
 }
+
 .nav-button {
   height: 40px;
   width: 90px;
@@ -232,10 +234,12 @@ footer {
   .hero-image {
     display: none;
   }
+
   .our-product {
     display: block;
     height: 60vh;
   }
+
   .product-image {
     position: initial;
     margin-top: 5%;
@@ -248,11 +252,13 @@ footer {
     min-width: 300px;
     margin: auto;
   }
+
   .product-text {
     margin-top: 50%;
     width: 70%;
     transform: translateY(200px);
   }
+
   .our-story p {
     margin-top: 20%;
   }
@@ -283,6 +289,7 @@ footer {
   align-items: center;
   padding: 5%;
 }
+
 .sign-section-blue {
   background-color: var(--main-color);
   color: var(--text-color-3);
@@ -321,6 +328,7 @@ footer {
   border-radius: 15px;
   padding-left: 15px;
 }
+
 .signin-text {
   background-color: var(--secondary-color);
 }
@@ -545,6 +553,7 @@ footer {
 .dashboard-body-exercise-first div:not(:first-child) {
   margin-left: 30px;
 }
+
 .dashboard-body-icon {
   height: 120px;
   width: 120px;
@@ -560,6 +569,7 @@ footer {
   height: 60%;
   color: var(--text-color-2);
 }
+
 .dashboard-body-tag p:not(:first-child) {
   margin-top: 20px;
 }
@@ -633,6 +643,7 @@ footer {
   width: 100%;
   height: 70%;
 }
+
 .create-form {
   height: 100%;
 }
@@ -691,10 +702,14 @@ footer {
   width: 80%;
   height: 60%;
   border-radius: 30px;
+
 }
 
 .dashboard-create-modal-content {
-  height: 90%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 40px auto 40px;
+  row-gap: 10px;
 }
 
 .dashboard-create-modal-submit {
@@ -717,14 +732,12 @@ footer {
   color: var(--text-color-1);
 }
 
-.dashboard-create-modal-form {
-  display: flex;
-  justify-content: space-between;
-}
 
 .dashboard-create-modal-forminputs {
-  display: flex;
+  display: grid;
   align-items: center;
+  grid-template-columns: calc(10% - 30px) 45% 35% 10%;
+  column-gap: 10px;
 }
 
 .dashboard-create-modal-select {
@@ -737,7 +750,7 @@ footer {
   background-position: right 10px top 50%;
   background-repeat: no-repeat;
   background-size: 10px;
-  width: 50%;
+  width: 100%;
   height: 40px;
   padding-left: 20px;
 
@@ -750,11 +763,34 @@ footer {
 
 .dashboard-create-modal-text {
   height: 40px;
-  width: 75%;
+  width: 100%;
   border: none;
   border-radius: 20px;
   padding-left: 20px;
 
   background-color: var(--secondary-color);
-  color: var(--text-color-2);
+  color: var(--text-color-1);
+}
+
+.dashboard-create-modal-search {
+  height: 40px;
+  width: 100%;
+  border: none;
+  background-color: var(--main-color);
+  color: var(--text-color-3);
+}
+
+.dashboard-create-modal-forminputs p {
+  font-weight: bold;
+  text-overflow: clip;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.dashboard-create-modal-exercise {
+  background-color: var(--secondary-color);
+  height: 100%;
+  width: 100%;
+  border-radius: 20px;
+
 }
