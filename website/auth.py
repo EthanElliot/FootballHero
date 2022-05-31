@@ -3,7 +3,6 @@ from flask import Blueprint, render_template, session, redirect, url_for, reques
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import User
 from . import db
-from flask_sqlalchemy import SQLAlchemy
 
 
 # code for logging the sql queries (used for testing)

@@ -3,7 +3,7 @@ import logging
 from flask import Blueprint, render_template, session, redirect, url_for, abort, request, jsonify
 from .models import User, Exercise, Type
 from .import db
-import json
+
 
 # make flask blueprint
 dashboard = Blueprint('dashboard', __name__)
@@ -86,22 +86,22 @@ def exerciseget():
     filtertext = request.args.get('filtertext', default='', type=str)
     filtertype = request.args.get('filtertype', default='', type=str)
 
-    print(filtertext)
-    print(filtertype)
+    if filtertext and filtertype:
+        exercise_data = Exercise.query.join(Type).filter(
+            Exercise.name.ilike(f'%{filtertext}%'),
+            Type.type == filtertype
+        ).all()
 
-    if filtertext:
+    elif filtertext:
         exercise_data = Exercise.query.filter(
             Exercise.name.ilike(f'%{filtertext}%')).all()
 
-        if exercise_data:
-            print(exercise_data[0].name)
-
-        else:
-            print('no data found')
-
     elif filtertype:
-        exercise_data = Exercise.query.join(Type).filter(
+        exercise_data = Exercise.query().join(Type).filter(
             Type.type == filtertype).all()
-        print(exercise_data[0].name)
+
+    else:
+        exercise_data = Exercise.query.join(Type).all()
+        print(exercise_data)
 
     return jsonify(exercise_data)
