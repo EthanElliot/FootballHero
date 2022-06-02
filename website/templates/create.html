@@ -30,7 +30,8 @@
             <div class="dashboard-create-modal-form">
                 <div class="dashboard-create-modal-forminputs">
                     <p> Filter by</p>
-                    <input type="text" class="dashboard-create-modal-text" name="" id="" placeholder="keywords">
+                    <input type="text" class="dashboard-create-modal-text" name="" id="dashboard-create-modal-text"
+                        placeholder="keywords">
                     <select name="comp_select" id="dashboard-create-modal-select" class="dashboard-create-modal-select">
                         <option value="Type" selected="selected">Type</option>
 
@@ -42,7 +43,8 @@
                         {% endif %}
                         {% endfor %}
                     </select>
-                    <button class="dashboard-create-modal-search button">Search</button>
+                    <button id='dashboard-create-modal-search'
+                        class="dashboard-create-modal-search button">Search</button>
 
                 </div>
 
@@ -59,8 +61,7 @@
         </div>
     </div>
 </div>
-
-<script src="{{url_for('static' , filename='javascript/dashboard-create.js')}}"></script>
 <script src="{{url_for('static' , filename='javascript/dashboard-create-request.js')}}"></script>
+<script src="{{url_for('static' , filename='javascript/dashboard-create.js')}}"></script>
 
 {% endblock %}

@@ -3,6 +3,7 @@ import logging
 from flask import Blueprint, render_template, session, redirect, url_for, abort, request, jsonify
 from .models import User, Exercise, Type
 from .import db
+import json
 
 
 # make flask blueprint
@@ -14,8 +15,16 @@ logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 
-# dashboard route
+# function to make sqlalchemy responce jsonifyable
+def to_JSON(data):
+    exercises = []
+    for row in data:
+        exercises.append([x for x in row])
+        # found from https://stackoverflow.com/questions/34715593/rows-returned-by-pyodbc-are-not-json-serializable
+    return exercises
 
+
+# dashboard route
 @dashboard.route("/dashboard")
 def home():
     # check if user is logged in
@@ -83,25 +92,34 @@ def exercise(id):
 
 @dashboard.route('/exercise-get', methods=['POST'])
 def exerciseget():
-    filtertext = request.args.get('filtertext', default='', type=str)
-    filtertype = request.args.get('filtertype', default='', type=str)
+    filters = json.loads(request.get_data())
+    filtertext = filters['filtertext']
+    filtertype = filters['filtertype']
 
     if filtertext and filtertype:
-        exercise_data = Exercise.query.join(Type).filter(
+        exercise_data = db.session.query(Exercise.id, Exercise.name, Type.type).join(Type).filter(
             Exercise.name.ilike(f'%{filtertext}%'),
             Type.type == filtertype
         ).all()
 
+        exercise_data = to_JSON(exercise_data)
+
     elif filtertext:
-        exercise_data = Exercise.query.filter(
+        exercise_data = db.session.query(Exercise.id, Exercise.name, Type.type).join(Type).filter(
             Exercise.name.ilike(f'%{filtertext}%')).all()
 
+        exercise_data = to_JSON(exercise_data)
+
     elif filtertype:
-        exercise_data = Exercise.query().join(Type).filter(
+        exercise_data = db.session.query(Exercise.id, Exercise.name, Type.type).filter(
             Type.type == filtertype).all()
 
+        exercise_data = to_JSON(exercise_data)
+
     else:
-        exercise_data = Exercise.query.join(Type).all()
-        print(exercise_data)
+        exercise_data = db.session.query(Exercise.id, Exercise.name, Type.type).join(
+            Type).all()
+
+        exercise_data = to_JSON(exercise_data)
 
     return jsonify(exercise_data)
