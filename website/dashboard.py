@@ -111,7 +111,7 @@ def exerciseget():
         exercise_data = to_JSON(exercise_data)
 
     elif filtertype:
-        exercise_data = db.session.query(Exercise.id, Exercise.name, Type.type).filter(
+        exercise_data = db.session.query(Exercise.id, Exercise.name, Type.type).join(Type).filter(
             Type.type == filtertype).all()
 
         exercise_data = to_JSON(exercise_data)
@@ -122,4 +122,5 @@ def exerciseget():
 
         exercise_data = to_JSON(exercise_data)
 
+    print(exercise_data)
     return jsonify(exercise_data)

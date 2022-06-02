@@ -50,8 +50,16 @@
 
             </div>
 
-            <div class="dashboard-create-modal-exercise">
-
+            <div id='dashboard-create-modal-exercise' class="dashboard-create-modal-exercise">
+                <template id='dashboard-create-modal-template'>
+                    <div class="dashboard-create-modal-exercisesbody" id='dashboard-create-modal-exercisesbody'>
+                        <p id='dashboard-create-modal-exercisesbody-title'></p>
+                        <p id='dashboard-create-modal-exercisesbody-subtitle'></p>
+                    </div>
+                </template>
+                <div id='dashboard-create-modal-loader' class="dashboard-create-modal-loader"></div>
+                <p id='dashboard-create-modal-message'>sorry, we couldnt find
+                    anything to match your search.</p>
             </div>
             <div class="dashboard-create-modal-submit">
                 <button class="dashboard-create-modal-button-cancel button"
