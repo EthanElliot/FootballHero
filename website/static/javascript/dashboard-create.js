@@ -119,8 +119,6 @@ function on_exerciseclick(id, name, type) {
   $(".dashboard-create-modal-exercisesbody-title span").remove();
 
   // add styles
-  console.log(selectedexercise[0]);
-  console.log(id);
   if (selectedexercise[0].toString() === id.toString()) {
     $(
       `#dashboard-create-modal-exercise-${id.toString()} #dashboard-create-modal-exercisesbody-title`
@@ -129,3 +127,20 @@ function on_exerciseclick(id, name, type) {
       .html(name + "<span> - selected</span>");
   }
 }
+
+var modaladd = $("#dasboard-create-modal-add");
+
+modaladd.click(function () {
+  //if there is exercises selected
+  if (selectedexercise.length !== 0) {
+    //reset all the css styles involved
+    exercisemodal.css("display", "none	");
+    $(".dashboard-create-modal-exercisesbody-title").css("color", "black");
+    $(".dashboard-create-modal-exercisesbody-title span").remove();
+
+    //reset form inputs and selected exercise
+    selectedexercise = [];
+    modalsearchselect.val("Type");
+    modalsearchtext.val("");
+  }
+});
