@@ -794,7 +794,10 @@ footer {
   padding: 20px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  grid-row-gap: 10px;
   grid-column-gap: 10px;
+  grid-template-rows: repeat(auto-fill, 80px);
   overflow: scroll;
 }
 
