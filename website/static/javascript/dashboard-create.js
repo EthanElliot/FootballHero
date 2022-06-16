@@ -2,6 +2,7 @@ var showmodal = $("#dashboard-create-showmodal");
 var exercisemodal = $("#dashboard-create-exercise-modal");
 var hidemodal = $("#dasboard-create-modal-close");
 
+
 $(showmodal).on("click", function () {
   exercisemodal.css("display", "inline	");
 });
@@ -28,6 +29,8 @@ var modalmessage = $("#dashboard-create-modal-message");
 var modaltemplate = $("#dashboard-create-modal-template")[0];
 
 selectedexercise = [];
+
+programmeexercises = [];
 
 modalsearch.click(function () {
   // remove all elements from the div
@@ -138,9 +141,63 @@ modaladd.click(function () {
     $(".dashboard-create-modal-exercisesbody-title").css("color", "black");
     $(".dashboard-create-modal-exercisesbody-title span").remove();
 
+
+    
+    programmeexercises.push(selectedexercise)
+    
+    exerciseformatpage();
     //reset form inputs and selected exercise
     selectedexercise = [];
     modalsearchselect.val("Type");
     modalsearchtext.val("");
   }
 });
+
+
+var create_form_body = $('#dashboard-create-form-exercises');
+
+function exerciseformatpage(){
+  if (programmeexercises.length > 0){
+    console.log(programmeexercises)
+    create_form_body
+    .contents(
+      ":not(template,#dashboard-create-showmodal)"
+    )
+    .remove();
+  }
+  $('#dashboard-create-showmodal').css('display', 'none')
+
+  create_form_body.addClass('create-form-display-grid')
+
+  for (var i = 0; i < programmeexercises.length; i++) {
+    
+    var exercise_form_template = $('#dashboard-create-form-template')[0]
+    var exercise_clone_form = exercise_form_template.content.cloneNode(true);
+
+    exercise_clone_form.querySelector(
+          "#dashboard-create-form-exercisesbody-title"
+        ).innerHTML = programmeexercises[i][1].toString();
+
+        exercise_clone_form.querySelector(
+          "#dashboard-create-form-exercisesbody-subtitle "
+        ).innerHTML = programmeexercises[i][2];
+
+        exercise_clone_form
+          .querySelector("#dashboard-create-form-exercisesbody")
+          .setAttribute(
+            "id",
+            "dashboard-create-form-exercise-" + programmeexercises[i][0]
+          );
+         
+
+        //add themplate to the dom
+        create_form_body[0].appendChild(exercise_clone_form)
+       }
+    
+      //add themplate to the dom
+
+    
+      create_form_body[0].appendChild($('#dashboard-create-form-plustemplate')[0].content.cloneNode(true)
+      ) 
+    };
+     

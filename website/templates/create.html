@@ -1,6 +1,5 @@
 {% extends 'dashboard_template.html' %}
 
-
 {% block content %}
 <div class=" dashboard-body-element dashboard-body-first dashboard-body-create">
     <form class="create-form " action="" method="post">
@@ -10,11 +9,27 @@
         <input type="text" name="" id="" placeholder="Description" class="create-form-element create-form-text">
         <br>
 
-        <div id="dashboard-create-showmodal"
-            class="create-form-element create-form-exercise create-form-exercise-activeplus">
-            <div class="create-form-exercise-plus">
+
+        <div id="dashboard-create-form-exercises" class="create-form-element create-form-exercise">
+
+            <div id="dashboard-create-showmodal" class=" create-form-exercise-plus">
                 <span class="iconify" data-icon="charm:plus" style="font-size: 70px"></span>
             </div>
+            <template id='dashboard-create-form-template'>
+                <div class="dashboard-create-form-exercisesbody" id='dashboard-create-form-exercisesbody'>
+                    <p class='dashboard-create-form-exercisesbody-title' id='dashboard-create-form-exercisesbody-title'>
+                    </p>
+                    <p id='dashboard-create-form-exercisesbody-subtitle'></p>
+                </div>
+            </template>
+
+            <template id='dashboard-create-form-plustemplate'>
+                <div id='create-form-exercise-plusinline'
+                    class=" dashboard-create-form-exercisesbody create-form-exercise-plusinline"
+                    onclick="  exercisemodal.css('display', 'inline	') ">
+                    <span class="iconify" data-icon="charm:plus" style="font-size: 70px"></span>
+                </div>
+            </template>
         </div>
 
         <br>
