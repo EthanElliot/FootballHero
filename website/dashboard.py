@@ -124,3 +124,12 @@ def exerciseget():
 
     print(exercise_data)
     return jsonify(exercise_data)
+
+
+@dashboard.route('/create-program', methods=['POST'])
+def create_program():
+    if 'user' in session:
+        if request.method == 'POST':
+            exercisedata = json.loads(request.get_data())
+            print(exercisedata)
+            return 'sucess'

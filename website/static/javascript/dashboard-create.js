@@ -142,9 +142,9 @@ modaladd.click(function () {
     $(".dashboard-create-modal-exercisesbody-title span").remove();
 
 
-    
+
     programmeexercises.push(selectedexercise)
-    
+
     exerciseformatpage();
     //reset form inputs and selected exercise
     selectedexercise = [];
@@ -156,48 +156,55 @@ modaladd.click(function () {
 
 var create_form_body = $('#dashboard-create-form-exercises');
 
-function exerciseformatpage(){
-  if (programmeexercises.length > 0){
+function exerciseformatpage() {
+  if (programmeexercises.length > 0) {
     console.log(programmeexercises)
     create_form_body
-    .contents(
-      ":not(template,#dashboard-create-showmodal)"
-    )
-    .remove();
+      .contents(
+        ":not(template,#dashboard-create-showmodal)"
+      )
+      .remove();
   }
   $('#dashboard-create-showmodal').css('display', 'none')
 
   create_form_body.addClass('create-form-display-grid')
 
   for (var i = 0; i < programmeexercises.length; i++) {
-    
+
     var exercise_form_template = $('#dashboard-create-form-template')[0]
     var exercise_clone_form = exercise_form_template.content.cloneNode(true);
 
     exercise_clone_form.querySelector(
-          "#dashboard-create-form-exercisesbody-title"
-        ).innerHTML = programmeexercises[i][1].toString();
+      "#dashboard-create-form-exercisesbody-title"
+    ).innerHTML = programmeexercises[i][1].toString();
 
-        exercise_clone_form.querySelector(
-          "#dashboard-create-form-exercisesbody-subtitle "
-        ).innerHTML = programmeexercises[i][2];
+    exercise_clone_form.querySelector(
+      "#dashboard-create-form-exercisesbody-subtitle "
+    ).innerHTML = programmeexercises[i][2];
 
-        exercise_clone_form
-          .querySelector("#dashboard-create-form-exercisesbody")
-          .setAttribute(
-            "id",
-            "dashboard-create-form-exercise-" + programmeexercises[i][0]
-          );
-         
+    exercise_clone_form
+      .querySelector("#dashboard-create-form-exercisesbody")
+      .setAttribute(
+        "id",
+        "dashboard-create-form-exercise-" + programmeexercises[i][0]
+      );
 
-        //add themplate to the dom
-        create_form_body[0].appendChild(exercise_clone_form)
-       }
-    
-      //add themplate to the dom
 
-    
-      create_form_body[0].appendChild($('#dashboard-create-form-plustemplate')[0].content.cloneNode(true)
-      ) 
-    };
-     
+    //add themplate to the dom
+    create_form_body[0].appendChild(exercise_clone_form)
+  }
+
+  //add themplate to the dom
+
+
+  create_form_body[0].appendChild($('#dashboard-create-form-plustemplate')[0].content.cloneNode(true)
+  )
+};
+
+
+$("#dashboard-create-form-submit").click(function () {
+  playlistname = $("#dashboard-create-form-text-name").val()
+  description = $("#dashboard-create-form-text-description").val()
+  exercises = programmeexercises;
+  send_exercise_program(playlistname, description, exercises)
+})

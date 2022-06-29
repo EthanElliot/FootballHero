@@ -1,5 +1,4 @@
 # imports
-from dis import Instruction
 from . import db
 from dataclasses import dataclass
 
