@@ -1,89 +1,93 @@
-{% extends 'dashboard_template.html' %}
-
-{% block content %}
-<div class=" dashboard-body-element dashboard-body-first dashboard-body-create">
-    <form class="create-form " action="" method="post">
-        <label for="" class="create-form-label">Create.</label> <br><br>
+{% extends 'dashboard_template.html' %} {% block content %}
+<div class="dashboard-body-element dashboard-body-first dashboard-body-create">
+    <form class="create-form" action="" method="post">
+        <label for="" class="create-form-label">Create.</label> <br />
+        <div class="dashbord-create-errormessage-wrapper" id="dashbord_create_error">
+            <div>
+                <p class="dashboard-create-errormessage" id="dashboard-create-errormessage"></p>
+                <span id="close_message" onclick="dashbord_create_error.style.display ='none'">&times;</span>
+            </div>
+        </div>
+        <br />
         <input type="text" name="dashboard-create-form-text-name" id="dashboard-create-form-text-name"
-            placeholder="Name" class="create-form-element create-form-text">
-        <br>
+            placeholder="Name" maxlength='15' class="create-form-element create-form-text" />
+        <br />
         <input type="text" name="dashboard-create-form-text-description" id="dashboard-create-form-text-description"
-            placeholder="Description" class="create-form-element create-form-text">
-        <br>
-
+            placeholder="Description" maxlength='59' class="create-form-element create-form-text" />
+        <br />
 
         <div id="dashboard-create-form-exercises" class="create-form-element create-form-exercise">
-
-            <div id="dashboard-create-showmodal" class=" create-form-exercise-plus">
+            <div id="dashboard-create-showmodal" class="create-form-exercise-plus">
                 <span class="iconify" data-icon="charm:plus" style="font-size: 70px"></span>
             </div>
-            <template id='dashboard-create-form-template'>
-                <div class="dashboard-create-form-exercisesbody" id='dashboard-create-form-exercisesbody'>
-                    <p class='dashboard-create-form-exercisesbody-title' id='dashboard-create-form-exercisesbody-title'>
+            <template id="dashboard-create-form-template">
+                <div class="dashboard-create-form-exercisesbody" id="dashboard-create-form-exercisesbody">
+                    <p class="dashboard-create-form-exercisesbody-title" id="dashboard-create-form-exercisesbody-title">
                     </p>
-                    <p id='dashboard-create-form-exercisesbody-subtitle'></p>
+                    <p id="dashboard-create-form-exercisesbody-subtitle"></p>
                 </div>
             </template>
 
-            <template id='dashboard-create-form-plustemplate'>
-                <div id='create-form-exercise-plusinline'
-                    class=" dashboard-create-form-exercisesbody create-form-exercise-plusinline"
+            <template id="dashboard-create-form-plustemplate">
+                <div id="create-form-exercise-plusinline"
+                    class="dashboard-create-form-exercisesbody create-form-exercise-plusinline"
                     onclick="  exercisemodal.css('display', 'inline	') ">
                     <span class="iconify" data-icon="charm:plus" style="font-size: 70px"></span>
                 </div>
             </template>
         </div>
 
-        <br>
-        <input type="button" value="Create" id="dashboard-create-form-submit"
-            class="button create-form-button create-form-submit">
 
+        <input type="button" value="Create" id="dashboard-create-form-submit"
+            class="button create-form-button create-form-submit" />
     </form>
 </div>
-
 
 <div id="dashboard-create-exercise-modal" class="dashboard-create-modal-wrapper">
     <div class="dashboard-create-exercise-modal">
         <div class="dashboard-create-modal-content">
             <div class="dashboard-create-modal-form">
                 <div class="dashboard-create-modal-forminputs">
-                    <p> Filter by</p>
+                    <p>Filter by</p>
                     <input type="text" class="dashboard-create-modal-text" name="" id="dashboard-create-modal-text"
-                        placeholder="keywords">
+                        placeholder="keywords" />
                     <select name="comp_select" id="dashboard-create-modal-select" class="dashboard-create-modal-select">
                         <option value="Type" selected="selected">Type</option>
 
-                        {% for type in types %}
-                        {% if type.type == output %}
-                        <option value="{{ type.type }}" selected>{{ type.type|capitalize }}</option>
+                        {% for type in types %} {% if type.type == output %}
+                        <option value="{{ type.type }}" selected>
+                            {{ type.type|capitalize }}
+                        </option>
                         {% else %}
                         <option value="{{ type.type}}">{{ type.type|capitalize }}</option>
-                        {% endif %}
-                        {% endfor %}
+                        {% endif %} {% endfor %}
                     </select>
-                    <button id='dashboard-create-modal-search'
-                        class="dashboard-create-modal-search button">Search</button>
-
+                    <button id="dashboard-create-modal-search" class="dashboard-create-modal-search button">
+                        Search
+                    </button>
                 </div>
-
             </div>
 
-            <div id='dashboard-create-modal-exercise' class="dashboard-create-modal-exercise">
-                <template id='dashboard-create-modal-template'>
-                    <div class="dashboard-create-modal-exercisesbody" id='dashboard-create-modal-exercisesbody'>
-                        <p class='dashboard-create-modal-exercisesbody-title'
-                            id='dashboard-create-modal-exercisesbody-title'></p>
-                        <p id='dashboard-create-modal-exercisesbody-subtitle'></p>
+            <div id="dashboard-create-modal-exercise" class="dashboard-create-modal-exercise">
+                <template id="dashboard-create-modal-template">
+                    <div class="dashboard-create-modal-exercisesbody" id="dashboard-create-modal-exercisesbody">
+                        <p class="dashboard-create-modal-exercisesbody-title"
+                            id="dashboard-create-modal-exercisesbody-title"></p>
+                        <p id="dashboard-create-modal-exercisesbody-subtitle"></p>
                     </div>
                 </template>
-                <div id='dashboard-create-modal-loader' class="dashboard-create-modal-loader"></div>
-                <p id='dashboard-create-modal-message'>sorry, we couldnt find
-                    anything to match your search.</p>
+                <div id="dashboard-create-modal-loader" class="dashboard-create-modal-loader"></div>
+                <p id="dashboard-create-modal-message">
+                    sorry, we couldnt find anything to match your search.
+                </p>
             </div>
             <div class="dashboard-create-modal-submit">
-                <button class="dashboard-create-modal-button-cancel button"
-                    id="dasboard-create-modal-close">cancel</button>
-                <button class="dashboard-create-modal-button button" id="dasboard-create-modal-add">add</button>
+                <button class="dashboard-create-modal-button-cancel button" id="dasboard-create-modal-close">
+                    cancel
+                </button>
+                <button class="dashboard-create-modal-button button" id="dasboard-create-modal-add">
+                    add
+                </button>
             </div>
         </div>
     </div>

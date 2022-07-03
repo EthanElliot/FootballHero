@@ -1,7 +1,8 @@
 # imports
 import logging
+from operator import le
 from flask import Blueprint, render_template, session, redirect, url_for, abort, request, jsonify
-from .models import User, Exercise, Type
+from .models import User, Exercise, Type, Program, ExerciseProgram
 from .import db
 import json
 
@@ -132,4 +133,48 @@ def create_program():
         if request.method == 'POST':
             exercisedata = json.loads(request.get_data())
             print(exercisedata)
-            return 'sucess'
+            name = exercisedata['name']
+            description = exercisedata['description']
+            username = session['user']
+            exercises = exercisedata['exercises']
+
+            # checks for form inupt
+            if not name:
+                return jsonify(False, 'No name given.')
+            if not description:
+                return jsonify(False, 'No description given.')
+            if not exercises:
+                return jsonify(False, 'No exercises selected.')
+            if len(name) < 4:
+                return jsonify(False, 'Name is too short.')
+            if len(description) < 20:
+                return jsonify(False, 'Description is too short.')
+            if len(exercises) < 2:
+                return jsonify(False, 'Not enouph exercises selected.')
+            if len(name) > 16:
+                return jsonify(False, 'Name is too long.')
+            if len(description) > 60:
+                return jsonify(False, 'Description is too long.')
+            if len(exercises) > 40:
+                return jsonify(False, 'Too many exercises selected.')
+
+            # get user id
+            userid = User.query.filter_by(username=f'{username}').first().id
+            # insert playlist data into table.
+            program = Program(
+                name=name, description=description, user_id=userid)
+            db.session.add(program)
+            db.session.commit()
+
+            # get id of added program
+            programid = program.id
+
+            # insert the exercises into the ExerciseProgram table
+
+            for i in range(len(exercises)):
+                exerciseprogram = ExerciseProgram.insert().values(
+                    program_id=programid, exercise_id=exercises[i][0])
+                db.session.execute(exerciseprogram)
+                db.session.commit()
+
+            return jsonify(True, programid)

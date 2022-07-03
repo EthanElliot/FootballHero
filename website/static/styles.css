@@ -456,7 +456,7 @@ footer {
   box-shadow: inset 3px 2px 4px rgba(0, 0, 0, 0.1);
   height: auto;
   width: 100%;
-  padding-bottom: 100px;
+  padding-bottom: 20px;
 }
 
 .dashboard-navleft {
@@ -622,7 +622,7 @@ footer {
 }
 
 .dashboard-body-create {
-  height: 100%;
+  height: 90%;
   min-height: 600px;
 }
 
@@ -646,7 +646,7 @@ footer {
 }
 
 .create-form {
-  height: 100%;
+  height: 90%;
 }
 
 .create-form-submit {
@@ -655,6 +655,7 @@ footer {
 }
 
 .create-form-button {
+  margin-top: 5px;
   height: 40px;
   width: 90px;
   background-color: var(--main-color);
@@ -720,7 +721,6 @@ footer {
   align-items: center;
   cursor: pointer;
 }
-
 
 .dashboard-create-modal-wrapper {
   display: none;
@@ -889,4 +889,24 @@ footer {
 #dashboard-create-modal-exercisesbody-subtitle {
   font-size: 10px;
   color: var(--text-color-2);
+}
+
+.dashbord-create-errormessage-wrapper {
+  display: none;
+  background-color: rgba(255, 0, 0, 0.8);
+  width: 100%;
+  border-radius: 25px;
+  margin-bottom: -15px;
+}
+
+.dashbord-create-errormessage-wrapper div {
+  font-size: 12px;
+  font-weight: normal;
+  padding: 10px 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dashbord-create-errormessage-wrapper div span {
+  float: right;
 }

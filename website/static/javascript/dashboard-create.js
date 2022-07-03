@@ -2,7 +2,6 @@ var showmodal = $("#dashboard-create-showmodal");
 var exercisemodal = $("#dashboard-create-exercise-modal");
 var hidemodal = $("#dasboard-create-modal-close");
 
-
 $(showmodal).on("click", function () {
   exercisemodal.css("display", "inline	");
 });
@@ -141,9 +140,7 @@ modaladd.click(function () {
     $(".dashboard-create-modal-exercisesbody-title").css("color", "black");
     $(".dashboard-create-modal-exercisesbody-title span").remove();
 
-
-
-    programmeexercises.push(selectedexercise)
+    programmeexercises.push(selectedexercise);
 
     exerciseformatpage();
     //reset form inputs and selected exercise
@@ -153,25 +150,21 @@ modaladd.click(function () {
   }
 });
 
-
-var create_form_body = $('#dashboard-create-form-exercises');
+var create_form_body = $("#dashboard-create-form-exercises");
 
 function exerciseformatpage() {
   if (programmeexercises.length > 0) {
-    console.log(programmeexercises)
+    console.log(programmeexercises);
     create_form_body
-      .contents(
-        ":not(template,#dashboard-create-showmodal)"
-      )
+      .contents(":not(template,#dashboard-create-showmodal)")
       .remove();
   }
-  $('#dashboard-create-showmodal').css('display', 'none')
+  $("#dashboard-create-showmodal").css("display", "none");
 
-  create_form_body.addClass('create-form-display-grid')
+  create_form_body.addClass("create-form-display-grid");
 
   for (var i = 0; i < programmeexercises.length; i++) {
-
-    var exercise_form_template = $('#dashboard-create-form-template')[0]
+    var exercise_form_template = $("#dashboard-create-form-template")[0];
     var exercise_clone_form = exercise_form_template.content.cloneNode(true);
 
     exercise_clone_form.querySelector(
@@ -189,22 +182,33 @@ function exerciseformatpage() {
         "dashboard-create-form-exercise-" + programmeexercises[i][0]
       );
 
-
     //add themplate to the dom
-    create_form_body[0].appendChild(exercise_clone_form)
+    create_form_body[0].appendChild(exercise_clone_form);
   }
 
   //add themplate to the dom
 
-
-  create_form_body[0].appendChild($('#dashboard-create-form-plustemplate')[0].content.cloneNode(true)
-  )
-};
-
+  create_form_body[0].appendChild(
+    $("#dashboard-create-form-plustemplate")[0].content.cloneNode(true)
+  );
+}
 
 $("#dashboard-create-form-submit").click(function () {
-  playlistname = $("#dashboard-create-form-text-name").val()
-  description = $("#dashboard-create-form-text-description").val()
+  playlistname = $("#dashboard-create-form-text-name").val();
+  description = $("#dashboard-create-form-text-description").val();
   exercises = programmeexercises;
-  send_exercise_program(playlistname, description, exercises)
-})
+  responce = send_exercise_program(playlistname, description, exercises);
+
+  responce
+    .then((response) => response.json())
+    .then((data) => {
+      if (data[0] == true) {
+        window.location.href = "/browse";
+      }
+      if (data[0] == false) {
+        console.log(data[1]);
+        $("#dashbord_create_error").css("display", "block");
+        $("#dashboard-create-errormessage").text(data[1]);
+      }
+    });
+});

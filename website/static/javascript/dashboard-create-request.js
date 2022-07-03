@@ -18,7 +18,5 @@ async function send_exercise_program(name, description, exercises) {
       exercises: exercises,
     }),
   });
-  if (response) {
-    return response
-  }
+  return response;
 }
