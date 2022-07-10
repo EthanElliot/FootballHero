@@ -1,14 +1,10 @@
 {% extends 'dashboard_template.html' %} {% block content %}
 <div class="dashboard-body-element dashboard-body-first dashboard-body-exercise-first">
-  <div class="dashboard-body-icon">
+  <div class="dashboard-body-icon dashboard-body-tag">
     <span class="iconify" data-icon="map:gym"></span>
   </div>
-  <div class="dashboard-body-tag-name dashboard-body-tag">
-    <p><strong>Name</strong></p>
+  <div class="dashboard-body-tag dashboard-body-tag-info">
     <p>{{exercise[0].name | capitalize}}</p>
-  </div>
-  <div class="dashboard-body-tag-type dashboard-body-tag">
-    <p><strong>Type</strong></p>
     <p>{{exercise[1].type | capitalize}}</p>
   </div>
 </div>

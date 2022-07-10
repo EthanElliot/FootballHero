@@ -425,6 +425,7 @@ footer {
   background-color: var(--background-colour);
   display: flex;
   align-items: center;
+  box-shadow: 3px 2px 4px rgb(0 0 0 / 10%);
 }
 
 .dashboard-navsearch {
@@ -550,8 +551,12 @@ footer {
   align-items: center;
 }
 
-.dashboard-body-exercise-first div:not(:first-child) {
+.dashboard-body-exercise-first .dashboard-body-tag:not(:first-child) {
   margin-left: 30px;
+}
+
+.dashboard-body-tag-info p:not(:first-child) {
+  color: var(--text-color-2);
 }
 
 .dashboard-body-icon {
@@ -570,8 +575,8 @@ footer {
   color: var(--text-color-2);
 }
 
-.dashboard-body-tag p:not(:first-child) {
-  margin-top: 20px;
+.dashboard-body-tag p:first-child {
+  margin-bottom: 10px;
 }
 
 .dashboard-body-exercise {
@@ -909,4 +914,127 @@ footer {
 
 .dashbord-create-errormessage-wrapper div span {
   float: right;
+}
+
+.dashboard-body-program-info {
+  max-width: 20ch;
+  word-wrap: break-word;
+}
+
+.dashboard-body-tag-info p:first-child {
+  font-size: 30px;
+  font-weight: bold;
+}
+.dashboard-body-program-first {
+  display: flex;
+  align-items: center;
+}
+.dashboard-program-info-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 80%;
+  margin-left: 30px;
+  height: 120px;
+}
+
+.dashboard-program-info-settings {
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  color: var(--text-color-2);
+}
+
+.dashboard-program-info-settings a {
+  background-color: var(--secondary-color);
+  color: var(--text-color-2);
+  border-radius: 10px;
+  margin-left: 5px;
+  padding: 2px 5px;
+  text-decoration: none;
+}
+
+.dashboard-program-info-settings a:first-child {
+  margin-left: 10px;
+}
+.dashboard-program-info-settings a:hover {
+  cursor: pointer;
+}
+
+.dashboard-program-actions-wrapper {
+  display: flex;
+  gap: 5%;
+}
+
+.dashboard-program-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100px;
+  height: 100%;
+  text-align: center;
+}
+
+.dashboard-program-actions .dashboard-program-actions-like-icon .iconify {
+  width: 50px;
+  height: 50px;
+  color: var(--main-color);
+}
+
+.dashboard-program-actions .dashboard-program-actions-like-icon :hover {
+  cursor: pointer;
+}
+
+.dashboard-program-actions-disabled {
+  display: none;
+}
+
+.dashboard-program-exercises-wrapper {
+  margin-top: 20px;
+
+  height: 60%;
+  min-height: 400px;
+}
+
+.dashboard-program-exercises {
+  height: 100%;
+  width: 100%;
+  border-radius: 15px;
+  padding: 20px;
+  background-color: var(--secondary-color);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  grid-row-gap: 10px;
+  grid-column-gap: 10px;
+  grid-template-rows: repeat(auto-fill, 80px);
+  overflow: scroll;
+}
+
+.dashboard-program-exercise {
+  background-color: var(--background-colour);
+  height: 80px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  text-transform: capitalize;
+}
+
+.dashboard-create-modal-exercisesbody-title {
+  font-size: 20px;
+}
+
+.dashboard-create-modal-exercisesbody-subtitle {
+  font-size: 10px;
+  color: var(--text-color-2);
+}
+
+.dashboard-create-modal-exercisesbody-link {
+  color: var(--text-color-2);
+  font-size: 13px;
+}
+
+.dashboard-create-modal-exercisesbody-link:hover {
+  cursor: pointer;
 }

@@ -1,8 +1,7 @@
 # imports
 import logging
-from operator import le
 from flask import Blueprint, render_template, session, redirect, url_for, abort, request, jsonify
-from .models import User, Exercise, Type, Program, ExerciseProgram
+from .models import User, Exercise, Type, Program, ExerciseProgram, FavoriteProgram
 from .import db
 import json
 
@@ -158,6 +157,15 @@ def create_program():
             if len(exercises) > 40:
                 return jsonify(False, 'Too many exercises selected.')
 
+            # check for duplicates
+
+            exerciseids = []
+            for exercise in exercises:
+                exerciseids.append(exercise[0])
+
+            if len(exerciseids) != len(set(exerciseids)):
+                return jsonify(False, 'There are duplicate exercises')
+
             # get user id
             userid = User.query.filter_by(username=f'{username}').first().id
             # insert playlist data into table.
@@ -178,3 +186,63 @@ def create_program():
                 db.session.commit()
 
             return jsonify(True, programid)
+
+
+@dashboard.route('/delete-program', methods=['POST'])
+def delete_program():
+    if 'user' in session:
+        programdata = json.loads(request.get_data())
+
+        # check if the user deleting the program is the user logged in in session data
+        if session['user'] != programdata['username']:
+            print('ahhh')
+            return jsonify(False)
+
+        # delete data from all tables where id is the id sent.
+        # *not sure if this is the propprer way to do this some guidance would be appreciated*
+        db.session.query(ExerciseProgram).filter(
+            ExerciseProgram.columns.program_id == programdata['id']).delete()
+        db.session.query(FavoriteProgram).filter(
+            FavoriteProgram.columns.program_id == programdata['id']).delete()
+        Program.query.filter(Program.id == programdata['id']).delete()
+        db.session.commit()
+
+        return jsonify(True)
+    else:
+        return jsonify(False)
+
+
+@dashboard.route('/program/<int:id>')
+def program(id):
+    user = 'pippin'
+
+    program_info = db.session.query(
+        Program.id, Program.name, Program.description, User.username).join(User).filter(Program.id == id).first()
+
+    if not program_info:
+        abort(404)
+
+    exercises = Program.query.filter(Program.id == id).first().exercises
+    print(exercises)
+
+    # this is used to check if user has liked the program... returns true if they have and returns false if they havent
+    # get the id of the user
+    user_id = db.session.query(User.id).filter(User.username == user).first()
+
+    # query the favoriteProgram relationship to see if the user id has liked the program with the id of the entered id.
+    user_like = db.session.query(FavoriteProgram).filter(
+        (FavoriteProgram.columns.user_id == int(user_id[0])) & (FavoriteProgram.columns.program_id == int(id))).first()
+
+    # create outcome
+    if user_like:
+        liked_by_user = True
+    else:
+        liked_by_user = False
+    print(liked_by_user)
+
+    # get amount of likes
+    likes = db.session.query(FavoriteProgram).filter(
+        (FavoriteProgram.columns.program_id == int(id))).count()
+    print(likes)
+
+    return render_template('program.html', username=user, program_info=program_info, exercises=exercises, liked_by_user=liked_by_user, likes=likes)

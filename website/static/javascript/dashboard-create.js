@@ -203,7 +203,7 @@ $("#dashboard-create-form-submit").click(function () {
     .then((response) => response.json())
     .then((data) => {
       if (data[0] == true) {
-        window.location.href = "/browse";
+        window.location.href = "/program/" + data[1];
       }
       if (data[0] == false) {
         console.log(data[1]);

@@ -3,6 +3,21 @@ from . import db
 from dataclasses import dataclass
 
 
+# FavoriteProgram table database model
+FavoriteProgram = db.Table('FavoriteProgram',
+                           db.Column('user_id', db.Integer,
+                                     db.ForeignKey('user.id')),
+                           db.Column('program_id', db.Integer, db.ForeignKey('program.id')))
+
+
+# ExerciseProgram table database model
+ExerciseProgram = db.Table('ExerciseProgram',
+                           db.Column('program_id', db.Integer,
+                                     db.ForeignKey('program.id')),
+                           db.Column('exercise_id', db.Integer,
+                                     db.ForeignKey('exercise.id')))
+
+
 # User table database model
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -10,6 +25,8 @@ class User(db.Model):
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(200))
     programs = db.relationship('Program')
+    favorites = db.relationship(
+        'Program', secondary=FavoriteProgram, backref='favorites')
 
 
 # program table database model
@@ -18,6 +35,8 @@ class Program(db.Model):
     name = db.Column(db.String(150), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     description = db.Column(db.String(3000))
+    exercises = db.relationship(
+        'Exercise', secondary=ExerciseProgram, backref='Exercisess')
 
 
 # exercise table database model
@@ -43,17 +62,3 @@ class Type(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String(150), nullable=False)
     exercise = db.relationship('Exercise')
-
-
-# FavoriteProgram table database model
-FavoriteProgram = db.Table('FavoriteProgram',
-                           db.Column('user_id', db.Integer,
-                                     db.ForeignKey('user.id')),
-                           db.Column('program_id', db.Integer, db.ForeignKey('program.id')))
-
-
-# ExerciseProgram table database model
-ExerciseProgram = db.Table('ExerciseProgram',
-                           db.Column('program_id', db.Integer,
-                                     db.ForeignKey('program.id')),
-                           db.Column('exercise_id', db.Integer, db.ForeignKey('exercise.id')))

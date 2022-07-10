@@ -1,0 +1,84 @@
+{% extends 'dashboard_template.html' %}
+
+
+{% block content %}
+
+<div class="dashboard-body-element dashboard-body-first dashboard-body-program-first">
+
+    <div class="dashboard-body-icon dashboard-body-tag">
+        <span class="iconify" data-icon="akar-icons:folder"></span>
+    </div>
+
+    <div class='dashboard-program-info-wrapper'>
+
+        <div class="dashboard-body-tag dashboard-body-tag-info">
+            <p>{{program_info[1] | capitalize}}</p>
+            {% if program_info[3] == username %}
+            <p>Created by You</p>
+            <div class="dashboard-program-info-settings">
+                <span class="iconify" data-icon="carbon:settings"></span>
+                <a id='dashboard-program-info-settings-copylink'>copy link</a>
+                <a id='dashboard-program-info-settings-deletepost'> delete</a>
+
+            </div>
+            {% else %}
+            <p>Created by {{program_info[3]}} </p>
+            {% endif %}
+
+        </div>
+        <div class="dashboard-body-tag dashboard-program-actions-wrapper">
+            <div class="dashboard-program-actions dashboard-program-actions-likes">
+
+                {% if liked_by_user == True %}
+                <div class=" dashboard-program-actions-like-icon" id='dashboard-program-actions-like-icon'>
+                    <span class="iconify" id='dashboard-program-actions-liked' data-icon="ci:heart-fill"></span>
+                    <span class="iconify dashboard-program-actions-disabled" id='dashboard-program-actions-notliked'
+                        data-icon="ci:heart-outline"></span>
+                </div>
+
+                {% if likes > 1 %}
+                <p>Liked by you and {{likes}} others</p>
+                {% else %}
+                <p>liked by you.</p>
+                {% endif %}
+                {% else %}
+                <div class="dashboard-program-actions-like-icon" id="dashboard-program-actions-like-icon">
+                    <span class="iconify dashboard-program-actions-disabled" id='dashboard-program-actions-liked'
+                        data-icon="ci:heart-fill"></span>
+                    <span class="iconify" id='dashboard-program-actions-notliked' data-icon="ci:heart-outline"></span>
+                </div>
+
+                <p>liked by {{likes}} users.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="dashboard-body-element dashboard-program-exercises-wrapper">
+    <div class="dashboard-program-exercises">
+        {% for exercise in exercises%}
+        <div class="dashboard-program-exercise">
+            <p class="dashboard-create-modal-exercisesbody-title">{{exercise.name}}</p>
+            <a class="dashboard-create-modal-exercisesbody-link"
+                onclick="location.href='/exercise/{{exercise.id}}';">more...</a>
+        </div>
+        {% endfor %}
+    </div>
+
+
+</div>
+
+
+<script src=" {{url_for('static', filename='javascript/dashboard-program.js' )}}"></script>
+<script src="{{url_for('static', filename='javascript/dashboard-program-request.js' )}}"></script>
+<script type="text/javascript">
+    var programid = ({{ program_info[0] | tojson }})
+    var programuser = ({{ program_info[3] | tojson  }})
+</script>
+
+
+
+{% endblock %}
