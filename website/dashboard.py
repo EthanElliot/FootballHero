@@ -81,7 +81,6 @@ def exercise(id):
             Type).filter(Exercise.id == id).first()
         # if exercise exists render the page
         if exercise:
-            print(exercise)
             return render_template('exercise.html', exercise=exercise)
         # if exercise doesnt exist return a error
         else:
@@ -122,7 +121,6 @@ def exerciseget():
 
         exercise_data = to_JSON(exercise_data)
 
-    print(exercise_data)
     return jsonify(exercise_data)
 
 
@@ -131,7 +129,6 @@ def create_program():
     if 'user' in session:
         if request.method == 'POST':
             exercisedata = json.loads(request.get_data())
-            print(exercisedata)
             name = exercisedata['name']
             description = exercisedata['description']
             username = session['user']
@@ -195,7 +192,6 @@ def delete_program():
 
         # check if the user deleting the program is the user logged in in session data
         if session['user'] != programdata['username']:
-            print('ahhh')
             return jsonify(False)
 
         # delete data from all tables where id is the id sent.
@@ -223,7 +219,6 @@ def program(id):
         abort(404)
 
     exercises = Program.query.filter(Program.id == id).first().exercises
-    print(exercises)
 
     # this is used to check if user has liked the program... returns true if they have and returns false if they havent
     # get the id of the user
@@ -238,11 +233,9 @@ def program(id):
         liked_by_user = True
     else:
         liked_by_user = False
-    print(liked_by_user)
 
     # get amount of likes
     likes = db.session.query(FavoriteProgram).filter(
         (FavoriteProgram.columns.program_id == int(id))).count()
-    print(likes)
 
     return render_template('program.html', username=user, program_info=program_info, exercises=exercises, liked_by_user=liked_by_user, likes=likes)
