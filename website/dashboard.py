@@ -146,7 +146,7 @@ def create_program():
             if len(description) < 20:
                 return jsonify(False, 'Description is too short.')
             if len(exercises) < 2:
-                return jsonify(False, 'Not enouph exercises selected.')
+                return jsonify(False, 'Not enough exercises selected.')
             if len(name) > 16:
                 return jsonify(False, 'Name is too long.')
             if len(description) > 60:

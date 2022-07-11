@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FootballHero</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'styles.css') }}" />
+</head>
+
+<body>
+    <div class="error-content-wrapper">
+        <div class="error-content-body">
+            <p class="error-content-body-code">{{response.code}}</p>
+            <p class="error-content-body-name">{{response.name}} </p>
+            <p class="error-content-body-description">{{response.description}} </p>
+            <div class="error-content-body-buttons">
+                <button class='error-content-body-error-button  button' onclick="history.back()">Go Back</button>
+                {%if session['user']%}
+                <button class='error-content-body-error-button  button' onclick="location.href = '/dashboard'">Go
+                    home</button>
+                {% else %}
+                <button class='error-content-body-error-button  button' onclick="location.href = '/'">Go home</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

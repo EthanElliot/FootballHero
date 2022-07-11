@@ -1050,3 +1050,54 @@ footer {
 .dashboard-create-modal-exercisesbody-link:hover {
   cursor: pointer;
 }
+
+/* styles fror error page*/
+.error-content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--secondary-color);
+}
+
+.error-content-body {
+  background-color: var(--background-colour);
+  width: 40%;
+  height: 70%;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  min-width: 500px;
+}
+
+.error-content-body-code {
+  color: var(--main-color);
+  font-weight: bold;
+  font-size: 30vh;
+  letter-spacing: 0.5vw;
+}
+
+.error-content-body-name {
+  font-size: 25px;
+  color: var(--text-color-2);
+}
+
+.error-content-body-description {
+  font-size: 15px;
+  margin-top: 10px;
+}
+
+.error-content-body-buttons {
+  margin-top: 10%;
+}
+
+.error-content-body-error-button {
+  height: 40px;
+  width: 90px;
+  margin-left: 10px;
+  background-color: var(--main-color);
+  color: var(--text-color-3);
+}
