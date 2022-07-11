@@ -1,5 +1,6 @@
 # imports
 import logging
+from urllib import response
 from flask import Blueprint, render_template, session, redirect, url_for, abort, request, jsonify
 from .models import User, Exercise, Type, Program, ExerciseProgram, FavoriteProgram
 from .import db
@@ -206,6 +207,51 @@ def delete_program():
         return jsonify(True)
     else:
         return jsonify(False)
+
+
+@dashboard.route('/like-program', methods=['POST'])
+def like_program():
+    if 'user' in session:
+        programdata = json.loads(request.get_data())
+        program_id = programdata['id']
+
+        # this is used to check if user has liked the program... returns true if they have and returns false if they havent
+        # get the id of the user
+        user_id = db.session.query(User.id).filter(
+            User.username == session['user']).first()
+
+        # query the favoriteProgram relationship to see if the user id has liked the program with the id of the entered id.
+        user_like = db.session.query(FavoriteProgram).filter(
+            (FavoriteProgram.columns.user_id == int(user_id[0])) & (FavoriteProgram.columns.program_id == program_id)).first()
+
+        # create outcome and add the relationship if the user hasnt liked or remove if they have
+        if user_like:
+            db.session.query(FavoriteProgram).filter(
+                (FavoriteProgram.columns.user_id == int(user_id[0])) & (FavoriteProgram.columns.program_id == program_id)).delete()
+            db.session.commit()
+            liked_by_user = False
+
+        else:
+            likerelationship = FavoriteProgram.insert().values(
+                user_id=(user_id.id), program_id=(program_id))
+            db.session.execute(likerelationship)
+            db.session.commit()
+            liked_by_user = True
+
+        # get like count
+        likes = db.session.query(FavoriteProgram).filter(
+            (FavoriteProgram.columns.program_id == int(program_id))).count()
+
+        # create responce
+        response = {
+            'liked_by_user': liked_by_user,
+            'likes': likes
+        }
+
+        # return responce
+        return jsonify(response)
+    else:
+        return jsonify('error: user not logged in')
 
 
 @dashboard.route('/program/<int:id>')

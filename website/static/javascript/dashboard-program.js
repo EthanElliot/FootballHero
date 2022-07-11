@@ -1,12 +1,36 @@
 like_icon = $("#dashboard-program-actions-like-icon");
+like_text = $("#dashboard-program-actions-like-text");
 
 icon = $("#dashboard-program-actions-like-icon span");
 
 like_icon.click(function () {
-  var t1 = document.getElementById("dashboard-program-actions-liked");
-  var t2 = document.getElementById("dashboard-program-actions-notliked");
-  t1.classList.toggle("dashboard-program-actions-disabled");
-  t2.classList.toggle("dashboard-program-actions-disabled");
+  responce = send_delete_request(programid);
+  responce
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.liked_by_user == true) {
+        console.log("yo");
+        if (data.likes == 1) {
+          like_text.text("Liked by you");
+        } else if (data.likes == 2) {
+          like_text.text(`liked by you and 1 other`);
+        } else if (data.likes > 1) {
+          like_text.text(`liked by you and ${data.likes} others`);
+        }
+      } else {
+        if (data.likes == 0) {
+          like_text.text("Liked by 0 users");
+        } else if (data.likes == 1) {
+          like_text.text(`liked by 1 user`);
+        } else if (data.likes > 0) {
+          like_text.text(`liked by ${data.likes} users`);
+        }
+      }
+      var t1 = document.getElementById("dashboard-program-actions-liked");
+      var t2 = document.getElementById("dashboard-program-actions-notliked");
+      t1.classList.toggle("dashboard-program-actions-disabled");
+      t2.classList.toggle("dashboard-program-actions-disabled");
+    });
 });
 
 copylink = $("#dashboard-program-info-settings-copylink");

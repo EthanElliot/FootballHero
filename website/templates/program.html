@@ -37,9 +37,9 @@
                 </div>
 
                 {% if likes > 1 %}
-                <p>Liked by you and {{likes}} others</p>
+                <p id='dashboard-program-actions-like-text'>Liked by you and {{likes}} others</p>
                 {% else %}
-                <p>liked by you.</p>
+                <p id='dashboard-program-actions-like-text'>liked by you</p>
                 {% endif %}
                 {% else %}
                 <div class="dashboard-program-actions-like-icon" id="dashboard-program-actions-like-icon">
@@ -48,7 +48,7 @@
                     <span class="iconify" id='dashboard-program-actions-notliked' data-icon="ci:heart-outline"></span>
                 </div>
 
-                <p>liked by {{likes}} users.</p>
+                <p id='dashboard-program-actions-like-text'>liked by {{likes}} users</p>
                 {% endif %}
             </div>
         </div>
