@@ -9,7 +9,7 @@ async function send_delete_request(id, username) {
   return response;
 }
 
-async function send_delete_request(id) {
+async function send_like_request(id) {
   let response = await fetch("/like-program", {
     method: "post",
     body: JSON.stringify({

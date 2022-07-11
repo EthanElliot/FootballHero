@@ -4,12 +4,11 @@ like_text = $("#dashboard-program-actions-like-text");
 icon = $("#dashboard-program-actions-like-icon span");
 
 like_icon.click(function () {
-  responce = send_delete_request(programid);
+  responce = send_like_request(programid);
   responce
     .then((response) => response.json())
     .then((data) => {
       if (data.liked_by_user == true) {
-        console.log("yo");
         if (data.likes == 1) {
           like_text.text("Liked by you");
         } else if (data.likes == 2) {
@@ -41,7 +40,6 @@ copylink.click(function () {
 deletepost = $("#dashboard-program-info-settings-deletepost");
 deletepost.click(function () {
   if (confirm("Are you sure you want to delete?") == true) {
-    console.log(programid);
     responce = send_delete_request(programid, programuser);
     responce
       .then((response) => response.json())
@@ -50,7 +48,6 @@ deletepost.click(function () {
           window.location.href = "/browse";
         } else {
           alert("something went wrong.");
-          console.log("something went wrong");
         }
       });
   }

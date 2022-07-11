@@ -1,6 +1,5 @@
 # imports
 import logging
-from urllib import response
 from flask import Blueprint, render_template, session, redirect, url_for, abort, request, jsonify
 from .models import User, Exercise, Type, Program, ExerciseProgram, FavoriteProgram
 from .import db
@@ -256,32 +255,36 @@ def like_program():
 
 @dashboard.route('/program/<int:id>')
 def program(id):
-    user = 'pippin'
+    if 'user' in session:
+        user = session['user']
 
-    program_info = db.session.query(
-        Program.id, Program.name, Program.description, User.username).join(User).filter(Program.id == id).first()
+        program_info = db.session.query(
+            Program.id, Program.name, Program.description, User.username).join(User).filter(Program.id == id).first()
 
-    if not program_info:
-        abort(404)
+        if not program_info:
+            abort(404)
 
-    exercises = Program.query.filter(Program.id == id).first().exercises
+        exercises = Program.query.filter(Program.id == id).first().exercises
 
-    # this is used to check if user has liked the program... returns true if they have and returns false if they havent
-    # get the id of the user
-    user_id = db.session.query(User.id).filter(User.username == user).first()
+        # this is used to check if user has liked the program... returns true if they have and returns false if they havent
+        # get the id of the user
+        user_id = db.session.query(User.id).filter(
+            User.username == user).first()
 
-    # query the favoriteProgram relationship to see if the user id has liked the program with the id of the entered id.
-    user_like = db.session.query(FavoriteProgram).filter(
-        (FavoriteProgram.columns.user_id == int(user_id[0])) & (FavoriteProgram.columns.program_id == int(id))).first()
+        # query the favoriteProgram relationship to see if the user id has liked the program with the id of the entered id.
+        user_like = db.session.query(FavoriteProgram).filter(
+            (FavoriteProgram.columns.user_id == int(user_id[0])) & (FavoriteProgram.columns.program_id == int(id))).first()
 
-    # create outcome
-    if user_like:
-        liked_by_user = True
+        # create outcome
+        if user_like:
+            liked_by_user = True
+        else:
+            liked_by_user = False
+
+        # get amount of likes
+        likes = db.session.query(FavoriteProgram).filter(
+            (FavoriteProgram.columns.program_id == int(id))).count()
+
+        return render_template('program.html', username=user, program_info=program_info, exercises=exercises, liked_by_user=liked_by_user, likes=likes)
     else:
-        liked_by_user = False
-
-    # get amount of likes
-    likes = db.session.query(FavoriteProgram).filter(
-        (FavoriteProgram.columns.program_id == int(id))).count()
-
-    return render_template('program.html', username=user, program_info=program_info, exercises=exercises, liked_by_user=liked_by_user, likes=likes)
+        return redirect((url_for('auth.signin')))
