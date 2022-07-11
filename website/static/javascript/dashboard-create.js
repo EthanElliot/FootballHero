@@ -153,44 +153,72 @@ modaladd.click(function () {
 var create_form_body = $("#dashboard-create-form-exercises");
 
 function exerciseformatpage() {
-  if (programmeexercises.length > 0) {
-    console.log(programmeexercises);
-    create_form_body
-      .contents(":not(template,#dashboard-create-showmodal)")
-      .remove();
-  }
+  //clear all the elemetns from create
+  create_form_body
+    .contents(":not(template,#dashboard-create-showmodal)")
+    .remove();
+
   $("#dashboard-create-showmodal").css("display", "none");
 
-  create_form_body.addClass("create-form-display-grid");
+  //if there are exercises do this
+  if (programmeexercises.length > 0) {
+    create_form_body.addClass("create-form-display-grid");
 
-  for (var i = 0; i < programmeexercises.length; i++) {
-    var exercise_form_template = $("#dashboard-create-form-template")[0];
-    var exercise_clone_form = exercise_form_template.content.cloneNode(true);
+    for (var i = 0; i < programmeexercises.length; i++) {
+      var exercise_form_template = $("#dashboard-create-form-template")[0];
+      var exercise_clone_form = exercise_form_template.content.cloneNode(true);
 
-    exercise_clone_form.querySelector(
-      "#dashboard-create-form-exercisesbody-title"
-    ).innerHTML = programmeexercises[i][1].toString();
+      exercise_clone_form.querySelector(
+        "#dashboard-create-form-exercisesbody-title"
+      ).innerHTML = programmeexercises[i][1].toString();
 
-    exercise_clone_form.querySelector(
-      "#dashboard-create-form-exercisesbody-subtitle "
-    ).innerHTML = programmeexercises[i][2];
+      exercise_clone_form.querySelector(
+        "#dashboard-create-form-exercisesbody-subtitle "
+      ).innerHTML = programmeexercises[i][2];
 
-    exercise_clone_form
-      .querySelector("#dashboard-create-form-exercisesbody")
-      .setAttribute(
-        "id",
-        "dashboard-create-form-exercise-" + programmeexercises[i][0]
-      );
+      exercise_clone_form
+        .querySelector("#dashboard-create-form-exercisesbody")
+        .setAttribute(
+          "id",
+          "dashboard-create-form-exercise-" + programmeexercises[i][0]
+        );
+
+      exercise_clone_form
+        .querySelector("#dashboard-create-form-removeexercise")
+        .setAttribute("id", `dashboard-create-form-removeexercise-${i}`);
+
+      //add themplate to the dom
+      create_form_body[0].appendChild(exercise_clone_form);
+
+      //add a on click function for each remove exercise to remove exercises
+      $(`#dashboard-create-form-removeexercise-${i}`).on("click", function () {
+        var id = $(this).attr("id");
+        //get int from id
+        var i = id.replace(/[^\d.]/g, ""); //found on https://stackoverflow.com/questions/10780087/getting-integer-value-from-a-string-using-javascript-jquery
+
+        //if it is the last exercise clear the selected exercises else remove the exercise with the id from the list.
+        if (programmeexercises.length <= 1) {
+          programmeexercises = [];
+        } else {
+          programmeexercises.splice(i, 1);
+        }
+
+        //format page
+        exerciseformatpage();
+      });
+    }
 
     //add themplate to the dom
-    create_form_body[0].appendChild(exercise_clone_form);
+
+    create_form_body[0].appendChild(
+      $("#dashboard-create-form-plustemplate")[0].content.cloneNode(true)
+    );
   }
-
-  //add themplate to the dom
-
-  create_form_body[0].appendChild(
-    $("#dashboard-create-form-plustemplate")[0].content.cloneNode(true)
-  );
+  //if there are no exercises do this
+  else if (programmeexercises.length == 0) {
+    create_form_body.removeClass("create-form-display-grid");
+    $("#dashboard-create-showmodal").css("display", "flex");
+  }
 }
 
 $("#dashboard-create-form-submit").click(function () {
@@ -206,7 +234,6 @@ $("#dashboard-create-form-submit").click(function () {
         window.location.href = "/program/" + data[1];
       }
       if (data[0] == false) {
-        console.log(data[1]);
         $("#dashbord_create_error").css("display", "block");
         $("#dashboard-create-errormessage").text(data[1]);
       }

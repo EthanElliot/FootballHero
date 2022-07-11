@@ -697,6 +697,18 @@ footer {
   padding: 10px;
   border-radius: 10px;
   text-transform: capitalize;
+  position: relative;
+}
+
+.dashboard-create-form-removeexercise {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  transform: rotate(45deg);
+  font-size: 15px;
+}
+.dashboard-create-form-removeexercise:hover {
+  cursor: pointer;
 }
 
 #dashboard-create-form-exercisesbody-title {
