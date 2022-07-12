@@ -15,7 +15,7 @@ if (activePage === "/browse") {
   console.log(activePage);
 }
 
-if (activePage === "/account") {
+if (activePage === `/account/${username}`) {
   document
     .getElementById("dashboard-nav-account-icn")
     .classList.add("dashboard-nav-navelement-active");

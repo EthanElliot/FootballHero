@@ -2,5 +2,83 @@
 
 
 {% block content %}
-{{username}}
+
+
+<div class="dashboard-body-element dashboard-body-first dashboard-body-account-first">
+
+    <div class="dashboard-body-icon dashboard-body-tag">
+        <span class="iconify" data-icon="bx:user"></span>
+    </div>
+
+    <div class='dashboard-account-info-wrapper'>
+
+        <p class="dashboard-account-info-username">{{user.username | capitalize}}</p>
+
+        {% if session['user'] == user.username %}
+        {% if playlistcreated == 0 %}<p class="dashboard-account-info-subtitle">You have created 0 programs.</p>
+        {% elif playlistcreated <= 1 %} <p class="dashboard-account-info-subtitle">You have created 1 program.</p>
+            {% else %}
+            <p class="dashboard-account-info-subtitle">You have created {{playlistcreated}} programs</p>
+            {% endif%}
+            {% else %}
+            {% if playlistcreated <= 1 %} <p class="dashboard-account-info-subtitle">This user has created 1 program.
+                </p>
+                {% else %}
+                <p class="dashboard-account-info-subtitle">This user has created {{playlistcreated}} programs</p>
+                {% endif%}
+                {% endif %}
+
+                {% if session['user'] == user.username %}
+                <div class="dashboard-account-info-settings">
+                    <span class="iconify" data-icon="carbon:settings"></span>
+                    <a id='dashboard-account-info-settings-editinfo' class="dashboard-account-info-settings-button">edit
+                        info</a>
+                    <a id='dashboard-account-info-settings-deleteaccount'
+                        class="dashboard-account-info-settings-button">delete account</a>
+
+
+                </div>
+                {% endif %}
+
+    </div>
+</div>
+
+
+<div id="dashboard-account-modal" class="dashboard-modal-wrapper">
+    <div id='dashboard-account-modal-editinfo' class="dashboard-account-modal">
+        <div id='dashboard-account-modal-editinfo-close' class="dashboard-account-modal-close">
+            <p>&#9547;</p>
+        </div>
+        edit info
+    </div>
+    <div id='dashboard-account-modal-deleteaccount' class="dashboard-account-modal">
+        <div id='dashboard-account-modal-deleteaccount-close' class="dashboard-account-modal-close">
+            <p>&#9547;</p>
+        </div>
+
+        <p class="dashboard-account-modal-form-title">Delete</p>
+        <div class="dashboard-account-modal-form-error-wrapper" id='dashboard-account-modal-form-error-wrapper'>
+            <p class="dashboard-account-modal-form-error-message" id='dashboard-account-modal-form-error-message'></p>
+            <p class="dashboard-account-modal-form-error-close" id='dashboard-account-modal-form-error-close'>&#9547;
+            </p>
+        </div>
+        <p class="dashboard-account-modal-form-paragraph">To delete your account please enter your password. </p>
+
+        <input type="password" placeholder="password" class="dashboard-account-modal-form-password"
+            id='dashboard-account-modal-form-password' maxlength="150"><br>
+        <button class="button dashboard-account-modal-form-delete"
+            id='dashboard-account-modal-form-delete'>delete</button>
+
+    </div>
+</div>
+
+<script>
+    var username = ({{ user.username | tojson }})
+</script>
+
+<script src="{{url_for('static' , filename='javascript/dashboard-account.js')}}"></script>
+
+<script src="{{url_for('static' , filename='javascript/dashboard-account-request.js')}}"></script>
+
+
 {% endblock %}

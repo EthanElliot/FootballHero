@@ -4,6 +4,7 @@ from flask import Blueprint, render_template, session, redirect, url_for, abort,
 from .models import User, Exercise, Type, Program, ExerciseProgram, FavoriteProgram
 from .import db
 import json
+from werkzeug.security import check_password_hash
 
 
 # make flask blueprint
@@ -47,12 +48,19 @@ def browse():
 
 
 # account route
-@dashboard.route("/account")
-def account():
+@dashboard.route("/account/<username>")
+def account(username):
     # check if user is logged in
     if 'user' in session:
-        user = session['user']
-        return render_template('account.html', username=user)
+        user = db.session.query(User.id, User.username).filter(
+            User.username == username).first()
+
+        if not user:
+            abort(404)
+
+        playlistcreated = db.session.query(Program.user_id).filter(
+            (Program.user_id == int(user.id))).count()
+        return render_template('account.html', user=user, playlistcreated=playlistcreated)
     else:
         return redirect((url_for('auth.signin')))
 
@@ -288,3 +296,48 @@ def program(id):
         return render_template('program.html', username=user, program_info=program_info, exercises=exercises, liked_by_user=liked_by_user, likes=likes)
     else:
         return redirect((url_for('auth.signin')))
+
+
+@dashboard.route('/delete-account', methods=['POST'])
+def delete_account():
+    if 'user' in session:
+        userdata = json.loads(request.get_data())
+
+        if session['user'] == userdata['username']:
+            user = db.session.query(User).filter(
+                User.username == session['user']).first()
+            if check_password_hash(user.password, userdata['password']) == True:
+
+                # delete program
+                program_id = db.session.query(Program.id).filter(
+                    Program.user_id == user.id).first()
+
+                if program_id:
+                    db.session.query(ExerciseProgram).filter(
+                        ExerciseProgram.columns.program_id == program_id).delete()
+                    db.session.query(Program).filter(
+                        Program.user_id == user.id).delete()
+                    db.session.query(FavoriteProgram).filter(
+                        FavoriteProgram.columns.program_id == program_id[0]).delete()
+
+                # delete favorited programs
+                db.session.query(FavoriteProgram).filter(
+                    FavoriteProgram.columns.user_id == user.id).delete()
+
+                # delete user
+                db.session.query(User).filter(User.id == user.id).delete()
+
+                # commit
+                db.session.commit()
+
+                session.pop('user', None)
+                return jsonify(True, 'Success')
+
+            else:
+                return jsonify(False, 'Incorect password')
+
+        else:
+            return jsonify(False, 'Something went wrong')
+
+    else:
+        return jsonify(False, 'User not logged in')

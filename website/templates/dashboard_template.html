@@ -49,7 +49,7 @@
 
                 <li>
                     <div id='dashboard-nav-account' class="dashboard-nav-navelement"
-                        onclick="location.href = '/account';">
+                        onclick="location.href = '/account/{{session['user']}}';">
                         <div id='dashboard-nav-account-icn' class="dashboard-nav-navelement-icn">
                             <span class="iconify" data-icon="bx:user" style="font-size: 20px"></span>
                         </div>
@@ -72,8 +72,11 @@
 
         <div class="dashboard-body">{% block content %} {% endblock %}</div>
     </div>
-
+    <script>
+        var username = ({{ session['user'] | tojson }})
+    </script>
     <script src="{{url_for('static' , filename='javascript/dashboard-nav.js')}}"></script>
+
 
 </body>
 
