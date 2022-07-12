@@ -36,13 +36,13 @@ def signup():
         # checks for the len of inputs and if inputs exist
         if check:
             flash('usename or email already in use')
-        elif len(email) <= 4:
+        if len(email) <= 4:
             flash('email must be longer than 4 charaters')
-        elif len(username) <= 4:
+        if len(username) <= 4:
             flash('usename must be longer than 4 charaters')
-        elif password1 != password2:
+        if password1 != password2:
             flash('passwords dont match')
-        elif len(email) > 150 and len(username) > 150 and len(password1) > 200 and len(password2) > 200:
+        if len(email) > 150 and len(username) > 150 and len(password1) > 200 and len(password2) > 200:
             flash('your inputs is too long')
 
         # if unique account sign the user up and redirect to dashboard
@@ -73,9 +73,9 @@ def signin():
         user = User.query.filter(
             (User.email == identifier) | (User.username == identifier)).first()
 
-        # if no username
+        # if no user
         if not user:
-            flash('no username')
+            flash('no user found')
 
         # if user in check the password and then if the password matches sign the user in
         else:

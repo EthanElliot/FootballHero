@@ -52,7 +52,7 @@ def browse():
 def account(username):
     # check if user is logged in
     if 'user' in session:
-        user = db.session.query(User.id, User.username).filter(
+        user = db.session.query(User.id, User.username, User.email).filter(
             User.username == username).first()
 
         if not user:
@@ -314,7 +314,7 @@ def delete_account():
 
                 if program_id:
                     db.session.query(ExerciseProgram).filter(
-                        ExerciseProgram.columns.program_id == program_id).delete()
+                        ExerciseProgram.columns.program_id == program_id[0]).delete()
                     db.session.query(Program).filter(
                         Program.user_id == user.id).delete()
                     db.session.query(FavoriteProgram).filter(
@@ -334,6 +334,60 @@ def delete_account():
                 return jsonify(True, 'Success')
 
             else:
+                return jsonify(False, 'Incorect password')
+
+        else:
+            return jsonify(False, 'Something went wrong')
+
+    else:
+        return jsonify(False, 'User not logged in')
+
+
+@dashboard.route('/edit-account', methods=['POST'])
+def edit_account():
+    if 'user' in session:
+        userdata = json.loads(request.get_data())
+
+        if session['user'] == userdata['username']:
+            user = db.session.query(User).filter(
+                User.username == session['user']).first()
+            if not user:
+                return jsonify(False, 'Something went wrong')
+
+            if check_password_hash(user.password, userdata['password']) == True:
+
+                new_username = str(userdata['updateinfo']['username'])
+                new_email = str(userdata['updateinfo']['email'])
+
+                if user.username != new_username and user.email != new_email:
+                    check = User.query.filter(
+                        (User.email == new_email) | (User.username == new_username)).first()
+                elif user.username != new_username:
+                    check = User.query.filter(
+                        (User.username == new_username)).first()
+                elif user.email != new_email:
+                    check = User.query.filter(
+                        (User.email == new_email)).first()
+                else:
+                    return jsonify(True, session['user'])
+
+                if check:
+                    return jsonify(False, 'email or username already in use')
+                if len(new_email) <= 4:
+                    return jsonify(False, 'email must be longer than 4 charaters')
+                if len(new_username) <= 4:
+                    return jsonify(False, 'usename must be longer than 4 charaters')
+                if len(new_email) > 150 and len(new_username) > 150:
+                    return jsonify(False, 'your inputs are too long')
+                else:
+                    user.username = (new_username)
+                    user.email = (new_email)
+                    db.session.commit()
+                    session['user'] = new_username
+                    return jsonify(True, new_username)
+
+            else:
+
                 return jsonify(False, 'Incorect password')
 
         else:

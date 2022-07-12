@@ -1152,11 +1152,11 @@ footer {
   transform: translateY(-50%);
   padding: 20px;
   width: 40%;
-  height: 38%;
+  height: 40%;
   min-width: 500px;
   border-radius: 30px;
   position: relative;
-  min-height: 280px;
+  min-height: 330px;
 }
 
 .dashboard-account-modal-close {
@@ -1180,9 +1180,10 @@ footer {
 
 .dashboard-account-modal-form-paragraph {
   color: var(--text-color-2);
+  margin-bottom: 5px;
 }
 
-.dashboard-account-modal-form-password {
+.dashboard-account-modal-form-input {
   background-color: var(--secondary-color);
   height: 30px;
   width: 75%;
@@ -1190,9 +1191,12 @@ footer {
   margin: 5px 0;
   border-radius: 15px;
   padding-left: 15px;
+}
+
+.dashboard-account-modal-form-input:first-child {
   margin-top: 30px;
 }
-.dashboard-account-modal-form-delete {
+.dashboard-account-modal-form-button {
   height: 40px;
   width: 90px;
   background-color: var(--main-color);

@@ -30,14 +30,21 @@ deleteaccount_modal_close.on("click", function () {
   deleteaccount_modal.css("display", "none");
 });
 
-$("#dashboard-account-modal-form-error-close").on("click", function () {
-  $("#dashboard-account-modal-form-error-wrapper").css("display", "none");
+$("#dashboard-account-modal-form-error-delete-close").on("click", function () {
+  $("#dashboard-account-modal-form-error-delete-wrapper").css(
+    "display",
+    "none"
+  );
+});
+
+$("#dashboard-account-modal-form-error-edit-close").on("click", function () {
+  $("#dashboard-account-modal-form-error-edit-wrapper").css("display", "none");
 });
 
 $("#dashboard-account-modal-form-delete").on("click", function () {
   responce = send_delete_account(
     username,
-    $("#dashboard-account-modal-form-password").val()
+    $("#dashboard-account-modal-form-password-delete").val()
   );
 
   responce
@@ -47,9 +54,41 @@ $("#dashboard-account-modal-form-delete").on("click", function () {
         location.replace("/");
       }
       if (data[0] == false) {
-        $("#dashboard-account-modal-form-error-message").html(data[1]);
+        $("#dashboard-account-modal-form-error-delete-message").html(data[1]);
 
-        $("#dashboard-account-modal-form-error-wrapper").css("display", "flex");
+        $("#dashboard-account-modal-form-error-delete-wrapper").css(
+          "display",
+          "flex"
+        );
+      }
+    });
+});
+
+$("#dashboard-account-modal-form-edit").on("click", function () {
+  console.log("yes");
+  updateinfo = {
+    username: $("#dashboard-account-modal-form-username").val(),
+    email: $("#dashboard-account-modal-form-email").val(),
+  };
+
+  responce = send_edit_account(
+    username,
+    updateinfo,
+    $("#dashboard-account-modal-form-password-edit").val()
+  );
+  responce
+    .then((response) => response.json())
+    .then((data) => {
+      if (data[0] == true) {
+        location.replace(`/account/${data[1]}`);
+      }
+      if (data[0] == false) {
+        $("#dashboard-account-modal-form-error-edit-message").html(data[1]);
+
+        $("#dashboard-account-modal-form-error-edit-wrapper").css(
+          "display",
+          "flex"
+        );
       }
     });
 });
