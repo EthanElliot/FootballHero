@@ -356,7 +356,7 @@ def edit_account():
 
             if check_password_hash(user.password, userdata['password']) == True:
 
-                new_username = str(userdata['updateinfo']['username'])
+                new_username = str(userdata['updateinfo']['username']).lower()
                 new_email = str(userdata['updateinfo']['email'])
 
                 if user.username != new_username and user.email != new_email:

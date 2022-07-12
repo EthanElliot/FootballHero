@@ -25,7 +25,7 @@ def signup():
     # if data is sent get the form data and assign it to variables
     if request.method == 'POST':
         email = request.form.get('email')
-        username = request.form.get('username')
+        username = (request.form.get('username')).lower()
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
 
@@ -33,16 +33,17 @@ def signup():
         check = User.query.filter(
             (User.email == email) | (User.username == username)).first()
 
+        print(check)
         # checks for the len of inputs and if inputs exist
         if check:
             flash('usename or email already in use')
-        if len(email) <= 4:
+        elif len(email) <= 4:
             flash('email must be longer than 4 charaters')
-        if len(username) <= 4:
+        elif len(username) <= 4:
             flash('usename must be longer than 4 charaters')
-        if password1 != password2:
+        elif password1 != password2:
             flash('passwords dont match')
-        if len(email) > 150 and len(username) > 150 and len(password1) > 200 and len(password2) > 200:
+        elif len(email) > 150 and len(username) > 150 and len(password1) > 200 and len(password2) > 200:
             flash('your inputs is too long')
 
         # if unique account sign the user up and redirect to dashboard
@@ -71,7 +72,7 @@ def signin():
 
         # query the database to get the password
         user = User.query.filter(
-            (User.email == identifier) | (User.username == identifier)).first()
+            (User.email == identifier) | (User.username == identifier.lower())).first()
 
         # if no user
         if not user:
