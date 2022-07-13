@@ -36,7 +36,7 @@ class Program(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     description = db.Column(db.String(3000))
     exercises = db.relationship(
-        'Exercise', secondary=ExerciseProgram, backref='Exercisess')
+        'Exercise', secondary=ExerciseProgram, backref='exercises')
 
 
 # exercise table database model
