@@ -1,12 +1,11 @@
 # imports
-from curses.ascii import US
 import logging
 from flask import Blueprint, render_template, session, redirect, url_for, abort, request, jsonify
-from sqlalchemy import false
 from .models import User, Exercise, Type, Program, ExerciseProgram, FavoriteProgram
 from .import db
 import json
 from werkzeug.security import check_password_hash
+from sqlalchemy import func, column, desc, false
 
 
 # make flask blueprint
@@ -32,8 +31,27 @@ def to_JSON(data):
 def home():
     # check if user is logged in
     if 'user' in session:
-        user = session['user']
-        return render_template('dashboard.html', username=user)
+        # get user info from the db
+        user = db.session.query(User).filter(
+            User.username == session['user']).first()
+
+        # if user dosent exist return 404 error
+        if not user:
+            abort(404)
+
+        # get the of plalists created by the user
+        programscreated = db.session.query(Program.id, Program.name).filter(
+            (Program.user_id == int(user.id))).all()
+
+        # get the programs that the user has favorited
+        UserFavorites = user.favorites.all()
+
+        # get the programs with the most favorites
+        mostfavorites = db.session.query(
+            FavoriteProgram.columns.program_id.label('id'), Program.name).join(Program).group_by(FavoriteProgram.columns.program_id).order_by(desc(func.count(FavoriteProgram.columns.program_id))).limit(5).all()
+
+        # render the page
+        return render_template('dashboard.html', user=user, programscreated=programscreated, UserFavorites=UserFavorites, mostfavorites=mostfavorites)
     else:
         return redirect((url_for('auth.signin')))
 
@@ -56,19 +74,39 @@ def account(username):
     if 'user' in session:
 
         # get user info from the db
-        user = db.session.query(User.id, User.username, User.email).filter(
+        user = db.session.query(User).filter(
             User.username == username).first()
 
         # if user dosent exist return 404 error
         if not user:
             abort(404)
 
-        # get the number of plalists created
-        playlistcreated = db.session.query(Program.user_id).filter(
-            (Program.user_id == int(user.id))).count()
+        # get the programs with the favorites count added
+        likes_query = db.session.\
+            query(
+                FavoriteProgram.columns.program_id.label('programid'),
+                func.count().label('cnt')
+            ).\
+            filter(FavoriteProgram.columns.program_id).\
+            group_by('programid').\
+            subquery()
+
+        programscreated = db.session.\
+            query(Program.id,
+                  Program.name,
+                  func.coalesce(
+                      likes_query.c.cnt, 0).label('cnt')
+                  ).\
+            join(likes_query,
+                 likes_query.c.programid == Program.id,
+                 isouter=True
+                 ).\
+            filter(Program.user_id == user.id).\
+            order_by(desc(Program.id)).\
+            all()
 
         # render the page
-        return render_template('account.html', user=user, playlistcreated=playlistcreated)
+        return render_template('account.html', user=user, programscreated=programscreated)
     else:
         return redirect((url_for('auth.signin')))
 

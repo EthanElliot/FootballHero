@@ -37,7 +37,7 @@
                 </div>
 
                 {% if likes > 1 %}
-                <p id='dashboard-program-actions-like-text'>Liked by you and {{likes}} others</p>
+                <p id='dashboard-program-actions-like-text'>Liked by you and {{likes - 1}} others</p>
                 {% else %}
                 <p id='dashboard-program-actions-like-text'>liked by you</p>
                 {% endif %}

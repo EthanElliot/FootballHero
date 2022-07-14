@@ -26,7 +26,7 @@ class User(db.Model):
     password = db.Column(db.String(200))
     programs = db.relationship('Program')
     favorites = db.relationship(
-        'Program', secondary=FavoriteProgram, backref='favorites')
+        'Program', secondary=FavoriteProgram, backref=db.backref('favoriteprograms'),  lazy='dynamic')
 
 
 # program table database model
@@ -37,6 +37,8 @@ class Program(db.Model):
     description = db.Column(db.String(3000))
     exercises = db.relationship(
         'Exercise', secondary=ExerciseProgram, backref='exercises')
+    favorited = db.relationship(
+        'User', secondary=FavoriteProgram, backref=db.backref('favirouted'),  lazy='dynamic')
 
 
 # exercise table database model

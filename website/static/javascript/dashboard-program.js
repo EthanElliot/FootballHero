@@ -14,7 +14,7 @@ like_icon.click(function () {
         } else if (data.likes == 2) {
           like_text.text(`liked by you and 1 other`);
         } else if (data.likes > 1) {
-          like_text.text(`liked by you and ${data.likes} others`);
+          like_text.text(`liked by you and ${data.likes - 1} others`);
         }
       } else {
         if (data.likes == 0) {

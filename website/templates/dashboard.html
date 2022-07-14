@@ -2,5 +2,50 @@
 
 
 {% block content %}
-{{username}}
+
+
+<div class="dashboard-body-element dashboard-body-first dashboard-dashboard-programs">
+    <p class="dashboard-dashboard-programs-header">Your programs</p>
+    <div class="dashboard-dashboard-programs-list">
+        {% for program in programscreated%}
+        <div class="dashboard-dashboard-programs-list-card">
+            <p>{{program.name}}</p>
+
+            <a onclick="location.href = '/program/{{program.id}}'">more...</a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <p class="dashboard-dashboard-programs-header">Your favorites</p>
+    <div class="dashboard-dashboard-programs-list">
+        {% for program in UserFavorites%}
+        <div class="dashboard-dashboard-programs-list-card">
+            <p>{{program.name}}</p>
+
+
+            <a onclick="location.href = '/program/{{program.id}}'">more...</a>
+        </div>
+
+        {% endfor %}
+    </div>
+
+    <p class="dashboard-dashboard-programs-header">Community Favorites</p>
+    <div class="dashboard-dashboard-programs-list">
+        {% for program in mostfavorites%}
+        <div class="dashboard-dashboard-programs-list-card">
+            <p>{{program.name}}</p>
+
+
+            <a onclick="location.href = '/program/{{program.id}}'">more...</a>
+        </div>
+        {% endfor %}
+    </div>
+
+
+
+
+
+
+</div>
+
 {% endblock %}

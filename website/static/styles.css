@@ -584,7 +584,7 @@ footer {
   margin-bottom: 200px;
   display: grid;
   grid-template-columns: 10% auto;
-  height: 70%;
+  height: 60%;
 }
 
 .dashboard-exercise-video {
@@ -1225,4 +1225,119 @@ footer {
 }
 .dashboard-account-modal-form-error-close:hover {
   cursor: pointer;
+}
+
+.dashboard-account-programs-wrapper {
+  margin-top: 20px;
+  height: 60%;
+  min-height: 400px;
+}
+.dashboard-account-programs {
+  height: 100%;
+  width: 100%;
+  border-radius: 15px;
+  padding: 20px;
+  background-color: var(--secondary-color);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  grid-row-gap: 10px;
+  grid-column-gap: 10px;
+  grid-template-rows: repeat(auto-fill, 120px);
+  overflow: scroll;
+}
+.dashboard-account-programs-card {
+  background-color: var(--background-colour);
+  height: 100%;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  text-transform: capitalize;
+}
+
+.dashboard-account-programs-card p:first-child {
+  color: var(--text-color-1);
+  font-weight: bold;
+  font-size: 20px;
+  width: 100%;
+  text-overflow: ellipsis;
+  margin-bottom: 10px;
+}
+
+.dashboard-account-programs-card p {
+  color: var(--text-color-2);
+  margin-bottom: 5px;
+}
+
+.dashboard-account-programs-card a {
+  color: var(--text-color-2);
+}
+
+.dashboard-account-programs-card a:hover {
+  cursor: pointer;
+}
+
+/* ---------- dashboard styles ----------*/
+
+.dashboard-dashboard-programs {
+  margin-top: 20px;
+  height: 60%;
+  min-height: 400px;
+}
+
+.dashboard-dashboard-programs-header {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.dashboard-dashboard-programs-list {
+  background-color: var(--secondary-color);
+  padding: 15px;
+  border-radius: 15px;
+  height: 27%;
+  margin-bottom: 15px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.dashboard-dashboard-programs-list-card {
+  display: inline-block;
+  height: 100%;
+  width: 200px;
+  margin-right: 10px;
+  background-color: var(--background-colour);
+  padding: 10px;
+  border-radius: 10px;
+  text-transform: capitalize;
+  position: relative;
+}
+
+.dashboard-dashboard-programs-list-card p:first-child {
+  font-weight: bold;
+  font-size: 20px;
+  max-width: 200px;
+}
+
+.dashboard-dashboard-programs-list-card p:first-child {
+  font-weight: bold;
+  font-size: 20px;
+  max-width: 200px;
+}
+
+.dashboard-dashboard-programs-list-card p {
+  margin-top: 5px;
+}
+
+.dashboard-dashboard-programs-list-card a {
+  color: var(--text-color-2);
+}
+
+.dashboard-dashboard-programs-list-card a:hover {
+  cursor: pointer;
+}
+
+.dashboard-dashboard-programs {
+  height: 90%;
+  min-height: 600px;
+  margin-top: 20px;
 }
