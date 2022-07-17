@@ -501,13 +501,14 @@ def edit_account():
 # route for load program
 @dashboard.route('/load-programs', methods=['POST'])
 def load_programs():
+    # assign the query to variables
     request_data = json.loads(request.get_data())
-    print(request_data)
+    # startpoint of count
     count = request_data['c']
     query = str(request_data['query'])
     orderby = str(request_data['orderby'])
 
-    print(orderby)
+    # query the database
     likes_query = db.session.\
         query(
             FavoriteProgram.columns.program_id.label('programid'),
@@ -530,7 +531,7 @@ def load_programs():
              ).join(User).\
         filter(Program.name.like(f'%{query}%'))
 
-    print('hi')
+    # create outcome based on orderby (order of the posts)
     if not orderby:
         return jsonify(to_JSON(programscreated.limit(6).offset(count).all()))
 

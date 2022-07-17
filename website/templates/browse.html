@@ -8,11 +8,11 @@
         <input type="text" name="" id="dashboard-browse-form-text" class="dashboard-browse-form-text"
             placeholder="Keywords" value="{{query}}">
         <select name="" id="dashboard-browse-form-order" placeholder='order by' class="dashboard-browse-form-select">
-            <option value="">Order by</option>
-            <option value="newest">Newest</option>
-            <option value="oldest">Oldest</option>
-            <option value="most_liked">Most liked</option>
-            <option value="least_liked">Least liked</option>
+            <option value="" {{'selected' if not orderby }}>Order by</option>
+            <option value="newest" {{'selected' if orderby=='newest' }}>Newest</option>
+            <option value="oldest" {{'selected' if orderby=='oldest' }}>Oldest</option>
+            <option value="most_liked" {{'selected' if orderby=='most_liked' }}>Most liked</option>
+            <option value="least_liked" {{'selected' if orderby=='least_liked' }}>Least liked</option>
         </select>
         <input type="button" class="button dashboard-browse-form-search" value="search"
             onclick="location.href=`/browse?query=${$('#dashboard-browse-form-text').val()}&orderby=${$('#dashboard-browse-form-order').val()}` ">
