@@ -2,5 +2,51 @@
 
 
 {% block content %}
-{{username}}
+
+<div class="dashboard-body-element dashboard-body-first">
+    <form action="/browse" class="dashboard-browse-form">
+        <input type="text" name="" id="dashboard-browse-form-text" class="dashboard-browse-form-text"
+            placeholder="Keywords" value="{{query}}">
+        <select name="" id="dashboard-browse-form-order" placeholder='order by' class="dashboard-browse-form-select">
+            <option value="">Order by</option>
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="most_liked">Most liked</option>
+            <option value="least_liked">Least liked</option>
+        </select>
+        <input type="button" class="button dashboard-browse-form-search" value="search"
+            onclick="location.href=`/browse?query=${$('#dashboard-browse-form-text').val()}&orderby=${$('#dashboard-browse-form-order').val()}` ">
+
+    </form>
+
+</div>
+
+<div class="dashboard-body-element dashboard-body-browse">
+    <div class="dashboard-browse-program">
+        <div id="dashboard-browse-programs" class="dashboard-browse-programs">
+            <template id="dashboard-browse-program-template">
+                <div class="dashboard-browse-program-card">
+                    <p id="dashboard-browse-program-card-title" class="dashboard-browse-program-card-title"></p>
+                    <a id="dashboard-browse-program-card-user" class="dashboard-browse-program-card-user"> </a>
+                    <p id="dashboard-browse-program-card-likes" class="dashboard-browse-program-card-likes"> </p>
+                    <a id="dashboard-browse-program-card-more" class='dashboard-browse-program-card-more'>more...</a>
+                </div>
+            </template>
+
+
+        </div>
+
+        <div id='dashboard-browse-program-sentinel'>
+            <div class="dashboard-browse-programs-loader"></div>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    var query = '{{query}}'
+    var orderby = '{{orderby}}'
+</script>
+<script src="{{url_for('static' , filename='javascript/dashboard-browse.js')}}"></script>
 {% endblock %}

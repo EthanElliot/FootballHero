@@ -1,11 +1,12 @@
 # imports
 import logging
+import queue
 from flask import Blueprint, render_template, session, redirect, url_for, abort, request, jsonify
 from .models import User, Exercise, Type, Program, ExerciseProgram, FavoriteProgram
 from .import db
 import json
 from werkzeug.security import check_password_hash
-from sqlalchemy import func, column, desc, false
+from sqlalchemy import asc, func, column, desc, false
 
 
 # make flask blueprint
@@ -59,10 +60,17 @@ def home():
 # brouse route
 @dashboard.route("/browse")
 def browse():
-    # check if user is logged in
+    # check if user is logged in a
     if 'user' in session:
-        user = session['user']
-        return render_template('browse.html', username=user)
+        # if the user searches something
+        if request.args and len(request.args.get('query')) > 0:
+            query = request.args.get('query')
+            orderby = request.args.get('orderby')
+
+            return render_template('browse.html', query=query, orderby=orderby)
+
+        else:
+            return render_template('browse.html')
     else:
         return redirect((url_for('auth.signin')))
 
@@ -488,3 +496,62 @@ def edit_account():
 
     else:
         return jsonify(False, 'User not logged in')
+
+
+# route for load program
+@dashboard.route('/load-programs', methods=['POST'])
+def load_programs():
+    request_data = json.loads(request.get_data())
+    print(request_data)
+    count = request_data['c']
+    query = str(request_data['query'])
+    orderby = str(request_data['orderby'])
+
+    print(orderby)
+    likes_query = db.session.\
+        query(
+            FavoriteProgram.columns.program_id.label('programid'),
+            func.count().label('cnt')
+        ).\
+        filter(FavoriteProgram.columns.program_id).\
+        group_by('programid').\
+        subquery()
+
+    programscreated = db.session.\
+        query(Program.id,
+              Program.name,
+              func.coalesce(
+                  likes_query.c.cnt, 0).label('cnt'),
+              User.username
+              ).\
+        join(likes_query,
+             likes_query.c.programid == Program.id,
+             isouter=True
+             ).join(User).\
+        filter(Program.name.like(f'%{query}%'))
+
+    print('hi')
+    if not orderby:
+        return jsonify(to_JSON(programscreated.limit(6).offset(count).all()))
+
+    elif orderby == 'newest':
+        programscreated = programscreated.order_by(
+            desc(Program.id)).limit(6).offset(count).all()
+        return jsonify(to_JSON(programscreated))
+
+    elif orderby == 'oldest':
+        programscreated = programscreated.order_by(
+            asc(Program.id)).limit(6).offset(count).all()
+        return jsonify(to_JSON(programscreated))
+
+    elif orderby == 'most_liked':
+        programscreated = programscreated.order_by(
+            desc(likes_query.c.cnt)).limit(6).offset(count).all()
+        return jsonify(to_JSON(programscreated))
+
+    elif orderby == 'least_liked':
+        programscreated = programscreated.order_by(
+            asc(likes_query.c.cnt)).limit(6).offset(count).all()
+        return jsonify(to_JSON(programscreated))
+    else:
+        return jsonify(to_JSON(programscreated.limit(6).offset(count).all()))

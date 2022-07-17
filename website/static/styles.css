@@ -1341,3 +1341,121 @@ footer {
   min-height: 600px;
   margin-top: 20px;
 }
+
+/* ---------- browse page ---------- */
+
+.dashboard-browse-form {
+  display: grid;
+  grid-template-columns: 4fr 3fr 1fr;
+  grid-column-gap: 10px;
+}
+
+.dashboard-browse-form-search {
+  height: 40px;
+  background-color: var(--main-color);
+  color: var(--text-color-3);
+}
+
+.dashboard-browse-form-select {
+  -webkit-appearance: none;
+  border: none;
+  background-color: rgb(240, 240, 240);
+  border-radius: 20px;
+  cursor: pointer;
+  background-image: url('data:image/svg+xml;utf8, <svg xmlns="http://www.w3.org/2000/svg" width="100" height ="50"><polygon points="0,0 100,0 50,50" style="fill:%23666666;" /></svg>');
+  background-position: right 10px top 50%;
+  background-repeat: no-repeat;
+  background-size: 10px;
+  width: 100%;
+  height: 40px;
+  padding-left: 20px;
+
+  background-color: var(--secondary-color);
+}
+.dashboard-browse-form-text {
+  height: 40px;
+  width: 100%;
+  border: none;
+  border-radius: 20px;
+  padding-left: 15px;
+  background-color: var(--secondary-color);
+}
+
+.dashboard-body-browse {
+  margin-top: 20px;
+}
+.dashboard-browse-program {
+  width: 100%;
+  height: 100%;
+  background-color: var(--secondary-color);
+  border-radius: 15px;
+  min-height: 400px;
+  padding: 20px;
+}
+
+.dashboard-browse-programs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  grid-row-gap: 10px;
+  grid-column-gap: 10px;
+  grid-template-rows: repeat(auto-fill, 200px);
+}
+
+#dashboard-browse-program-sentinel {
+  width: 100%;
+  margin-top: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 20px;
+}
+.dashboard-browse-programs-loader {
+  border: 8px solid var(--secondary-color);
+  border-top: 8px solid var(--main-color);
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  animation: modal-spin 1.5s linear infinite;
+  transform: translateX(-50%);
+  /*found on https://www.w3schools.com/howto/howto_css_loader.asp*/
+}
+
+.dashboard-browse-program-card {
+  width: 100%;
+  height: 200px;
+  padding: 20px;
+  border-radius: 15px;
+  background-color: var(--background-colour);
+}
+
+.dashboard-browse-program-card-title {
+  font-weight: bold;
+  font-size: 30px;
+  width: 100%;
+  text-overflow: ellipsis;
+  margin-bottom: 20px;
+}
+
+.dashboard-browse-program-card-user {
+  color: var(--text-color-2);
+  text-decoration: none;
+}
+
+.dashboard-browse-program-card-user:hover {
+  cursor: pointer;
+}
+
+.dashboard-browse-program-card-likes {
+  color: var(--text-color-2);
+  text-decoration: none;
+}
+
+.dashboard-browse-program-card-more {
+  color: var(--text-color-2);
+  text-decoration: none;
+}
+
+.dashboard-browse-program-card-more:hover {
+  cursor: pointer;
+}

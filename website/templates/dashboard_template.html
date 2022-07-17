@@ -15,8 +15,8 @@
 <body>
     <div class="dashboard-wrapper">
         <div class="dashboard-navtop">
-            <form method="POST" class="dashboard-navsearch" id='dashboard-navsearch'>
-                <input type="text" placeholder="Search" />
+            <form class="dashboard-navsearch" id='dashboard-navsearch' action="/browse">
+                <input type="text" placeholder="Search" name='query' id='query' />
                 <span class="iconify" data-icon="ant-design:search-outlined" style="font-size: 20px"
                     onclick=" document.getElementById('dashboard-navsearch').submit();"></span>
             </form>
