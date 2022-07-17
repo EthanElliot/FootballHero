@@ -1,6 +1,5 @@
 # imports
 import logging
-import queue
 from flask import Blueprint, render_template, session, redirect, url_for, abort, request, jsonify
 from .models import User, Exercise, Type, Program, ExerciseProgram, FavoriteProgram
 from .import db
