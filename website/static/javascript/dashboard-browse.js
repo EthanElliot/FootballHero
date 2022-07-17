@@ -43,6 +43,9 @@ function loadItems() {
           body.appendChild(template_clone);
           count += 1;
         }
+        if (data.length < 6) {
+          sentinel.innerHTML = "No more programs";
+        }
       }
     });
 }
