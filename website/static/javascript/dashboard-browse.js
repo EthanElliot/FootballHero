@@ -45,6 +45,7 @@ function loadItems() {
         }
         if (data.length < 6) {
           sentinel.innerHTML = "No more programs";
+          intersectionObserver.unobserve(sentinel);
         }
       }
     });
