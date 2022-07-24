@@ -425,7 +425,6 @@ footer {
   background-color: var(--background-colour);
   display: flex;
   align-items: center;
-  box-shadow: 3px 2px 4px rgb(0 0 0 / 10%);
 }
 
 .dashboard-navsearch {
@@ -843,7 +842,7 @@ footer {
   grid-row-gap: 10px;
   grid-column-gap: 10px;
   grid-template-rows: repeat(auto-fill, 80px);
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
 .dashboard-create-modal-exercise-center {
@@ -1244,7 +1243,7 @@ footer {
   grid-row-gap: 10px;
   grid-column-gap: 10px;
   grid-template-rows: repeat(auto-fill, 120px);
-  overflow: scroll;
+  overflow-y: scroll;
 }
 .dashboard-account-programs-card {
   background-color: var(--background-colour);
