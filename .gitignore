@@ -4,3 +4,7 @@ website/__pycache__/dashboard.cpython-39.pyc
 website/__pycache__/models.cpython-39.pyc
 website/__pycache__/views.cpython-39.pyc
 website/__pycache__/
+.venv
+.vscode
+__pycache__
+migrations

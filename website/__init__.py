@@ -3,6 +3,7 @@ from flask import Flask
 import secrets
 from flask_sqlalchemy import SQLAlchemy
 from os import path
+from flask_migrate import Migrate
 
 # db variables
 db = SQLAlchemy()
@@ -14,6 +15,7 @@ DB_NAME = 'FootballHero.db'
 def create_app():
     # configure the flask app
     app = Flask(__name__)
+    migrate = Migrate(app, db)
     app.config['SECRET_KEY'] = secrets.token_urlsafe(32)
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

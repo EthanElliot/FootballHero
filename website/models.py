@@ -24,6 +24,8 @@ class User(db.Model):
     username = db.Column(db.String(150), unique=True, nullable=False)
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(200))
+    verified = db.Column(db.Boolean, default=False)
+
     programs = db.relationship('Program')
     favorites = db.relationship(
         'Program', secondary=FavoriteProgram, backref=db.backref('favoriteprograms'),  lazy='dynamic')
