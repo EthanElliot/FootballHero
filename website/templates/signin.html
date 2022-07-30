@@ -11,47 +11,37 @@
 </head>
 
 <body>
-    <div class="sign-wrapper signin-wrapper">
-        <div class="sign">
-            <div class="sign-section">
-                <div class="sign-formwrapper">
-                    <p>Sign In.</p>
-                    {%with messages = get_flashed_messages()%} {% if messages %} {% for
-                    message in messages %}
-                    <div class="form_errormessage_wrapper" id="form_error">
-                        <p class="form_errormessage">
-                            {{ message }}
-                            <span id="close_message" onclick="form_error.style.display ='none' ">&times;</span>
-                        </p>
-                    </div>
-                    {% endfor %} {% endif %} {% endwith %}
-                    <form method="post">
-                        <input type="text" placeholder="username or email" class="sign-text signin-text" maxlength="150"
-                            name="username" id="username" />
-                        <input type="password" placeholder="password" class="sign-text signin-text" maxlength="150"
-                            name="password" id="password" />
-                        <br />
-                        <label for="fogot-password" class="sign-forgotpassword">
-                            <a href=""> forgot my password?</a></label>
-                        <br />
-                        <input type="submit" class="button signin-form-button" value="sign in" />
-                        <div class="sign-google-login">
-                            <hr />
-                            <label for="google_login">Or</label>
-                            <br />
-                            <input type="button" class="button signin-form-button" value="google signin" />
-                        </div>
-                    </form>
-                </div>
+    <div class="centeredpage-content-wrapper">
+        <div class="centeredpage-content-body sign sign-in">
+            <p class="sign-title" onclick="location.href='/';">FootballHero</p>
+            <p class="sign-subtitle">Sign In.</p>
+            <br>
+            <p>please sign in below or <span onclick="location.href='/signup';" class="sign-link">create an
+                    account</span></p>
+            <br>
+            {%with messages = get_flashed_messages()%}
+            {% if messages %}
+            {% for message in messages %}
+            <div class="form_errormessage_wrapper" id="form_error">
+                <p class="form_errormessage">
+                    {{ message }}
+                    <span id="close_message" onclick="form_error.style.display ='none' ">&times;</span>
+                </p>
             </div>
-            <div class="sign-section sign-section-blue">
-                <div class="signin-section-blue">
-                    <p>Dont Have a <br />account?</p>
-                    <button class="button signin-button" onclick="location.href='/signup';">
-                        Sign Up<span class="iconify" data-icon="akar-icons:arrow-right"></span>
-                    </button>
-                </div>
-            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <form class='sign-form' method="post">
+                <input type="text" placeholder="username or email" class="sign-input-text" maxlength="150"
+                    name="username" id="username" />
+                <input type="password" placeholder="password" class="sign-input-text" maxlength="150" name="password"
+                    id="password" />
+                <br />
+                <label for="fogot-password" class="sign-forgotpassword">
+                    <a href=""> forgot my password?</a></label>
+                <br />
+                <input type="submit" class="button sign-form-button" value="sign in" />
+            </form>
         </div>
     </div>
 </body>
