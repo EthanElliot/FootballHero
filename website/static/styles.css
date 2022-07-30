@@ -1458,3 +1458,37 @@ footer {
 .dashboard-browse-program-card-more:hover {
   cursor: pointer;
 }
+
+/**/
+
+/* styles fror error page*/
+.verify-content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--secondary-color);
+}
+
+.verify-content-body {
+  background-color: var(--background-colour);
+  width: 40%;
+  height: 50%;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  min-width: 500px;
+}
+
+.verify-content-body-name {
+  font-size: 25px;
+  color: var(--text-color-2);
+}
+.verify-content-body-description {
+  font-size: 15px;
+  margin-top: 10px;
+}

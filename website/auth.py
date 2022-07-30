@@ -1,4 +1,5 @@
 # imports
+from os import abort
 from flask import Blueprint, render_template, session, redirect, url_for, request, flash
 from itsdangerous import SignatureExpired
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -59,15 +60,19 @@ def signup():
             token = s.dumps(email,  salt='email_verification')
 
             # create and send message
-            msg = Message('Confirm your Email', recipients=[email])
+            msg = Message('FootballHero - Confirm your Email',
+                          recipients=[email])
 
             link = url_for('auth.verify_email', token=token, _external=True)
 
-            msg.body = 'Your link is {}'.format(link)
+            msg.html = f'''<strong>Welcome to FootballHero,</strong> <br><br> 
+                            To verify your account click the link below:<br><br> 
+                            <a href={link}>verify</a> <br><br> 
+                            If you did not create an account, no further action is required '''
 
             mail.send(msg)
 
-            return token
+            return render_template('verify_email.html')
 
     return render_template('signup.html')
 
@@ -132,7 +137,7 @@ def verify_email(token):
         return(redirect(url_for('dashboard.home')))
 
     except SignatureExpired:
-        return ('the token is expired')
+        return abort(401)
 
     except:
         return ('something went wrong')

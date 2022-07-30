@@ -8,6 +8,7 @@
   <title>FootballHero</title>
   <link rel="stylesheet" href="{{ url_for('static', filename = 'styles.css') }}" />
   <link rel="shortcut icon" href="{{ url_for('static', filename = 'favicon.ico') }}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
 <body>
@@ -26,7 +27,7 @@
               </p>
             </div>
             {% endfor %} {% endif %} {% endwith %}
-            <form method="POST">
+            <form id='sign-form-inputs' method="POST">
               <div>
                 <input type="text" class="sign-text" placeholder="username" name="username" id="username" />
                 <br />
@@ -57,5 +58,9 @@
     </div>
   </div>
 </body>
+<script src="{{url_for('static' , filename='javascript/sign.js')}}">
+
+</script>
+
 
 </html>
