@@ -1,9 +1,10 @@
 # imports
 from flask import Blueprint, render_template, session, redirect, url_for, request, flash
+from itsdangerous import SignatureExpired
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import User
-from . import db
-
+from . import db, s, mail
+from flask_mail import Mail, Message
 
 # code for logging the sql queries (used for testing)
 import logging
@@ -46,14 +47,27 @@ def signup():
         elif len(email) > 150 and len(username) > 150 and len(password1) > 200 and len(password2) > 200:
             flash('your inputs is too long')
 
-        # if unique account sign the user up and redirect to dashboard
+        # if unique account sign the user up and redirect
         else:
-            session['user'] = username
+
             new_user = User(username=username, email=email,
-                            password=generate_password_hash(password1))
+                            password=generate_password_hash(password1), verified=False)
             db.session.add(new_user)
             db.session.commit()
-            return redirect(url_for('dashboard.home'))
+
+            # generate token
+            token = s.dumps(email,  salt='email_verification')
+
+            # create and send message
+            msg = Message('Confirm your Email', recipients=[email])
+
+            link = url_for('auth.verify_email', token=token, _external=True)
+
+            msg.body = 'Your link is {}'.format(link)
+
+            mail.send(msg)
+
+            return token
 
     return render_template('signup.html')
 
@@ -79,10 +93,17 @@ def signin():
             flash('no user found')
 
         # if user in check the password and then if the password matches sign the user in
+
         else:
+            print(user.verified)
             if check_password_hash(user.password, password) == True:
-                session['user'] = user.username
-                return redirect(url_for('dashboard.home'))
+                if user.verified == True:
+                    session['user'] = user.username
+                    return redirect(url_for('dashboard.home'))
+
+                else:
+                    flash('email is not verified')
+
             else:
                 flash('incorrect password')
 
@@ -95,3 +116,23 @@ def signout():
     # sign the user out
     session.pop('user', None)
     return redirect(url_for('auth.signin'))
+
+
+# route to verify email of the user
+@auth.route("/verify_email/<token>", methods=['GET', 'POST'])
+def verify_email(token):
+    try:
+        email = s.loads(token, salt='email_verification', max_age=3600)
+        print(email)
+        user = User.query.filter(
+            (User.email == email)).first()
+        user.verified = True
+        session["user"] = user.username
+        db.session.commit()
+        return(redirect(url_for('dashboard.home')))
+
+    except SignatureExpired:
+        return ('the token is expired')
+
+    except:
+        return ('something went wrong')
