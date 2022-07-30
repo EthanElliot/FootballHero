@@ -65,6 +65,28 @@ html {
   min-height: 200px;
 }
 
+/* ----- loader element styles ----- */
+
+.loader {
+  border: 8px solid var(--secondary-color);
+  border-top: 8px solid var(--main-color);
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  animation: modal-spin 1.5s linear infinite;
+  display: none;
+  /*found on https://www.w3schools.com/howto/howto_css_loader.asp*/
+}
+
+@keyframes loader-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
 /* --------------- styles for error page --------------- */
 
 .error-content-body {
@@ -441,6 +463,21 @@ footer {
   cursor: pointer;
 }
 
+/* --------------- verify page styles --------------- */
+.verify-content-body {
+  width: 40%;
+  height: 50%;
+}
+
+.verify-content-body-name {
+  font-size: 25px;
+  color: var(--text-color-2);
+}
+.verify-content-body-description {
+  font-size: 15px;
+  margin-top: 10px;
+}
+
 /* --------------- dashboard nav styles --------------- */
 .dashboard-wrapper {
   display: grid;
@@ -567,6 +604,8 @@ footer {
   height: 20px;
   margin-right: 5px;
 }
+
+/* --------------- dahboard pages styles --------------- */
 
 .dashboard-body-first {
   margin-top: 40px;
@@ -889,27 +928,6 @@ footer {
 
 #dashboard-create-modal-message {
   display: none;
-}
-
-#dashboard-create-modal-loader {
-  border: 8px solid var(--secondary-color);
-  border-top: 8px solid var(--main-color);
-  border-radius: 50%;
-  height: 50px;
-  width: 50px;
-  animation: modal-spin 1.5s linear infinite;
-  display: none;
-  /*found on https://www.w3schools.com/howto/howto_css_loader.asp*/
-}
-
-@keyframes modal-spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
 }
 
 .dashboard-create-modal-exercisesbody {
@@ -1394,16 +1412,6 @@ footer {
   justify-content: center;
   bottom: 20px;
 }
-.dashboard-browse-programs-loader {
-  border: 8px solid var(--secondary-color);
-  border-top: 8px solid var(--main-color);
-  border-radius: 50%;
-  height: 50px;
-  width: 50px;
-  animation: modal-spin 1.5s linear infinite;
-  transform: translateX(-50%);
-  /*found on https://www.w3schools.com/howto/howto_css_loader.asp*/
-}
 
 .dashboard-browse-program-card {
   width: 100%;
@@ -1433,19 +1441,4 @@ footer {
 .dashboard-browse-program-card-likes {
   color: var(--text-color-2);
   text-decoration: none;
-}
-
-/* --------------- verify page styles --------------- */
-.verify-content-body {
-  width: 40%;
-  height: 50%;
-}
-
-.verify-content-body-name {
-  font-size: 25px;
-  color: var(--text-color-2);
-}
-.verify-content-body-description {
-  font-size: 15px;
-  margin-top: 10px;
 }
