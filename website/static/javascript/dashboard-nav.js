@@ -1,3 +1,4 @@
+//add blue highlight on nav element when on page
 const activePage = window.location.pathname;
 
 if (activePage === "/dashboard") {
@@ -31,10 +32,16 @@ if (activePage === "/create") {
   console.log(activePage);
 }
 
+//styles for hamburger menu to toggle nav
 var hamburger = $("#dashboard-nav-hamburger");
 var nav = $("#dashboard-navleft");
 
 hamburger.click(function () {
   nav[0].classList.toggle("active");
   hamburger[0].classList.toggle("active");
+});
+
+$(window).resize(function () {
+  nav[0].classList.remove("active");
+  hamburger[0].classList.remove("active");
 });

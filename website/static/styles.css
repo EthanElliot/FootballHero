@@ -647,7 +647,8 @@ footer {
   /* --- nav top styles --- */
   .dashboard-navleft {
     position: fixed;
-    left: -100%;
+    left: 0;
+    top: -100%;
     margin-top: max(80px, 10%);
     gap: 0;
     height: 40%;
@@ -658,11 +659,13 @@ footer {
     -webkit-box-shadow: 0 2px rgba(0, 0, 0, 0.05);
     -moz-box-shadow: 0 2px rgba(0, 0, 0, 0.05);
     box-shadow: 0 2px rgba(0, 0, 0, 0.05);
-    z-index: 10;
+    z-index: 5;
+    display: none;
   }
 
   .dashboard-navleft.active {
-    left: 0;
+    top: 0;
+    display: grid;
   }
 
   .dashboard-navsearch {
@@ -688,6 +691,11 @@ footer {
 
   .dashboard-nav-hamburger.active span:nth-child(3) {
     transform: translateY(-8px) rotate(-45deg);
+  }
+
+  /* --- nav top menu styles --- */
+  .dashboard-navtop {
+    z-index: 10;
   }
 
   .dashboard-navtop .dashboard-navlogo {
