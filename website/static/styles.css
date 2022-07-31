@@ -463,6 +463,14 @@ footer {
   cursor: pointer;
 }
 
+/* --------------- reset password ---------------*/
+
+.reset-password-email {
+  height: 25%;
+  max-height: 400px;
+  min-height: 340px;
+}
+
 /* --------------- verify page styles --------------- */
 .verify-content-body {
   width: 40%;

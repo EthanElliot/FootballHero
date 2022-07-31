@@ -1,11 +1,10 @@
 # imports
-from os import abort
-from flask import Blueprint, render_template, session, redirect, url_for, request, flash
+from flask import Blueprint, render_template, session, redirect, url_for, request, flash, abort
 from itsdangerous import SignatureExpired
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import User
 from . import db, s, mail
-from flask_mail import Mail, Message
+from flask_mail import Message
 
 # code for logging the sql queries (used for testing)
 import logging
@@ -43,10 +42,12 @@ def signup():
             flash('email must be longer than 4 charaters')
         elif len(username) <= 4:
             flash('usename must be longer than 4 charaters')
+        elif len(password1) < 1:
+            flash('password to short')
         elif password1 != password2:
             flash('passwords dont match')
         elif len(email) > 150 and len(username) > 150 and len(password1) > 200 and len(password2) > 200:
-            flash('your inputs is too long')
+            flash('your inputs are to long')
 
         # if unique account sign the user up and redirect
         else:
@@ -72,7 +73,7 @@ def signup():
 
             mail.send(msg)
 
-            return render_template('verify_email.html')
+            return render_template("notify.html", message_header="Before you can access your account please validate your email", message_sub="to validate your account check your email.")
 
     return render_template('signup.html')
 
@@ -141,3 +142,87 @@ def verify_email(token):
 
     except:
         return ('something went wrong')
+
+
+# route for user to request update to user password
+@auth.route("/reset-password", methods=['GET', 'POST'])
+def send_reset_email():
+    # if user is logged in redirect to dashboard
+    if 'user' in session:
+        return redirect(url_for('dashboard.home'))
+
+    # if form data is sent
+    if request.method == 'POST' and request.form:
+        # get form input
+        email = str(request.form.get('email'))
+
+        # check the user exists
+        user = User.query.filter(
+            (User.email == email)).first()
+        if not user:
+            flash('no user registered with that email')
+            return render_template('reset_password_email.html')
+
+        # generate email
+        else:
+            token = s.dumps(email,  salt='password_reset')
+
+            # create and send message
+            msg = Message('FootballHero - Reset Your password',
+                          recipients=[email])
+
+            link = url_for('auth.reset_user_password',
+                           token=token, _external=True)
+
+            msg.html = f'''<strong>Reset password,</strong> <br><br> 
+                            To reset your password click the link below:<br><br> 
+                            <a href={link}>reset</a> <br><br> 
+                            If you did try to reset your password, no further action is required '''
+
+            mail.send(msg)
+            return render_template("notify.html", message_header="To update your password", message_sub="check your email.")
+
+    else:
+        return render_template('reset_password_email.html')
+
+
+# route for user to update password
+@auth.route("/reset-password/<token>", methods=['GET', 'POST'])
+def reset_user_password(token):
+    try:
+        # get token
+        email = s.loads(token, salt='password_reset', max_age=3600)
+        # if form input
+        if request.method == 'POST' and request.form:
+            # get form input
+            password1 = str(request.form.get('password1'))
+            password2 = str(request.form.get('password2'))
+
+            # check passwords
+            if password1 != password2:
+                flash('passwords dont match')
+                return render_template('reset_password_form.html')
+            elif len(password1) > 200 and len(password2) > 200:
+                flash('your inputs are too long')
+                return render_template('reset_password_form.html')
+            elif len(password1) < 1:
+                flash('password to short')
+                return render_template('reset_password_form.html')
+
+            # if passwords are valid update the db
+            User.query.filter_by(email=email).update(
+                dict(password=generate_password_hash(password1)))
+            db.session.commit()
+            # redirect to login
+            flash('password updated')
+            return redirect(url_for('auth.signin'))
+        else:
+            return render_template('reset_password_form.html')
+
+    # if token expired
+    except SignatureExpired:
+        abort(401)
+
+    # if any other error
+    except:
+        abort(500)
