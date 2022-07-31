@@ -30,3 +30,11 @@ if (activePage === "/create") {
 
   console.log(activePage);
 }
+
+var hamburger = $("#dashboard-nav-hamburger");
+var nav = $("#dashboard-navleft");
+
+hamburger.click(function () {
+  nav[0].classList.toggle("active");
+  hamburger[0].classList.toggle("active");
+});

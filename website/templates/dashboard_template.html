@@ -15,14 +15,23 @@
 <body>
     <div class="dashboard-wrapper">
         <div class="dashboard-navtop">
+            <div class="dashboard-navlogo">
+                <p>FootballHero</p>
+            </div>
+
             <form class="dashboard-navsearch" id='dashboard-navsearch' action="/browse">
                 <input type="text" placeholder="Search" name='query' id='query' />
                 <span class="iconify" data-icon="ant-design:search-outlined" style="font-size: 20px"
                     onclick=" document.getElementById('dashboard-navsearch').submit();"></span>
             </form>
+            <div id="dashboard-nav-hamburger" class="dashboard-nav-hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
 
-        <div class="dashboard-nav-sticky dashboard-navleft">
+        <div class="dashboard-nav-sticky dashboard-navleft" id="dashboard-navleft">
             <div class="dashboard-navlogo">
                 <p>FootballHero</p>
             </div>

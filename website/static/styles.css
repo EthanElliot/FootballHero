@@ -490,6 +490,7 @@ footer {
   width: 100vw;
 }
 
+/* --- nav top styles --- */
 .dashboard-navtop {
   grid-area: tophead;
   position: sticky;
@@ -498,6 +499,10 @@ footer {
   background-color: var(--background-colour);
   display: flex;
   align-items: center;
+  -webkit-box-shadow: 0 2px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: 0 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px rgba(0, 0, 0, 0.05);
+  z-index: 1;
 }
 
 .dashboard-navsearch {
@@ -523,6 +528,28 @@ footer {
   margin-right: 20px;
 }
 
+.dashboard-nav-hamburger {
+  cursor: pointer;
+  display: none;
+  margin-right: 30px;
+  margin-left: auto;
+}
+
+.dashboard-nav-hamburger span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  margin: 5px auto;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  background-color: var(--text-color-1);
+}
+
+.dashboard-navtop .dashboard-navlogo {
+  display: none;
+}
+
+/* --- nav body syles --- */
 .dashboard-body {
   grid-area: body;
   background-color: var(--secondary-color);
@@ -532,6 +559,7 @@ footer {
   padding-bottom: 20px;
 }
 
+/* --- nav left syles --- */
 .dashboard-navleft {
   grid-area: lefthead;
   position: fixed;
@@ -603,6 +631,67 @@ footer {
   width: 20px;
   height: 20px;
   margin-right: 5px;
+}
+
+/* ---------- style changes on smaller widths ---------- */
+@media screen and (max-width: 800px) {
+  .dashboard-wrapper {
+    display: grid;
+    grid-template:
+      "tophead"
+      "body";
+    grid-template-columns: auto;
+    grid-template-rows: max(80px, 10%) auto;
+  }
+
+  /* --- nav top styles --- */
+  .dashboard-navleft {
+    position: fixed;
+    left: -100%;
+    margin-top: max(80px, 10%);
+    gap: 0;
+    height: 40%;
+    min-height: 400px;
+    width: 100%;
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    -webkit-box-shadow: 0 2px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: 0 2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .dashboard-navleft.active {
+    left: 0;
+  }
+
+  .dashboard-navsearch {
+    display: none;
+  }
+
+  .dashboard-navleft .dashboard-navlogo {
+    display: none;
+  }
+
+  /* --- hamburger menu styles ---*/
+  .dashboard-nav-hamburger {
+    display: block;
+  }
+
+  .dashboard-nav-hamburger.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .dashboard-nav-hamburger.active span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .dashboard-nav-hamburger.active span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  .dashboard-navtop .dashboard-navlogo {
+    display: flex;
+  }
 }
 
 /* --------------- dahboard pages styles --------------- */
