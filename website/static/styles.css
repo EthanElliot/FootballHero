@@ -471,6 +471,12 @@ footer {
   min-height: 340px;
 }
 
+.reset-password-form {
+  height: 30%;
+  max-height: 425px;
+  min-height: 375px;
+}
+
 /* --------------- verify page styles --------------- */
 .verify-content-body {
   width: 40%;
