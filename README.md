@@ -1,22 +1,27 @@
 # Football Hero
 
-Simple overview of use/purpose.
+Made for Ethan Elliots 12DGT project
 
 ## Description
 
-An in-depth paragraph about your project and overview of use.
+The purpose of my project is a gym exercise program creator for footballers. It provides users the opportunity to view gym exercises targeted toward footballers. It will have the ability to organize the exercises into programs( playlist structure ) that users can create, view, and like.
+
 
 ## Getting Started
 
 ### Dependencies
 
-* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-* ex. Windows 10
+* install requirements using 
+``` 
+pip install -r requirements.txt 
+```
 
 ### Installing
 
 * How/where to download your program
 * Any modifications needed to be made to files/folders
+* make a copy of the "config_example.cfg" with the name "config.cfg. " In this file configure all your google password information.
+
 
 ### Executing program
 
