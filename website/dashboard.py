@@ -161,9 +161,8 @@ def exerciseget():
     # return the exercises
     return jsonify(exercise_data)
 
+
 # create program route
-
-
 @dashboard.route('/create-program', methods=['POST'])
 def create_program():
     # check user is logged in

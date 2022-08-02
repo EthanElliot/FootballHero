@@ -708,9 +708,6 @@ footer {
   }
 
   /* --- nav top menu styles --- */
-  .dashboard-navtop {
-    z-index: 10;
-  }
 
   .dashboard-navtop .dashboard-navlogo {
     display: flex;
@@ -928,7 +925,6 @@ footer {
 .dashboard-create-exercise-modal {
   background-color: var(--background-colour);
   margin: auto;
-  margin-top: 5%;
   padding: 20px;
   width: 80%;
   height: 70%;
