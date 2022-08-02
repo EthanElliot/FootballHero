@@ -187,13 +187,13 @@ def create_program():
         if len(description) < 20:
             return jsonify(False, 'Description is too short.')
         if len(exercises) < 2:
-            return jsonify(False, 'Not enough exercises selected.')
+            return jsonify(False, 'Not enough exercises selected.(min:2)')
         if len(name) > 16:
             return jsonify(False, 'Name is too long.')
         if len(description) > 60:
             return jsonify(False, 'Description is too long.')
         if len(exercises) > 40:
-            return jsonify(False, 'Too many exercises selected.')
+            return jsonify(False, 'Too many exercises selected.(max:40)')
 
         # check for duplicates
         exerciseids = []
