@@ -21,7 +21,7 @@ auth = Blueprint('auth', __name__)
 def signup():
     # check if user is logged in
     if 'user' in session:
-        return redirect(url_for('dashboard.home'))
+        return redirect(url_for('dashboard.account', username = session['user']))
 
     # if data is sent get the form data and assign it to variables
     if request.method == 'POST':
@@ -83,7 +83,7 @@ def signup():
 def signin():
     # check if user is logged in
     if 'user' in session:
-        return redirect(url_for('dashboard.home'))
+        return redirect(url_for('dashboard.account', username = session['user']))
 
     # if data is sent get the form data and assign it to variables
     if request.method == 'POST':
@@ -105,7 +105,7 @@ def signin():
             if check_password_hash(user.password, password) == True:
                 if user.verified == True:
                     session['user'] = user.username
-                    return redirect(url_for('dashboard.home'))
+                    return redirect(url_for('dashboard.account', username = session['user']))
 
                 else:
                     flash('email is not verified')
@@ -135,7 +135,7 @@ def verify_email(token):
         user.verified = True
         session["user"] = user.username
         db.session.commit()
-        return(redirect(url_for('dashboard.home')))
+        return redirect(url_for('dashboard.account', username = session['user']))
 
     except SignatureExpired:
         return abort(401)
@@ -149,7 +149,7 @@ def verify_email(token):
 def send_reset_email():
     # if user is logged in redirect to dashboard
     if 'user' in session:
-        return redirect(url_for('dashboard.home'))
+        return redirect(url_for('dashboard.account', username = session['user']))
 
     # if form data is sent
     if request.method == 'POST' and request.form:
