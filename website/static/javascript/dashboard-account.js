@@ -68,7 +68,6 @@ $("#dashboard-account-modal-form-edit").on("click", function () {
   console.log("yes");
   updateinfo = {
     username: $("#dashboard-account-modal-form-username").val(),
-    email: $("#dashboard-account-modal-form-email").val(),
   };
 
   responce = send_edit_account(
