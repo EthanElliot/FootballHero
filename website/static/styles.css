@@ -714,11 +714,50 @@ footer {
   }
 }
 
-/* --------------- dahboard pages styles --------------- */
+/* --------------- general dahboard pages styles --------------- */
 
 .dashboard-body-first {
   margin-top: 40px;
 }
+
+.dashboard-body-icon {
+  height: 120px;
+  width: 120px;
+  background-color: var(--secondary-color);
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-body-icon .iconify {
+  width: 60%;
+  height: 60%;
+  color: var(--text-color-2);
+}
+
+.dashboard-body-tag p:first-child {
+  margin-bottom: 10px;
+}
+
+
+/* ---------- exercise styles ---------- */
+.dashboard-body-exercise {
+  margin-top: 20px;
+  margin-bottom: 200px;
+  height: 60%;
+}
+
+
+.dashboard-exercise-instructions {
+  height: 90%;
+  width: 60%;
+  margin: auto;
+  margin-left: 0;
+  font-size: 20px;
+  margin-top: 20px;
+}
+
 
 .dashboard-body-element {
   width: 96%;
@@ -742,73 +781,9 @@ footer {
   color: var(--text-color-2);
 }
 
-.dashboard-body-icon {
-  height: 120px;
-  width: 120px;
-  background-color: var(--secondary-color);
-  border-radius: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-.dashboard-body-icon .iconify {
-  width: 60%;
-  height: 60%;
-  color: var(--text-color-2);
-}
 
-.dashboard-body-tag p:first-child {
-  margin-bottom: 10px;
-}
-
-.dashboard-body-exercise {
-  margin-top: 20px;
-  margin-bottom: 200px;
-  display: grid;
-  grid-template-columns: 10% auto;
-  height: 60%;
-}
-
-.dashboard-exercise-video {
-  height: 90%;
-  width: 70%;
-  margin: auto;
-  margin-left: 0;
-}
-
-.dashboard-exercise-button {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: var(--secondary-color);
-}
-
-.dashboard-exercise-button:hover {
-  cursor: pointer;
-}
-
-.dashboard-exercise-instructions {
-  height: 90%;
-  width: 60%;
-  margin: auto;
-  margin-left: 0;
-}
-
-.dashboard-exercise-button:nth-child(1) {
-  margin-bottom: 15px;
-}
-
-.dashboard-exercise-selector {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  float: left;
-
-  width: 50px;
-  height: 100%;
-}
-
+/* ---------- create styles ---------- */
 .dashboard-body-create {
   height: 90%;
   min-height: 600px;
