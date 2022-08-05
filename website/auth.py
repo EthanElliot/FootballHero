@@ -57,23 +57,27 @@ def signup():
             db.session.add(new_user)
             db.session.commit()
 
-            # generate token
-            token = s.dumps(email,  salt='email_verification')
+            try:
+                # generate token
+                token = s.dumps(email,  salt='email_verification')
 
-            # create and send message
-            msg = Message('FootballHero - Confirm your Email',
-                          recipients=[email])
+                # create and send message
+                msg = Message('FootballHero - Confirm your Email',
+                              recipients=[email])
 
-            link = url_for('auth.verify_email', token=token, _external=True)
+                link = url_for('auth.verify_email',
+                               token=token, _external=True)
 
-            msg.html = f'''<strong>Welcome to FootballHero,</strong> <br><br> 
-                            To verify your account click the link below:<br><br> 
-                            <a href={link}>verify</a> <br><br> 
-                            If you did not create an account, no further action is required '''
+                msg.html = f'''<strong>Welcome to FootballHero,</strong> <br><br> 
+                                To verify your account click the link below:<br><br> 
+                                <a href={link}>verify</a> <br><br> 
+                                If you did not create an account, no further action is required '''
 
-            mail.send(msg)
+                mail.send(msg)
 
-            return render_template("notify.html", message_header="Before you can access your account please validate your email", message_sub="to validate your account check your email.")
+                return render_template("notify.html", message_header="Before you can access your account please validate your email", message_sub="to validate your account check your email.")
+            except:
+                abort(500)
 
     return render_template('signup.html')
 
@@ -165,23 +169,25 @@ def send_reset_email():
 
         # generate email
         else:
-            token = s.dumps(email,  salt='password_reset')
+            try:
+                token = s.dumps(email,  salt='password_reset')
 
-            # create and send message
-            msg = Message('FootballHero - Reset Your password',
-                          recipients=[email])
+                # create and send message
+                msg = Message('FootballHero - Reset Your password',
+                              recipients=[email])
 
-            link = url_for('auth.reset_user_password',
-                           token=token, _external=True)
+                link = url_for('auth.reset_user_password',
+                               token=token, _external=True)
 
-            msg.html = f'''<strong>Reset password,</strong> <br><br> 
-                            To reset your password click the link below:<br><br> 
-                            <a href={link}>reset</a> <br><br> 
-                            If you did try to reset your password, no further action is required '''
+                msg.html = f'''<strong>Reset password,</strong> <br><br> 
+                                To reset your password click the link below:<br><br> 
+                                <a href={link}>reset</a> <br><br> 
+                                If you did try to reset your password, no further action is required '''
 
-            mail.send(msg)
-            return render_template("notify.html", message_header="To update your password", message_sub="check your email.")
-
+                mail.send(msg)
+                return render_template("notify.html", message_header="To update your password", message_sub="check your email.")
+            except:
+                abort(500)
     else:
         return render_template('reset_password_email.html')
 
