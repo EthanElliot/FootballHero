@@ -3,7 +3,7 @@ var exercisemodal = $("#dashboard-create-exercise-modal");
 var hidemodal = $("#dasboard-create-modal-close");
 
 $(showmodal).on("click", function () {
-  exercisemodal.css("display", "inline	");
+  exercisemodal.css("display", "flex	");
 });
 
 $(hidemodal).on("click", function () {

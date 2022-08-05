@@ -509,14 +509,13 @@ footer {
   grid-area: tophead;
   position: sticky;
   top: 0;
-  height: max(80px, 10%);
   background-color: var(--background-colour);
   display: flex;
   align-items: center;
   -webkit-box-shadow: 0 2px rgba(0, 0, 0, 0.05);
   -moz-box-shadow: 0 2px rgba(0, 0, 0, 0.05);
   box-shadow: 0 2px rgba(0, 0, 0, 0.05);
-  z-index: 1;
+  z-index: 2;
 }
 
 .dashboard-navsearch {
@@ -583,6 +582,7 @@ footer {
   display: grid;
   grid-template-rows: 10% 70% auto;
   width: max(200px, 17.5%);
+  z-index: 1;
 }
 
 .dashboard-navlogo {
@@ -673,7 +673,7 @@ footer {
     -webkit-box-shadow: 0 2px rgba(0, 0, 0, 0.05);
     -moz-box-shadow: 0 2px rgba(0, 0, 0, 0.05);
     box-shadow: 0 2px rgba(0, 0, 0, 0.05);
-    z-index: 5;
+    z-index: 1;
     display: none;
   }
 
@@ -708,20 +708,56 @@ footer {
   }
 
   /* --- nav top menu styles --- */
-  .dashboard-navtop {
-    z-index: 10;
-  }
 
   .dashboard-navtop .dashboard-navlogo {
     display: flex;
   }
 }
 
-/* --------------- dahboard pages styles --------------- */
+/* --------------- general dahboard pages styles --------------- */
 
 .dashboard-body-first {
   margin-top: 40px;
 }
+
+.dashboard-body-icon {
+  height: 120px;
+  width: 120px;
+  background-color: var(--secondary-color);
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-body-icon .iconify {
+  width: 60%;
+  height: 60%;
+  color: var(--text-color-2);
+}
+
+.dashboard-body-tag p:first-child {
+  margin-bottom: 10px;
+}
+
+
+/* ---------- exercise styles ---------- */
+.dashboard-body-exercise {
+  margin-top: 20px;
+  margin-bottom: 200px;
+  height: 60%;
+}
+
+
+.dashboard-exercise-instructions {
+  height: 90%;
+  width: 60%;
+  margin: auto;
+  margin-left: 0;
+  font-size: 20px;
+  margin-top: 20px;
+}
+
 
 .dashboard-body-element {
   width: 96%;
@@ -745,73 +781,9 @@ footer {
   color: var(--text-color-2);
 }
 
-.dashboard-body-icon {
-  height: 120px;
-  width: 120px;
-  background-color: var(--secondary-color);
-  border-radius: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-.dashboard-body-icon .iconify {
-  width: 60%;
-  height: 60%;
-  color: var(--text-color-2);
-}
 
-.dashboard-body-tag p:first-child {
-  margin-bottom: 10px;
-}
-
-.dashboard-body-exercise {
-  margin-top: 20px;
-  margin-bottom: 200px;
-  display: grid;
-  grid-template-columns: 10% auto;
-  height: 60%;
-}
-
-.dashboard-exercise-video {
-  height: 90%;
-  width: 70%;
-  margin: auto;
-  margin-left: 0;
-}
-
-.dashboard-exercise-button {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: var(--secondary-color);
-}
-
-.dashboard-exercise-button:hover {
-  cursor: pointer;
-}
-
-.dashboard-exercise-instructions {
-  height: 90%;
-  width: 60%;
-  margin: auto;
-  margin-left: 0;
-}
-
-.dashboard-exercise-button:nth-child(1) {
-  margin-bottom: 15px;
-}
-
-.dashboard-exercise-selector {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  float: left;
-
-  width: 50px;
-  height: 100%;
-}
-
+/* ---------- create styles ---------- */
 .dashboard-body-create {
   height: 90%;
   min-height: 600px;
@@ -928,7 +900,6 @@ footer {
 .dashboard-create-exercise-modal {
   background-color: var(--background-colour);
   margin: auto;
-  margin-top: 5%;
   padding: 20px;
   width: 80%;
   height: 70%;
@@ -1248,7 +1219,7 @@ footer {
 .dashboard-modal-wrapper {
   display: none;
   position: fixed;
-  z-index: 1;
+  z-index: 3;
   left: 0;
   top: 0;
   width: 100vw;
@@ -1389,71 +1360,6 @@ footer {
 
 .dashboard-account-programs-card a:hover {
   cursor: pointer;
-}
-
-/* ---------- dashboard styles ----------*/
-
-.dashboard-dashboard-programs {
-  margin-top: 20px;
-  height: 60%;
-  min-height: 400px;
-}
-
-.dashboard-dashboard-programs-header {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.dashboard-dashboard-programs-list {
-  background-color: var(--secondary-color);
-  padding: 15px;
-  border-radius: 15px;
-  height: 27%;
-  margin-bottom: 15px;
-  overflow-x: auto;
-  white-space: nowrap;
-}
-
-.dashboard-dashboard-programs-list-card {
-  display: inline-block;
-  height: 100%;
-  width: 200px;
-  margin-right: 10px;
-  background-color: var(--background-colour);
-  padding: 10px;
-  border-radius: 10px;
-  text-transform: capitalize;
-  position: relative;
-}
-
-.dashboard-dashboard-programs-list-card p:first-child {
-  font-weight: bold;
-  font-size: 20px;
-  max-width: 200px;
-}
-
-.dashboard-dashboard-programs-list-card p:first-child {
-  font-weight: bold;
-  font-size: 20px;
-  max-width: 200px;
-}
-
-.dashboard-dashboard-programs-list-card p {
-  margin-top: 5px;
-}
-
-.dashboard-dashboard-programs-list-card a {
-  color: var(--text-color-2);
-}
-
-.dashboard-dashboard-programs-list-card a:hover {
-  cursor: pointer;
-}
-
-.dashboard-dashboard-programs {
-  height: 90%;
-  min-height: 600px;
-  margin-top: 20px;
 }
 
 /* ---------- browse page ---------- */

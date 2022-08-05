@@ -26,35 +26,6 @@ def to_JSON(data):
     return exercises
 
 
-# dashboard route
-@dashboard.route("/dashboard")
-def home():
-    # check if user is logged in
-    if 'user' in session:
-        # get user info from the db
-        user = db.session.query(User).filter(
-            User.username == session['user']).first()
-
-        # if user dosent exist return 404 error
-        if not user:
-            abort(404)
-
-        # get the of plalists created by the user
-        programscreated = db.session.query(Program.id, Program.name).filter(
-            (Program.user_id == int(user.id))).all()
-
-        # get the programs that the user has favorited
-        UserFavorites = user.favorites.all()
-
-        # get the programs with the most favorites
-        mostfavorites = db.session.query(
-            FavoriteProgram.columns.program_id.label('id'), Program.name).join(Program).group_by(FavoriteProgram.columns.program_id).order_by(desc(func.count(FavoriteProgram.columns.program_id))).limit(5).all()
-
-        # render the page
-        return render_template('dashboard.html', user=user, programscreated=programscreated, UserFavorites=UserFavorites, mostfavorites=mostfavorites)
-    else:
-        return redirect((url_for('auth.signin')))
-
 
 # brouse route
 @dashboard.route("/browse")
@@ -190,9 +161,8 @@ def exerciseget():
     # return the exercises
     return jsonify(exercise_data)
 
+
 # create program route
-
-
 @dashboard.route('/create-program', methods=['POST'])
 def create_program():
     # check user is logged in
@@ -216,13 +186,13 @@ def create_program():
         if len(description) < 20:
             return jsonify(False, 'Description is too short.')
         if len(exercises) < 2:
-            return jsonify(False, 'Not enough exercises selected.')
+            return jsonify(False, 'Not enough exercises selected.(min:2)')
         if len(name) > 16:
             return jsonify(False, 'Name is too long.')
         if len(description) > 60:
             return jsonify(False, 'Description is too long.')
         if len(exercises) > 40:
-            return jsonify(False, 'Too many exercises selected.')
+            return jsonify(False, 'Too many exercises selected.(max:40)')
 
         # check for duplicates
         exerciseids = []
