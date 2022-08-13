@@ -1,6 +1,6 @@
 # imports
 from flask import Blueprint, render_template, session, redirect, url_for, request, flash, abort
-from itsdangerous import SignatureExpired
+from itsdangerous import SignatureExpired, BadSignature
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import User
 from . import db, s, mail
@@ -21,7 +21,7 @@ auth = Blueprint('auth', __name__)
 def signup():
     # check if user is logged in
     if 'user' in session:
-        return redirect(url_for('dashboard.account', username = session['user']))
+        return redirect(url_for('dashboard.account', username=session['user']))
 
     # if data is sent get the form data and assign it to variables
     if request.method == 'POST':
@@ -29,6 +29,16 @@ def signup():
         username = (request.form.get('username')).lower()
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
+
+        if not (username):
+            flash('username required')
+            return render_template('signup.html')
+        if not (email):
+            flash('email required')
+            return render_template('signup.html')
+        if not (password1) or not password2:
+            flash('password required')
+            return render_template('signup.html')
 
         # query the database to check the username and email
         check = User.query.filter(
@@ -87,12 +97,19 @@ def signup():
 def signin():
     # check if user is logged in
     if 'user' in session:
-        return redirect(url_for('dashboard.account', username = session['user']))
+        return redirect(url_for('dashboard.account', username=session['user']))
 
     # if data is sent get the form data and assign it to variables
     if request.method == 'POST':
         identifier = str(request.form.get('username'))
         password = str(request.form.get('password'))
+
+        if not identifier:
+            flash('username or email required')
+            return render_template('signin.html')
+        if not password:
+            flash('password required')
+            return render_template('signin.html')
 
         # query the database to get the password
         user = User.query.filter(
@@ -100,7 +117,7 @@ def signin():
 
         # if no user
         if not user:
-            flash('no user found')
+            flash('no user registered with that email or username found')
 
         # if user in check the password and then if the password matches sign the user in
 
@@ -109,7 +126,7 @@ def signin():
             if check_password_hash(user.password, password) == True:
                 if user.verified == True:
                     session['user'] = user.username
-                    return redirect(url_for('dashboard.account', username = session['user']))
+                    return redirect(url_for('dashboard.account', username=session['user']))
 
                 else:
                     flash('email is not verified')
@@ -133,19 +150,17 @@ def signout():
 def verify_email(token):
     try:
         email = s.loads(token, salt='email_verification', max_age=3600)
-        print(email)
-        user = User.query.filter(
-            (User.email == email)).first()
-        user.verified = True
-        session["user"] = user.username
-        db.session.commit()
-        return redirect(url_for('dashboard.account', username = session['user']))
-
     except SignatureExpired:
         return abort(401)
+    except BadSignature:
+        abort(401)
 
-    except:
-        return ('something went wrong')
+    user = User.query.filter(
+        (User.email == email)).first()
+    user.verified = True
+    session["user"] = user.username
+    db.session.commit()
+    return redirect(url_for('dashboard.account', username=session['user']))
 
 
 # route for user to request update to user password
@@ -153,7 +168,7 @@ def verify_email(token):
 def send_reset_email():
     # if user is logged in redirect to dashboard
     if 'user' in session:
-        return redirect(url_for('dashboard.account', username = session['user']))
+        return redirect(url_for('dashboard.account', username=session['user']))
 
     # if form data is sent
     if request.method == 'POST' and request.form:
@@ -198,37 +213,35 @@ def reset_user_password(token):
     try:
         # get token
         email = s.loads(token, salt='password_reset', max_age=3600)
-        # if form input
-        if request.method == 'POST' and request.form:
-            # get form input
-            password1 = str(request.form.get('password1'))
-            password2 = str(request.form.get('password2'))
-
-            # check passwords
-            if password1 != password2:
-                flash('passwords dont match')
-                return render_template('reset_password_form.html')
-            elif len(password1) > 200 and len(password2) > 200:
-                flash('your inputs are too long')
-                return render_template('reset_password_form.html')
-            elif len(password1) < 1:
-                flash('password to short')
-                return render_template('reset_password_form.html')
-
-            # if passwords are valid update the db
-            User.query.filter_by(email=email).update(
-                dict(password=generate_password_hash(password1)))
-            db.session.commit()
-            # redirect to login
-            flash('password updated')
-            return redirect(url_for('auth.signin'))
-        else:
-            return render_template('reset_password_form.html')
-
     # if token expired
     except SignatureExpired:
         abort(401)
+    except BadSignature:
+        abort(401)
 
-    # if any other error
-    except:
-        abort(500)
+    # if form input
+    if request.method == 'POST' and request.form:
+        # get form input
+        password1 = str(request.form.get('password1'))
+        password2 = str(request.form.get('password2'))
+
+        # check passwords
+        if password1 != password2:
+            flash('passwords dont match')
+            return render_template('reset_password_form.html')
+        elif len(password1) > 200 and len(password2) > 200:
+            flash('your inputs are too long')
+            return render_template('reset_password_form.html')
+        elif len(password1) < 1:
+            flash('password to short')
+            return render_template('reset_password_form.html')
+
+        # if passwords are valid update the db
+        User.query.filter_by(email=email).update(
+            dict(password=generate_password_hash(password1)))
+        db.session.commit()
+        # redirect to login
+        flash('password updated')
+        return redirect(url_for('auth.signin'))
+    else:
+        return render_template('reset_password_form.html')

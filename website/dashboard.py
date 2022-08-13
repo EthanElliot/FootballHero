@@ -26,7 +26,6 @@ def to_JSON(data):
     return exercises
 
 
-
 # brouse route
 @dashboard.route("/browse")
 def browse():

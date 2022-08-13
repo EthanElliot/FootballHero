@@ -19,7 +19,8 @@
             <div class="error-content-body-buttons">
                 <button class='error-content-body-error-button  button' onclick="history.back()">Go Back</button>
                 {%if session['user']%}
-                <button class='error-content-body-error-button  button' onclick="location.href = '/dashboard'">Go
+                <button class='error-content-body-error-button  button'
+                    onclick="location.href = '/account/{{session['user']}}'">Go
                     home</button>
                 {% else %}
                 <button class='error-content-body-error-button  button' onclick="location.href = '/'">Go home</button>
