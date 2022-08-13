@@ -418,22 +418,12 @@ def edit_account():
 
                 # assign the new userdata to variables
                 new_username = str(userdata['updateinfo']['username']).lower()
-                new_email = str(userdata['updateinfo']['email'])
 
                 # create a check for the email and username
                 # if user has changed both email and username
-                if user.username != new_username and user.email != new_email:
-                    check = User.query.filter(
-                        (User.email == new_email) | (User.username == new_username)).first()
-                # if user has changed just username
-                elif user.username != new_username:
-                    check = User.query.filter(
-                        (User.username == new_username)).first()
+                if user.username != new_username :
+                    check = User.query.filter((User.username == new_username)).first()
 
-                # if user has changed email
-                elif user.email != new_email:
-                    check = User.query.filter(
-                        (User.email == new_email)).first()
                 # if user didnt change anything
                 else:
                     return jsonify(True, session['user'])
@@ -441,16 +431,11 @@ def edit_account():
                 # checks before updating the data
                 if check:
                     return jsonify(False, 'email or username already in use')
-                if len(new_email) <= 4:
-                    return jsonify(False, 'email must be longer than 4 charaters')
                 if len(new_username) <= 4:
                     return jsonify(False, 'usename must be longer than 4 charaters')
-                if len(new_email) > 150 and len(new_username) > 150:
-                    return jsonify(False, 'your inputs are too long')
                 else:
                     # update the user info
                     user.username = (new_username)
-                    user.email = (new_email)
                     db.session.commit()
                     session['user'] = new_username
                     return jsonify(True, new_username)
