@@ -48,6 +48,18 @@ class SignUpForm(FlaskForm):
         if not email or not username or not password or not confirm:
             flash('plese fill out all required feilds')
             return False
+        if len(email) <= 4:
+            flash('email must be longer than 4 charaters')
+            return False
+        if len(username) <= 4:
+            flash('usename must be longer than 4 charaters')
+            return False
+        if len(password) < 1:
+            flash('password to short')
+            return False
+        if len(email) > 150 and len(username) > 150 and len(password) > 150 and len(confirm) > 150:
+            flash('your inputs are to long')
+            return False
 
         if password != confirm:
             flash('passwords dont match')
