@@ -1,11 +1,12 @@
 # imports
 import logging
-from flask import Blueprint, render_template, session, redirect, url_for, abort, request, jsonify
+from flask import Blueprint, render_template, redirect, url_for, abort, request, jsonify
 from .models import User, Exercise, Type, Program, ExerciseProgram, FavoriteProgram
 from .import db
 import json
 from werkzeug.security import check_password_hash
 from sqlalchemy import asc, func, column, desc, false
+from flask_login import login_required, current_user
 
 
 # make flask blueprint
@@ -28,96 +29,84 @@ def to_JSON(data):
 
 # brouse route
 @dashboard.route("/browse")
+@login_required
 def browse():
-    # check if user is logged in a
-    if 'user' in session:
-        # if the user searches something
-        if request.args and len(request.args.get('query')) > 0:
-            query = request.args.get('query')
-            orderby = request.args.get('orderby')
+    # if the user searches something
+    if request.args.get('query') or request.args.get('orderby'):
+        query = request.args.get('query')
+        orderby = request.args.get('orderby')
 
-            return render_template('browse.html', query=query, orderby=orderby)
+        return render_template('browse.html', query=query, orderby=orderby)
 
-        else:
-            return render_template('browse.html')
     else:
-        return redirect((url_for('auth.signin')))
-
+        return render_template('browse.html')
 
 # account route
+
+
 @dashboard.route("/account/<username>")
+@login_required
 def account(username):
-    # check if user is logged in
-    if 'user' in session:
 
-        # get user info from the db
-        user = db.session.query(User).filter(
-            User.username == username).first()
+    # get user info from the db
+    user = db.session.query(User).filter(
+        User.username == username).first()
 
-        # if user dosent exist return 404 error
-        if not user:
-            abort(404)
+    # if user dosent exist return 404 error
+    if not user:
+        abort(404)
 
-        # get the programs with the favorites count added
-        likes_query = db.session.\
-            query(
-                FavoriteProgram.columns.program_id.label('programid'),
-                func.count().label('cnt')
-            ).\
-            filter(FavoriteProgram.columns.program_id).\
-            group_by('programid').\
-            subquery()
+    # get the programs with the favorites count added
+    likes_query = db.session.\
+        query(
+            FavoriteProgram.columns.program_id.label('programid'),
+            func.count().label('cnt')
+        ).\
+        filter(FavoriteProgram.columns.program_id).\
+        group_by('programid').\
+        subquery()
 
-        programscreated = db.session.\
-            query(Program.id,
-                  Program.name,
-                  func.coalesce(
-                      likes_query.c.cnt, 0).label('cnt')
-                  ).\
-            join(likes_query,
-                 likes_query.c.programid == Program.id,
-                 isouter=True
-                 ).\
-            filter(Program.user_id == user.id).\
-            order_by(desc(Program.id)).\
-            all()
+    programscreated = db.session.\
+        query(Program.id,
+              Program.name,
+              func.coalesce(
+                  likes_query.c.cnt, 0).label('cnt')
+              ).\
+        join(likes_query,
+             likes_query.c.programid == Program.id,
+             isouter=True
+             ).\
+        filter(Program.user_id == user.id).\
+        order_by(desc(Program.id)).\
+        all()
 
-        # render the page
-        return render_template('account.html', user=user, programscreated=programscreated)
-    else:
-        return redirect((url_for('auth.signin')))
+    # render the page
+    return render_template('account.html', user=user, programscreated=programscreated)
 
 
 # create route
 @dashboard.route("/create")
+@login_required
 def create():
-    # check if user is logged in
-    if 'user' in session:
-        # get the exercise types
-        types = Type.query.all()
+    # get the exercise types
+    types = Type.query.all()
 
-        return render_template('create.html',  types=types)
-    else:
-        return redirect((url_for('auth.signin')))
+    return render_template('create.html',  types=types)
 
 
 # exercise route
 @dashboard.route('/exercise/<int:id>')
+@login_required
 def exercise(id):
-    # check if user is logged in
-    if 'user' in session:
-        user = session['user']
-        # query the database for exercise with the id in the route
-        exercise = db.session.query(Exercise, Type).join(
-            Type).filter(Exercise.id == id).first()
-        # if exercise exists render the page
-        if exercise:
-            return render_template('exercise.html', exercise=exercise)
-        # if exercise doesnt exist return a error
-        else:
-            abort(404)
+    # query the database for exercise with the id in the route
+    exercise = db.session.query(Exercise, Type).join(
+        Type).filter(Exercise.id == id).first()
+    # if exercise exists render the page
+    if exercise:
+        return render_template('exercise.html', exercise=exercise)
+    # if exercise doesnt exist return a error
     else:
-        return redirect((url_for('auth.signin')))
+        abort(404)
 
 
 @dashboard.route('/exercise-get', methods=['POST'])
@@ -163,292 +152,265 @@ def exerciseget():
 
 # create program route
 @dashboard.route('/create-program', methods=['POST'])
+@login_required
 def create_program():
-    # check user is logged in
-    if 'user' in session:
-        # load the exercise data and assign them to variables
-        exercisedata = json.loads(request.get_data())
-        name = exercisedata['name']
-        description = exercisedata['description']
-        username = session['user']
-        exercises = exercisedata['exercises']
+    # load the exercise data and assign them to variables
+    exercisedata = json.loads(request.get_data())
+    name = exercisedata['name']
+    description = exercisedata['description']
+    userid = current_user.id
+    exercises = exercisedata['exercises']
 
-        # checks for form inupt
-        if not name:
-            return jsonify(False, 'No name given.')
-        if not description:
-            return jsonify(False, 'No description given.')
-        if not exercises:
-            return jsonify(False, 'No exercises selected.')
-        if len(name) < 4:
-            return jsonify(False, 'Name is too short.')
-        if len(description) < 20:
-            return jsonify(False, 'Description is too short.')
-        if len(exercises) < 2:
-            return jsonify(False, 'Not enough exercises selected.(min:2)')
-        if len(name) > 16:
-            return jsonify(False, 'Name is too long.')
-        if len(description) > 60:
-            return jsonify(False, 'Description is too long.')
-        if len(exercises) > 40:
-            return jsonify(False, 'Too many exercises selected.(max:40)')
+    # checks for form inupt
+    if not name:
+        return jsonify(False, 'No name given.')
+    if not description:
+        return jsonify(False, 'No description given.')
+    if not exercises:
+        return jsonify(False, 'No exercises selected.')
+    if len(name) < 4:
+        return jsonify(False, 'Name is too short.')
+    if len(description) < 20:
+        return jsonify(False, 'Description is too short.')
+    if len(exercises) < 2:
+        return jsonify(False, 'Not enough exercises selected.(min:2)')
+    if len(name) > 16:
+        return jsonify(False, 'Name is too long.')
+    if len(description) > 60:
+        return jsonify(False, 'Description is too long.')
+    if len(exercises) > 40:
+        return jsonify(False, 'Too many exercises selected.(max:40)')
 
-        # check for duplicates
-        exerciseids = []
-        for exercise in exercises:
-            exerciseids.append(exercise[0])
+    # check for duplicates
+    exerciseids = []
+    for exercise in exercises:
+        exerciseids.append(exercise[0])
 
-        if len(exerciseids) != len(set(exerciseids)):
-            return jsonify(False, 'There are duplicate exercises')
+    if len(exerciseids) != len(set(exerciseids)):
+        return jsonify(False, 'There are duplicate exercises')
 
-        # get user id
-        userid = User.query.filter_by(username=f'{username}').first().id
-        # insert playlist data into table.
-        program = Program(
-            name=name, description=description, user_id=userid)
-        db.session.add(program)
+    # insert playlist data into table.
+    program = Program(
+        name=name, description=description, user_id=userid)
+    db.session.add(program)
+    db.session.commit()
+
+    # get id of added program
+    programid = program.id
+
+    # insert the exercises into the ExerciseProgram table
+    for i in range(len(exercises)):
+        exerciseprogram = ExerciseProgram.insert().values(
+            program_id=programid, exercise_id=exercises[i][0])
+        db.session.execute(exerciseprogram)
         db.session.commit()
 
-        # get id of added program
-        programid = program.id
-
-        # insert the exercises into the ExerciseProgram table
-        for i in range(len(exercises)):
-            exerciseprogram = ExerciseProgram.insert().values(
-                program_id=programid, exercise_id=exercises[i][0])
-            db.session.execute(exerciseprogram)
-            db.session.commit()
-
-        # return the exercise program
-        return jsonify(True, programid)
-
-    else:
-        return jsonify(False, ' user not logged in')
+    # return the exercise program
+    return jsonify(True, programid)
 
 
 # route for delete program
 @dashboard.route('/delete-program', methods=['POST'])
 def delete_program():
     # check that user is logged in
-    if 'user' in session:
-        programdata = json.loads(request.get_data())
+    programdata = json.loads(request.get_data())
 
-        # check if the user deleting the program is the user logged in in session data
-        if session['user'] != programdata['username']:
-            return jsonify(False)
-
-        # delete data from all tables where id is the id sent.
-        # *not sure if this is the propprer way to do this some guidance would be appreciated*
-        db.session.query(ExerciseProgram).filter(
-            ExerciseProgram.columns.program_id == programdata['id']).delete()
-        db.session.query(FavoriteProgram).filter(
-            FavoriteProgram.columns.program_id == programdata['id']).delete()
-        Program.query.filter(Program.id == programdata['id']).delete()
-        db.session.commit()
-
-        return jsonify(True)
-    else:
+    # check if the user deleting the program is the user logged in in session data
+    if current_user.username != programdata['username']:
         return jsonify(False)
+
+    # delete data from all tables where id is the id sent.
+    # *not sure if this is the propprer way to do this some guidance would be appreciated*
+    db.session.query(ExerciseProgram).filter(
+        ExerciseProgram.columns.program_id == programdata['id']).delete()
+    db.session.query(FavoriteProgram).filter(
+        FavoriteProgram.columns.program_id == programdata['id']).delete()
+    Program.query.filter(Program.id == programdata['id']).delete()
+    db.session.commit()
+
+    return jsonify(True)
 
 
 # route for like program
 @dashboard.route('/like-program', methods=['POST'])
+@login_required
 def like_program():
-    # check if user is logged in
-    if 'user' in session:
-        # get the program id that we will delete
-        programdata = json.loads(request.get_data())
-        program_id = programdata['id']
+    # get the program id that we will delete
+    programdata = json.loads(request.get_data())
+    program_id = programdata['id']
 
-        # this is used to check if user has liked the program... returns true if they have and returns false if they havent
+    # this is used to check if user has liked the program... returns true if they have and returns false if they havent
 
-        # get the id of the user
-        user_id = db.session.query(User.id).filter(
-            User.username == session['user']).first()
+    # get the id of the user
+    user_id = current_user.id
 
-        # query the favoriteProgram relationship to see if the user id has liked the program with the id of the entered id.
-        user_like = db.session.query(FavoriteProgram).filter(
-            (FavoriteProgram.columns.user_id == int(user_id[0])) & (FavoriteProgram.columns.program_id == program_id)).first()
+    # query the favoriteProgram relationship to see if the user id has liked the program with the id of the entered id.
+    user_like = db.session.query(FavoriteProgram).filter(
+        (FavoriteProgram.columns.user_id == int(user_id)) & (FavoriteProgram.columns.program_id == program_id)).first()
 
-        # create outcome and add the relationship if the user hasnt liked or remove if they have
-        if user_like:
-            db.session.query(FavoriteProgram).filter(
-                (FavoriteProgram.columns.user_id == int(user_id[0])) & (FavoriteProgram.columns.program_id == program_id)).delete()
-            db.session.commit()
-            liked_by_user = False
+    # create outcome and add the relationship if the user hasnt liked or remove if they have
+    if user_like:
+        db.session.query(FavoriteProgram).filter(
+            (FavoriteProgram.columns.user_id == int(user_id)) & (FavoriteProgram.columns.program_id == program_id)).delete()
+        db.session.commit()
+        liked_by_user = False
 
-        else:
-            likerelationship = FavoriteProgram.insert().values(
-                user_id=(user_id.id), program_id=(program_id))
-            db.session.execute(likerelationship)
-            db.session.commit()
-            liked_by_user = True
-
-        # get like count
-        likes = db.session.query(FavoriteProgram).filter(
-            (FavoriteProgram.columns.program_id == int(program_id))).count()
-
-        # create responce
-        response = {
-            'liked_by_user': liked_by_user,
-            'likes': likes
-        }
-
-        # return responce
-        return jsonify(response)
     else:
-        return jsonify('error: user not logged in')
+        likerelationship = FavoriteProgram.insert().values(
+            user_id=(user_id), program_id=(program_id))
+        db.session.execute(likerelationship)
+        db.session.commit()
+        liked_by_user = True
+
+    # get like count
+    likes = db.session.query(FavoriteProgram).filter(
+        (FavoriteProgram.columns.program_id == int(program_id))).count()
+
+    # create responce
+    response = {
+        'liked_by_user': liked_by_user,
+        'likes': likes
+    }
+
+    # return responce
+    return jsonify(response)
 
 
 # program route
 @dashboard.route('/program/<int:id>')
+@login_required
 def program(id):
-    # check if user is logged in
-    if 'user' in session:
-        # set the user to the logged in user
-        user = session['user']
 
-        # get the program info
-        program_info = db.session.query(
-            Program.id, Program.name, Program.description, User.username).join(User).filter(Program.id == id).first()
+    # get the program info
+    program_info = db.session.query(
+        Program.id, Program.name, Program.description, User.username).join(User).filter(Program.id == id).first()
 
-        # if program dosent exist return 404
-        if not program_info:
-            abort(404)
+    # if program dosent exist return 404
+    if not program_info:
+        abort(404)
 
-        # get the exercises from the program
-        exercises = Program.query.filter(Program.id == id).first().exercises
+    # get the exercises from the program
+    exercises = Program.query.filter(Program.id == id).first().exercises
 
-        # this is used to check if user has liked the program... returns true if they have and returns false if they havent
-        # get the id of the user
-        user_id = db.session.query(User.id).filter(
-            User.username == user).first()
+    # this is used to check if user has liked the program... returns true if they have and returns false if they havent
+    # get the id of the user
+    user_id = current_user.id
 
-        # query the favoriteProgram relationship to see if the user id has liked the program with the id of the entered id.
-        user_like = db.session.query(FavoriteProgram).filter(
-            (FavoriteProgram.columns.user_id == int(user_id[0])) & (FavoriteProgram.columns.program_id == int(id))).first()
+    # query the favoriteProgram relationship to see if the user id has liked the program with the id of the entered id.
+    user_like = db.session.query(FavoriteProgram).filter(
+        (FavoriteProgram.columns.user_id == int(user_id)) & (FavoriteProgram.columns.program_id == int(id))).first()
 
-        if user_like:
-            liked_by_user = True
-        else:
-            liked_by_user = False
-
-        # get amount of likes
-        likes = db.session.query(FavoriteProgram).filter(
-            (FavoriteProgram.columns.program_id == int(id))).count()
-
-        # render page
-        return render_template('program.html', username=user, program_info=program_info, exercises=exercises, liked_by_user=liked_by_user, likes=likes)
+    if user_like:
+        liked_by_user = True
     else:
-        return redirect((url_for('auth.signin')))
+        liked_by_user = False
+
+    # get amount of likes
+    likes = db.session.query(FavoriteProgram).filter(
+        (FavoriteProgram.columns.program_id == int(id))).count()
+
+    # render page
+    return render_template('program.html', username=current_user.username, program_info=program_info, exercises=exercises, liked_by_user=liked_by_user, likes=likes)
 
 
 # route for delete account
 @ dashboard.route('/delete-account', methods=['POST'])
+@login_required
 def delete_account():
-    # check if user is logged in
-    if 'user' in session:
-        # get the user data
-        userdata = json.loads(request.get_data())
+    # get the user data
+    userdata = json.loads(request.get_data())
 
-        # check that the user that is logged in is the one that sends the request.
+    # check that the user that is logged in is the one that sends the request.
 
-        if session['user'] == userdata['username']:
-            # get the user info
-            user = db.session.query(User).filter(
-                User.username == session['user']).first()
-            if check_password_hash(user.password, userdata['password']) == True:
+    if current_user.username == userdata['username']:
+        # get the user info
+        user = db.session.query(User).filter(
+            User.username == current_user.username).first()
+        if check_password_hash(user.password, userdata['password']) == True:
 
-                # delete program
-                program_id = db.session.query(Program.id).filter(
-                    Program.user_id == user.id).first()
+            # delete program
+            program_id = db.session.query(Program.id).filter(
+                Program.user_id == user.id).first()
 
-                # if user has created programs delete
-                if program_id:
-                    db.session.query(ExerciseProgram).filter(
-                        ExerciseProgram.columns.program_id == program_id[0]).delete()
-                    db.session.query(Program).filter(
-                        Program.user_id == user.id).delete()
-                    db.session.query(FavoriteProgram).filter(
-                        FavoriteProgram.columns.program_id == program_id[0]).delete()
-
-                # delete favorited programs
+            # if user has created programs delete
+            if program_id:
+                db.session.query(ExerciseProgram).filter(
+                    ExerciseProgram.columns.program_id == program_id[0]).delete()
+                db.session.query(Program).filter(
+                    Program.user_id == user.id).delete()
                 db.session.query(FavoriteProgram).filter(
-                    FavoriteProgram.columns.user_id == user.id).delete()
+                    FavoriteProgram.columns.program_id == program_id[0]).delete()
 
-                # delete user
-                db.session.query(User).filter(User.id == user.id).delete()
+            # delete favorited programs
+            db.session.query(FavoriteProgram).filter(
+                FavoriteProgram.columns.user_id == user.id).delete()
 
-                # commit
-                db.session.commit()
+            # delete user
+            db.session.query(User).filter(User.id == user.id).delete()
 
-                # log user out
-                session.pop('user', None)
-                return jsonify(True, 'Success')
+            # commit
+            db.session.commit()
 
-            else:
-                return jsonify(False, 'Incorect password')
+            # log user out
+            return jsonify(True, 'Success')
 
         else:
-            return jsonify(False, 'Something went wrong')
+            return jsonify(False, 'Incorect password')
 
     else:
-        return jsonify(False, 'User not logged in')
+        return jsonify(False, 'Something went wrong')
 
 
 # route for editing account info
 @ dashboard.route('/edit-account', methods=['POST'])
+@login_required
 def edit_account():
-    # check if user is logged in
-    if 'user' in session:
-        userdata = json.loads(request.get_data())
+    userdata = json.loads(request.get_data())
 
-        # check that the user that is logged in is the one that sends the request.
-        if session['user'] == userdata['username']:
-            # get the users accout info
-            user = db.session.query(User).filter(
-                User.username == session['user']).first()
+    # check that the user that is logged in is the one that sends the request.
+    if current_user.username == userdata['username']:
+        # get the users accout info
+        user = db.session.query(User).filter(
+            User.username == current_user.username).first()
 
-            # if user doesnt exist
-            if not user:
-                return jsonify(False, 'Something went wrong')
-
-            # check password hash
-            if check_password_hash(user.password, userdata['password']) == True:
-
-                # assign the new userdata to variables
-                new_username = str(userdata['updateinfo']['username']).lower()
-
-                # create a check for the email and username
-                # if user has changed both email and username
-                if user.username != new_username :
-                    check = User.query.filter((User.username == new_username)).first()
-
-                # if user didnt change anything
-                else:
-                    return jsonify(True, session['user'])
-
-                # checks before updating the data
-                if check:
-                    return jsonify(False, 'email or username already in use')
-                if len(new_username) <= 4:
-                    return jsonify(False, 'usename must be longer than 4 charaters')
-                else:
-                    # update the user info
-                    user.username = (new_username)
-                    db.session.commit()
-                    session['user'] = new_username
-                    return jsonify(True, new_username)
-
-            else:
-
-                return jsonify(False, 'Incorect password')
-
-        else:
+        # if user doesnt exist
+        if not user:
             return jsonify(False, 'Something went wrong')
 
+        # check password hash
+        if check_password_hash(user.password, userdata['password']) == True:
+
+            # assign the new userdata to variables
+            new_username = str(userdata['updateinfo']['username']).lower()
+
+            # create a check for the username
+            # if user has changed the username
+            if user.username != new_username:
+                check = User.query.filter(
+                    (User.username == new_username)).first()
+
+            # if user didnt change anything
+            else:
+                return jsonify(True, current_user.username)
+
+            # checks before updating the data
+            if check:
+                return jsonify(False, 'username already in use')
+            if len(new_username) <= 4:
+                return jsonify(False, 'usename must be longer than 4 charaters')
+            else:
+                # update the user info
+                user.username = (new_username)
+                db.session.commit()
+                current_user.username = new_username
+                return jsonify(True, new_username)
+
+        else:
+
+            return jsonify(False, 'Incorect password')
+
     else:
-        return jsonify(False, 'User not logged in')
+        return jsonify(False, 'Something went wrong')
 
 
 # route for load program

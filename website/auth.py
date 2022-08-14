@@ -1,10 +1,11 @@
 # imports
-from flask import Blueprint, render_template, session, redirect, url_for, request, flash, abort
+from flask import Blueprint, render_template, redirect, url_for, request, flash, abort
 from itsdangerous import SignatureExpired, BadSignature
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import User
 from . import db, s, mail
 from flask_mail import Message
+from flask_login import login_required, login_user, logout_user, current_user
 
 # code for logging the sql queries (used for testing)
 import logging
@@ -20,11 +21,11 @@ auth = Blueprint('auth', __name__)
 @auth.route("/signup", methods=['GET', 'POST'])
 def signup():
     # check if user is logged in
-    if 'user' in session:
-        return redirect(url_for('dashboard.account', username=session['user']))
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard.account', username=current_user.username))
 
     # if data is sent get the form data and assign it to variables
-    if request.method == 'POST':
+    if request.method == 'POST' and request.form:
         email = request.form.get('email')
         username = (request.form.get('username')).lower()
         password1 = request.form.get('password1')
@@ -78,9 +79,9 @@ def signup():
                 link = url_for('auth.verify_email',
                                token=token, _external=True)
 
-                msg.html = f'''<strong>Welcome to FootballHero,</strong> <br><br> 
-                                To verify your account click the link below:<br><br> 
-                                <a href={link}>verify</a> <br><br> 
+                msg.html = f'''<strong>Welcome to FootballHero,</strong> <br><br>
+                                To verify your account click the link below:<br><br>
+                                <a href={link}>verify</a> <br><br>
                                 If you did not create an account, no further action is required '''
 
                 mail.send(msg)
@@ -96,11 +97,11 @@ def signup():
 @auth.route("/signin", methods=['GET', 'POST'])
 def signin():
     # check if user is logged in
-    if 'user' in session:
-        return redirect(url_for('dashboard.account', username=session['user']))
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard.account', username=current_user.username))
 
     # if data is sent get the form data and assign it to variables
-    if request.method == 'POST':
+    if request.method == 'POST' and request.form:
         identifier = str(request.form.get('username'))
         password = str(request.form.get('password'))
 
@@ -122,11 +123,10 @@ def signin():
         # if user in check the password and then if the password matches sign the user in
 
         else:
-            print(user.verified)
             if check_password_hash(user.password, password) == True:
                 if user.verified == True:
-                    session['user'] = user.username
-                    return redirect(url_for('dashboard.account', username=session['user']))
+                    login_user(user)
+                    return redirect(url_for('dashboard.account', username=user.username))
 
                 else:
                     flash('email is not verified')
@@ -138,15 +138,16 @@ def signin():
 
 
 # route to sign the user out
-@auth.route('/signout')
+@ auth.route('/signout')
+@ login_required
 def signout():
     # sign the user out
-    session.pop('user', None)
+    logout_user()
     return redirect(url_for('auth.signin'))
 
 
 # route to verify email of the user
-@auth.route("/verify_email/<token>", methods=['GET', 'POST'])
+@ auth.route("/verify_email/<token>", methods=['GET', 'POST'])
 def verify_email(token):
     try:
         email = s.loads(token, salt='email_verification', max_age=3600)
@@ -158,17 +159,19 @@ def verify_email(token):
     user = User.query.filter(
         (User.email == email)).first()
     user.verified = True
-    session["user"] = user.username
     db.session.commit()
-    return redirect(url_for('dashboard.account', username=session['user']))
+
+    login_user(user)
+
+    return redirect(url_for('dashboard.account', username=current_user.username))
 
 
 # route for user to request update to user password
-@auth.route("/reset-password", methods=['GET', 'POST'])
+@ auth.route("/reset-password", methods=['GET', 'POST'])
 def send_reset_email():
     # if user is logged in redirect to dashboard
-    if 'user' in session:
-        return redirect(url_for('dashboard.account', username=session['user']))
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard.account', username=current_user.username))
 
     # if form data is sent
     if request.method == 'POST' and request.form:
@@ -194,9 +197,9 @@ def send_reset_email():
                 link = url_for('auth.reset_user_password',
                                token=token, _external=True)
 
-                msg.html = f'''<strong>Reset password,</strong> <br><br> 
-                                To reset your password click the link below:<br><br> 
-                                <a href={link}>reset</a> <br><br> 
+                msg.html = f'''<strong>Reset password,</strong> <br><br>
+                                To reset your password click the link below:<br><br>
+                                <a href={link}>reset</a> <br><br>
                                 If you did try to reset your password, no further action is required '''
 
                 mail.send(msg)
@@ -208,7 +211,7 @@ def send_reset_email():
 
 
 # route for user to update password
-@auth.route("/reset-password/<token>", methods=['GET', 'POST'])
+@ auth.route("/reset-password/<token>", methods=['GET', 'POST'])
 def reset_user_password(token):
     try:
         # get token

@@ -14,7 +14,7 @@
 
         <p class="dashboard-account-info-username">{{user.username | capitalize}}</p>
 
-        {% if session['user'] == user.username %}
+        {% if current_user.username == user.username %}
         {% if programscreated |length == 0 %}<p class="dashboard-account-info-subtitle">You have created 0 programs.</p>
         {% elif programscreated |length == 1 %} <p class="dashboard-account-info-subtitle">You have created 1 program.
         </p>
@@ -36,7 +36,7 @@
         {% endif%}
         {% endif %}
 
-        {% if session['user'] == user.username %}
+        {% if current_user.username == user.username %}
         <div class="dashboard-account-info-settings">
             <span class="iconify" data-icon="carbon:settings"></span>
             <a class="dashboard-account-info-settings-button" href="/signout">Log out</a>
@@ -98,7 +98,7 @@
 
         <input type="text" placeholder="username" class="dashboard-account-modal-form-input"
             id='dashboard-account-modal-form-username' maxlength="150" value="{{user.username}}"><br>
-       <input type="password" placeholder="password" class="dashboard-account-modal-form-input"
+        <input type="password" placeholder="password" class="dashboard-account-modal-form-input"
             id='dashboard-account-modal-form-password-edit' maxlength="150"><br>
         <button class="button dashboard-account-modal-form-button" id='dashboard-account-modal-form-edit'>Edit</button>
 
@@ -128,7 +128,7 @@
 </div>
 
 <script>
-    var username = ({{ user.username | tojson }})
+    var username = ('{{ current_user.username }}')
 </script>
 
 <script src="{{url_for('static' , filename='javascript/dashboard-account.js')}}"></script>

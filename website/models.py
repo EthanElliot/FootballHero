@@ -1,6 +1,6 @@
 # imports
 from . import db
-from dataclasses import dataclass
+from flask_login import UserMixin
 
 
 # FavoriteProgram table database model
@@ -19,7 +19,7 @@ ExerciseProgram = db.Table('ExerciseProgram',
 
 
 # User table database model
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
     email = db.Column(db.String(150), unique=True)
@@ -45,7 +45,6 @@ class Program(db.Model):
 
 # exercise table database model
 class Exercise(db.Model):
-
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), nullable=False)

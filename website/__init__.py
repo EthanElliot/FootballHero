@@ -6,6 +6,7 @@ from os import path
 from flask_migrate import Migrate
 from flask_mail import Mail
 from itsdangerous import URLSafeSerializer
+from flask_login import LoginManager
 
 # db variables
 db = SQLAlchemy()
@@ -19,6 +20,8 @@ mail = Mail()
 
 # set up db migration
 migrate = Migrate()
+
+login_manager = LoginManager()
 
 
 # create flask app function
@@ -38,11 +41,21 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
 
+    # Set up flask login
+    login_manager.login_view = 'auth.signin'
+    login_manager.init_app(app)
+
     # import the db models
     from .views import views
     from .auth import auth
     from .dashboard import dashboard
     from .models import User, Program, Exercise, Type, FavoriteProgram, ExerciseProgram
+
+    # configue login user
+    @login_manager.user_loader
+    def load_user(user_id):
+        # since the user_id is just the primary key of our user table, use it in the query for the user
+        return User.query.get(int(user_id))
 
     # redgister the blueprints
     app.register_blueprint(views, url_prefix='/')

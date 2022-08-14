@@ -37,7 +37,7 @@
             </div>
 
             <ul class="dashboard-navnavigation">
-        
+
                 <li>
                     <div id='dashboard-nav-browse' class="dashboard-nav-navelement"
                         onclick="location.href = '/browse';">
@@ -50,7 +50,7 @@
 
                 <li>
                     <div id='dashboard-nav-account' class="dashboard-nav-navelement"
-                        onclick="location.href = '/account/{{session['user']}}';">
+                        onclick="location.href = '/account/{{current_user.username}}';">
                         <div id='dashboard-nav-account-icn' class="dashboard-nav-navelement-icn">
                             <span class="iconify" data-icon="bx:user" style="font-size: 20px"></span>
                         </div>
@@ -74,7 +74,7 @@
         <div class="dashboard-body">{% block content %} {% endblock %}</div>
     </div>
     <script>
-        var username = ({{ session['user'] | tojson }})
+        var username = ('{{ current_user.username}}')
     </script>
     <script src="{{url_for('static' , filename='javascript/dashboard-nav.js')}}"></script>
 
