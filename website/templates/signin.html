@@ -32,15 +32,14 @@
             {% endif %}
             {% endwith %}
             <form class='sign-form' method="post">
-                <input type="text" placeholder="username or email" class="sign-input-text" maxlength="150"
-                    name="username" id="username" />
-                <input type="password" placeholder="password" class="sign-input-text" maxlength="150" name="password"
-                    id="password" />
+                {{ form.csrf_token }}
+                {{ form.identifier(class="sign-input-text") }}
+                {{ form.password(class="sign-input-text") }}
                 <br />
                 <label for="fogot-password" class="sign-forgotpassword">
                     <a onclick="location.href='/reset-password';"> forgot my password?</a></label>
                 <br />
-                <input type="submit" class="button sign-form-button" value="sign in" />
+                {{ form.submit( class="button sign-form-button" ) }}
             </form>
         </div>
     </div>

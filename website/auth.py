@@ -6,6 +6,8 @@ from .models import User
 from . import db, s, mail
 from flask_mail import Message
 from flask_login import login_required, login_user, logout_user, current_user
+from .forms import SignInForm
+
 
 # code for logging the sql queries (used for testing)
 import logging
@@ -45,7 +47,6 @@ def signup():
         check = User.query.filter(
             (User.email == email) | (User.username == username)).first()
 
-        print(check)
         # checks for the len of inputs and if inputs exist
         if check:
             flash('usename or email already in use')
@@ -100,41 +101,31 @@ def signin():
     if current_user.is_authenticated:
         return redirect(url_for('dashboard.account', username=current_user.username))
 
-    # if data is sent get the form data and assign it to variables
-    if request.method == 'POST' and request.form:
-        identifier = str(request.form.get('username'))
-        password = str(request.form.get('password'))
+    # create form
+    form = SignInForm()
 
-        if not identifier:
-            flash('username or email required')
-            return render_template('signin.html')
-        if not password:
-            flash('password required')
-            return render_template('signin.html')
-
-        # query the database to get the password
+    # check info once from is validated
+    if form.validate_on_submit():
         user = User.query.filter(
-            (User.email == identifier) | (User.username == identifier.lower())).first()
-
-        # if no user
-        if not user:
-            flash('no user registered with that email or username found')
-
-        # if user in check the password and then if the password matches sign the user in
-
-        else:
-            if check_password_hash(user.password, password) == True:
+            (User.email == form.identifier.data) | (User.username == form.identifier.data)).first()
+        # check if user is regestered
+        if user:
+            # check password hash
+            if check_password_hash(user.password, form.password.data) == True:
+                # check if user is verified
                 if user.verified == True:
+                    # if requiremets are met log the user in
                     login_user(user)
-                    return redirect(url_for('dashboard.account', username=user.username))
+                    return redirect(url_for('dashboard.account', username=current_user.username))
 
                 else:
                     flash('email is not verified')
-
             else:
                 flash('incorrect password')
+        else:
+            flash('no user registered with that email or username')
 
-    return render_template('signin.html')
+    return render_template('signin.html', form=form)
 
 
 # route to sign the user out

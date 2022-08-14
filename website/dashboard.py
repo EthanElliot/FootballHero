@@ -99,8 +99,15 @@ def create():
 @login_required
 def exercise(id):
     # query the database for exercise with the id in the route
-    exercise = db.session.query(Exercise, Type).join(
-        Type).filter(Exercise.id == id).first()
+    exercise = db.session.\
+        query(
+            Exercise,
+            Type).\
+        join(Type).\
+        filter(
+            Exercise.id == id
+        ).\
+        first()
     # if exercise exists render the page
     if exercise:
         return render_template('exercise.html', exercise=exercise)
@@ -116,33 +123,46 @@ def exerciseget():
     filtertext = filters['filtertext']
     filtertype = filters['filtertype']
 
+    exercise_data = db.session.\
+        query(
+            Exercise.id,
+            Exercise.name,
+            Type.type).\
+        join(Type)
+
     # if filtering by both filters
     if filtertext and filtertype:
-        exercise_data = db.session.query(Exercise.id, Exercise.name, Type.type).join(Type).filter(
-            Exercise.name.ilike(f'%{filtertext}%'),
-            Type.type == filtertype
-        ).all()
+        exercise_data = exercise_data.\
+            filter(
+                Exercise.name.ilike(f'%{filtertext}%'),
+                Type.type == filtertype
+            ).\
+            all()
 
         exercise_data = to_JSON(exercise_data)
 
     # if filtering by text filter
     elif filtertext:
-        exercise_data = db.session.query(Exercise.id, Exercise.name, Type.type).join(Type).filter(
-            Exercise.name.ilike(f'%{filtertext}%')).all()
+        exercise_data = exercise_data.\
+            filter(
+                Exercise.name.ilike(f'%{filtertext}%')
+            ).\
+            all()
 
         exercise_data = to_JSON(exercise_data)
 
     # if filtering by type filter
     elif filtertype:
-        exercise_data = db.session.query(Exercise.id, Exercise.name, Type.type).join(Type).filter(
-            Type.type == filtertype).all()
+        exercise_data = exercise_data.\
+            filter(
+                Type.type == filtertype).\
+            all()
 
         exercise_data = to_JSON(exercise_data)
 
     # if no filter
     else:
-        exercise_data = db.session.query(Exercise.id, Exercise.name, Type.type).join(
-            Type).all()
+        exercise_data = exercise_data.all()
 
         exercise_data = to_JSON(exercise_data)
 
@@ -195,18 +215,16 @@ def create_program():
     db.session.add(program)
     db.session.commit()
 
-    # get id of added program
-    programid = program.id
-
     # insert the exercises into the ExerciseProgram table
     for i in range(len(exercises)):
         exerciseprogram = ExerciseProgram.insert().values(
-            program_id=programid, exercise_id=exercises[i][0])
+            program_id=program.id, exercise_id=exercises[i][0])
         db.session.execute(exerciseprogram)
-        db.session.commit()
+
+    db.session.commit()
 
     # return the exercise program
-    return jsonify(True, programid)
+    return jsonify(True, program.id)
 
 
 # route for delete program
