@@ -6,7 +6,7 @@ from .models import User
 from . import db, s, mail
 from flask_mail import Message
 from flask_login import login_required, login_user, logout_user, current_user
-from .forms import SignInForm
+from .forms import SignInForm, SignUpForm
 
 
 # code for logging the sql queries (used for testing)
@@ -26,72 +26,48 @@ def signup():
     if current_user.is_authenticated:
         return redirect(url_for('dashboard.account', username=current_user.username))
 
-    # if data is sent get the form data and assign it to variables
-    if request.method == 'POST' and request.form:
-        email = request.form.get('email')
-        username = (request.form.get('username')).lower()
-        password1 = request.form.get('password1')
-        password2 = request.form.get('password2')
+    # create form
+    form = SignUpForm()
 
-        if not (username):
-            flash('username required')
-            return render_template('signup.html')
-        if not (email):
-            flash('email required')
-            return render_template('signup.html')
-        if not (password1) or not password2:
-            flash('password required')
-            return render_template('signup.html')
+    # on form submit send email and add user to db
+    if form.validate_on_submit():
+        email = form.email.data
+        username = form.username.data
+        password = str(form.password.data)
 
-        # query the database to check the username and email
-        check = User.query.filter(
-            (User.email == email) | (User.username == username)).first()
+        # send email with link
+        try:
+            # generate token
+            token = s.dumps(email,  salt='email_verification')
 
-        # checks for the len of inputs and if inputs exist
-        if check:
-            flash('usename or email already in use')
-        elif len(email) <= 4:
-            flash('email must be longer than 4 charaters')
-        elif len(username) <= 4:
-            flash('usename must be longer than 4 charaters')
-        elif len(password1) < 1:
-            flash('password to short')
-        elif password1 != password2:
-            flash('passwords dont match')
-        elif len(email) > 150 and len(username) > 150 and len(password1) > 200 and len(password2) > 200:
-            flash('your inputs are to long')
+            # create and send message
+            msg = Message('FootballHero - Confirm your Email',
+                          recipients=[email])
 
-        # if unique account sign the user up and redirect
-        else:
+            link = url_for('auth.verify_email',
+                           token=token, _external=True)
 
-            new_user = User(username=username, email=email,
-                            password=generate_password_hash(password1), verified=False)
-            db.session.add(new_user)
-            db.session.commit()
+            msg.html = f'''<strong>Welcome to FootballHero,</strong> <br><br>
+                            To verify your account click the link below:<br><br>
+                            <a href={link}>verify</a> <br><br>
+                            If you did not create an account, no further action is required '''
 
-            try:
-                # generate token
-                token = s.dumps(email,  salt='email_verification')
+            mail.send(msg)
 
-                # create and send message
-                msg = Message('FootballHero - Confirm your Email',
-                              recipients=[email])
+        except:
+            abort(500)
 
-                link = url_for('auth.verify_email',
-                               token=token, _external=True)
+        # add user to database
+        new_user = User(username=username,
+                        email=email,
+                        password=generate_password_hash(password),
+                        verified=False)
+        db.session.add(new_user)
+        db.session.commit()
 
-                msg.html = f'''<strong>Welcome to FootballHero,</strong> <br><br>
-                                To verify your account click the link below:<br><br>
-                                <a href={link}>verify</a> <br><br>
-                                If you did not create an account, no further action is required '''
+        return render_template("notify.html", message_header="Before you can access your account please validate your email", message_sub="to validate your account check your email.")
 
-                mail.send(msg)
-
-                return render_template("notify.html", message_header="Before you can access your account please validate your email", message_sub="to validate your account check your email.")
-            except:
-                abort(500)
-
-    return render_template('signup.html')
+    return render_template('signup.html', form=form)
 
 
 # route to sign the user in
