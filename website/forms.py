@@ -67,3 +67,20 @@ class SignUpForm(FlaskForm):
 
         else:
             return True
+
+
+class SendForgotPasswordLink(FlaskForm):
+    email = EmailField('email', validators=[
+        DataRequired(), Length(min=4, max=150), Email()], render_kw={"placeholder": "email"})
+    submit = SubmitField('reset')
+
+
+
+class ResetPassword(FlaskForm):
+    password = PasswordField('Password',
+                             validators=[DataRequired(), Length(min=4, max=150)], render_kw={"placeholder": "Password"})
+
+    confirm = PasswordField('Verify password',
+                            validators=[DataRequired(), EqualTo('password',
+                                                                message='Passwords must match')], render_kw={"placeholder": "Verify password"})
+    submit = SubmitField('reset')

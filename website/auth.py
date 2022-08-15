@@ -6,7 +6,7 @@ from .models import User
 from . import db, s, mail
 from flask_mail import Message
 from flask_login import login_required, login_user, logout_user, current_user
-from .forms import SignInForm, SignUpForm
+from .forms import SignInForm, SignUpForm, SendForgotPasswordLink, ResetPassword
 
 
 # code for logging the sql queries (used for testing)
@@ -140,17 +140,23 @@ def send_reset_email():
     if current_user.is_authenticated:
         return redirect(url_for('dashboard.account', username=current_user.username))
 
+    form = SendForgotPasswordLink()
+
     # if form data is sent
-    if request.method == 'POST' and request.form:
+    if form.validate_on_submit():
+        print('yesirr')
+
         # get form input
-        email = str(request.form.get('email'))
+        email = form.email.data
+       
+     
 
         # check the user exists
         user = User.query.filter(
             (User.email == email)).first()
         if not user:
             flash('no user registered with that email')
-            return render_template('reset_password_email.html')
+            return render_template('reset_password_email.html', form=form)
 
         # generate email
         else:
@@ -170,11 +176,12 @@ def send_reset_email():
                                 If you did try to reset your password, no further action is required '''
 
                 mail.send(msg)
-                return render_template("notify.html", message_header="To update your password", message_sub="check your email.")
             except:
                 abort(500)
+
+            return render_template("notify.html", message_header="To update your password", message_sub="check your email.")
     else:
-        return render_template('reset_password_email.html')
+        return render_template('reset_password_email.html', form=form)
 
 
 # route for user to update password
@@ -189,11 +196,13 @@ def reset_user_password(token):
     except BadSignature:
         abort(401)
 
+    form = ResetPassword()
+
     # if form input
-    if request.method == 'POST' and request.form:
+    if form.validate_on_submit():
         # get form input
-        password1 = str(request.form.get('password1'))
-        password2 = str(request.form.get('password2'))
+        password1 = form.password.data
+        password2 = form.confirm.data
 
         # check passwords
         if password1 != password2:
@@ -204,7 +213,7 @@ def reset_user_password(token):
             return render_template('reset_password_form.html')
         elif len(password1) < 1:
             flash('password to short')
-            return render_template('reset_password_form.html')
+            return render_template('reset_password_form.html') 
 
         # if passwords are valid update the db
         User.query.filter_by(email=email).update(
@@ -214,4 +223,4 @@ def reset_user_password(token):
         flash('password updated')
         return redirect(url_for('auth.signin'))
     else:
-        return render_template('reset_password_form.html')
+        return render_template('reset_password_form.html',form=form)
