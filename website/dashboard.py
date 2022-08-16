@@ -1,12 +1,15 @@
 # imports
+from crypt import methods
 import logging
-from flask import Blueprint, render_template, redirect, url_for, abort, request, jsonify
+from urllib import response
+from flask import Blueprint, render_template, redirect, url_for, abort, request, jsonify, make_response
 from .models import User, Exercise, Type, Program, ExerciseProgram, FavoriteProgram
 from .import db
 import json
 from werkzeug.security import check_password_hash
 from sqlalchemy import asc, func, column, desc, false
 from flask_login import login_required, current_user
+from .forms import BrowsePrograms
 
 
 # make flask blueprint
@@ -28,18 +31,22 @@ def to_JSON(data):
 
 
 # brouse route
-@dashboard.route("/browse")
+@dashboard.route("/browse", methods=['GET', "POST"])
 @login_required
 def browse():
+    form = BrowsePrograms()
     # if the user searches something
-    if request.args.get('query') or request.args.get('orderby'):
-        query = request.args.get('query')
-        orderby = request.args.get('orderby')
+    if form.validate_on_submit():
+        query = form.query.data
+        orderby = form.filter.data
 
-        return render_template('browse.html', query=query, orderby=orderby)
+        form.filter.default = orderby
+        form.query.default = query
+
+        return render_template('browse.html', form=form, query=query, orderby=orderby)
 
     else:
-        return render_template('browse.html')
+        return render_template('browse.html', form=form)
 
 # account route
 
@@ -464,28 +471,25 @@ def load_programs():
              ).join(User).\
         filter(Program.name.like(f'%{query}%'))
 
-    # create outcome based on orderby (order of the posts)
-    if not orderby:
-        return jsonify(to_JSON(programscreated.limit(6).offset(count).all()))
-
-    elif orderby == 'newest':
+    if orderby == 'newest':
         programscreated = programscreated.order_by(
             desc(Program.id)).limit(6).offset(count).all()
-        return jsonify(to_JSON(programscreated))
 
     elif orderby == 'oldest':
         programscreated = programscreated.order_by(
             asc(Program.id)).limit(6).offset(count).all()
-        return jsonify(to_JSON(programscreated))
 
     elif orderby == 'most_liked':
         programscreated = programscreated.order_by(
             desc(likes_query.c.cnt)).limit(6).offset(count).all()
-        return jsonify(to_JSON(programscreated))
 
     elif orderby == 'least_liked':
         programscreated = programscreated.order_by(
             asc(likes_query.c.cnt)).limit(6).offset(count).all()
-        return jsonify(to_JSON(programscreated))
+
     else:
-        return jsonify(to_JSON(programscreated.limit(6).offset(count).all()))
+        programscreated = programscreated.limit(6).offset(count).all()
+
+    response = make_response(jsonify(to_JSON(programscreated)), 200)
+    response.headers["Content-Type"] = "application/json"
+    return response

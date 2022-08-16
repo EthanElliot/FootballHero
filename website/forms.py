@@ -1,7 +1,8 @@
 # imports
+from email.policy import default
 from flask import flash
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, EmailField
+from wtforms import StringField, PasswordField, SubmitField, EmailField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from .models import User
 
@@ -75,7 +76,6 @@ class SendForgotPasswordLink(FlaskForm):
     submit = SubmitField('reset')
 
 
-
 class ResetPassword(FlaskForm):
     password = PasswordField('Password',
                              validators=[DataRequired(), Length(min=4, max=150)], render_kw={"placeholder": "Password"})
@@ -84,3 +84,11 @@ class ResetPassword(FlaskForm):
                             validators=[DataRequired(), EqualTo('password',
                                                                 message='Passwords must match')], render_kw={"placeholder": "Verify password"})
     submit = SubmitField('reset')
+
+
+class BrowsePrograms(FlaskForm):
+    query = StringField('keywords', validators=[Length(
+        min=0, max=150)], render_kw={"placeholder": "keywords"})
+    filter = SelectField('filter', choices=[("", "Filter"),
+                         ("newest", "Newest"), ("oldest", "Oldest"), ("most_liked", "Most liked"), ("least_liked", "Least liked")], default=("", "Filter"))
+    submit = SubmitField('search')
