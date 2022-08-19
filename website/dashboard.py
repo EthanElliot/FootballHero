@@ -1,7 +1,5 @@
 # imports
-from crypt import methods
 import logging
-from urllib import response
 from flask import Blueprint, render_template, redirect, url_for, abort, request, jsonify, make_response
 from .models import User, Exercise, Type, Program, ExerciseProgram, FavoriteProgram
 from .import db
