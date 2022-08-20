@@ -172,7 +172,9 @@ def exerciseget():
         exercise_data = to_JSON(exercise_data)
 
     # return the exercises
-    return jsonify(exercise_data)
+    response = make_response(jsonify(exercise_data), 200)
+    response.headers["Content-Type"] = "application/json"
+    return response
 
 
 # create program route

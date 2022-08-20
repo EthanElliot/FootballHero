@@ -82,6 +82,7 @@ def signin():
 
     # check info once from is validated
     if form.validate_on_submit():
+        # authenticate and log user in
         user = User.query.filter(
             (User.email == form.identifier.data) | (User.username == form.identifier.data)).first()
         # check if user is regestered
@@ -148,8 +149,6 @@ def send_reset_email():
 
         # get form input
         email = form.email.data
-       
-     
 
         # check the user exists
         user = User.query.filter(
@@ -213,7 +212,7 @@ def reset_user_password(token):
             return render_template('reset_password_form.html')
         elif len(password1) < 1:
             flash('password to short')
-            return render_template('reset_password_form.html') 
+            return render_template('reset_password_form.html')
 
         # if passwords are valid update the db
         User.query.filter_by(email=email).update(
@@ -223,4 +222,4 @@ def reset_user_password(token):
         flash('password updated')
         return redirect(url_for('auth.signin'))
     else:
-        return render_template('reset_password_form.html',form=form)
+        return render_template('reset_password_form.html', form=form)

@@ -1,5 +1,4 @@
 # imports
-from email.policy import default
 from flask import flash
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, EmailField, SelectField
@@ -9,10 +8,22 @@ from .models import User
 
 # sign in form
 class SignInForm(FlaskForm):
-    identifier = StringField('username or email', validators=[
-                             DataRequired(), Length(min=0, max=150)], render_kw={"placeholder": "username or email"})
-    password = PasswordField('password', validators=[DataRequired(), Length(min=0, max=150)], render_kw={
-                             "placeholder": "password"})
+    identifier = StringField('username or email',
+                             validators=[
+                                 DataRequired(),
+                                 Length(min=0, max=150)],
+                             render_kw={
+                                 "placeholder": "username or email"
+                             }
+                             )
+    password = PasswordField('password',
+                             validators=[
+                                 DataRequired(),
+                                 Length(min=0, max=150)],
+                             render_kw={
+                                 "placeholder": "password"
+                             }
+                             )
     submit = SubmitField('sign in')
 
 

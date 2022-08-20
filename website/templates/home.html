@@ -8,90 +8,67 @@
   <title>FootballHero</title>
   <link rel="stylesheet" href="{{ url_for('static', filename = 'styles.css') }}" />
   <link rel="shortcut icon" href="{{ url_for('static', filename = 'favicon.ico') }}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
 <body>
-  <nav>
-    <div class="navigation">
-      <div class="nav-name">
-        <h1>FootballHero</h1>
-      </div>
 
-      <div class="nav-butons">
-        <ul>
-          <li>
-            <button id="signup-button" class="nav-button button" onclick="location.href='/signup';">
-              Sign Up
-            </button>
-          </li>
-          <li>
-            <button id="signin-button" class="nav-button button" onclick="location.href='/signin';">
-              Sign In
-            </button>
-          </li>
-        </ul>
+  <div class="home-navigation" id="home-navigation">
+    <div class="home-nav-logo">
+      <h1 class="home-nav-name">FootballHero</h1>
+      <div class="home-nav-image">
+
       </div>
     </div>
-  </nav>
 
-  <div class="hero">
-    <div class="hero-text">
-      <h2>Enhance your<br />performance.</h2>
-      <h3>take your game to the<br />next level</h3>
+    <div class="home-nav-butons" id="home-nav-butons">
+      <ul>
+        <li>
+          <button id="home-signup-button" class="home-nav-button button" onclick="location.href='/signup';">
+            Sign Up
+          </button>
+        </li>
+        <li>
+          <button id="home-signin-button" class="home-nav-button button" onclick="location.href='/signin';">
+            Sign In
+          </button>
+        </li>
+      </ul>
+
+    </div>
+    <div class="home-nav-hamburger" id="home-nav-hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+
+
+  <div class="home-hero" rel="preload">
+    <p class="home-hero-text">TAKE YOUR<br>GAME TO THE<br>NEXT LEVEL.</p>
+    <button id="hero-button" class="nav-button button" onclick="location.href='/signup';">
+      Sign Up<span class="iconify" data-icon="akar-icons:arrow-right"></span>
+    </button>
+  </div>
+
+  <div class="home-section">
+    <div class="home-section-image-wrapper">
+      <div class="home-section-image">
+      </div>
+    </div>
+    <div class="home-section-text-wrapper">
+      <div class="home-section-text">
+        <p>Train like the best to be the best. Enhance your performance.</p>
+      </div>
       <button id="hero-button" class="nav-button button" onclick="location.href='/signup';">
         Sign Up<span class="iconify" data-icon="akar-icons:arrow-right"></span>
       </button>
     </div>
-    <div class="hero-image">
-      <img src="../static/images/FAe0ohtXoA8Lx8b-PhotoRoom-edit.svg" alt="Ronaldo" />
-    </div>
-    <span class="iconify hero-down-arrow" id="down-arrow" data-icon="ep:arrow-down-bold"
-      onclick="location='#down-arrow'"></span>
+
   </div>
 
-  <div class="about">
-    <div class="our-people about-section"></div>
-    <div class="our-story about-section">
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam odio,
-        maxime soluta sed, vitae dolore aliquid facilis aliquam, reiciendis
-        blanditiis debitis quos harum doloribus architecto distinctio dicta
-        nam incidunt non molestias eveniet ut recusandae. Dolor architecto in
-        pariatur eum, vel similique corrupti quis alias aspernatur odio
-        reiciendis est totam magnam repudiandae corporis, iure cupiditate ad
-        eveniet quibusdam. Minima, optio! Fuga nulla inventore eveniet, sint
-        repellat aspernatur esse ratione obcaecati sapiente nisi dolorem
-        soluta porro, vero veniam labore aliquam. Recusandae non repudiandae
-        maxime velit, veniam voluptate doloribus optio nihil et quis
-        architecto praesentium quia autem, debitis ullam voluptatem accusamus
-        ut quod ex ad minus labore, nulla distinctio molestiae. Earum a
-        dignissimos, molestiae, dolor dolore harum repudiandae pariatur ipsa
-        est atque omnis dolorum provident natus sit corporis mollitia officia
-        doloremque id enim nesciunt unde nostrum praesentium. Perspiciatis
-        deleniti labore quibusdam, asperiores, animi odit laboriosam aliquid
-        praesentium, quis eius esse libero. Eius, consequuntur!
-      </p>
-    </div>
-  </div>
 
-  <div class="our-product">
-    <div class="product-image product-section">
-      <img src="../static/images/istockphoto-1169087681-612x612.jpg" alt="computer" />
-    </div>
-    <div class="product-text product-section">
-      <h6>FootballHero web view.</h6>
-      <p>
-        We have a useful system that allows you to create and discover programs
-        that will help you improve your footballing ability. Sign up today to improve
-        your physicality and take your game to the next level.
-      </p>
-      <button id="hero-button" class="nav-button button" onclick="location.href='/signup';">
-        Sign Up<span class="iconify" data-icon="akar-icons:arrow-right"></span>
-      </button>
-    </div>
-  </div>
-
-  <footer>
+  <footer class="home-footer">
     <p>&#169;FootballHero</p>
   </footer>
   <script src="/static/javascript/home.js"></script>
