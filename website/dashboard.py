@@ -1,6 +1,6 @@
 # imports
 import logging
-from flask import Blueprint, render_template, redirect, url_for, abort, request, jsonify, make_response
+from flask import Blueprint, flash, render_template, redirect, url_for, abort, request, jsonify, make_response
 from .models import User, Exercise, Type, Program, ExerciseProgram, FavoriteProgram
 from .import db
 import json
@@ -150,7 +150,6 @@ def account(username):
 def create():
     # get the exercise types
     types = Type.query.all()
-
     return render_template('create.html',  types=types)
 
 
@@ -353,7 +352,9 @@ def like_program():
     }
 
     # return responce
-    return jsonify(response)
+    response = make_response(jsonify(response), 200)
+    response.headers["Content-Type"] = "application/json"
+    return response
 
 
 # program route

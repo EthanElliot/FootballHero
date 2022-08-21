@@ -703,7 +703,7 @@ html {
     position: fixed;
     left: 0;
     top: -100%;
-    margin-top: max(80px, 10%);
+    margin-top: max(80px, 10vh);
     gap: 0;
     height: 40%;
     min-height: 400px;

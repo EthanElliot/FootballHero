@@ -13,6 +13,7 @@ async function send_like_request(id) {
   let response = await fetch("/like-program", {
     method: "post",
     body: JSON.stringify({
+      // program id
       id: id,
     }),
   });
