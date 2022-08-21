@@ -7,7 +7,7 @@ import json
 from werkzeug.security import check_password_hash
 from sqlalchemy import asc, func, column, desc, false
 from flask_login import login_required, current_user
-from .forms import BrowsePrograms
+from .forms import BrowsePrograms, AccountEditInfo, AccountDelete
 
 
 # make flask blueprint
@@ -46,10 +46,9 @@ def browse():
     else:
         return render_template('browse.html', form=form)
 
+
 # account route
-
-
-@dashboard.route("/account/<username>")
+@dashboard.route("/account/<username>", methods=['POST', 'GET'])
 @login_required
 def account(username):
 
@@ -84,6 +83,62 @@ def account(username):
         filter(Program.user_id == user.id).\
         order_by(desc(Program.id)).\
         all()
+
+    if username == current_user.username:
+        Editform = AccountEditInfo()
+        DeleteForm = AccountDelete()
+
+        # edit account
+        if Editform.validate_on_submit() and Editform.edit.data:
+            user = db.session.query(User).filter(
+                User.username == current_user.username).first()
+            if check_password_hash(user.password, DeleteForm.password.data) == True:
+                new_username = Editform.username.data
+
+                check = User.query.filter(
+                    (User.username == new_username)).first()
+                # checks before updating the data
+                if not check:
+                    # update the user info
+                    print(new_username)
+                    user.username = (new_username)
+                    db.session.commit()
+                    current_user.username = new_username
+                    return redirect(url_for('dashboard.account', username=new_username))
+
+        # delete account
+        if DeleteForm.validate_on_submit() and DeleteForm.delete.data:
+            user = db.session.query(User).filter(
+                User.username == current_user.username).first()
+            if check_password_hash(user.password, DeleteForm.password.data) == True:
+                # delete program
+                program_id = db.session.query(Program.id).filter(
+                    Program.user_id == user.id).first()
+
+                # if user has created programs delete
+                if program_id:
+                    db.session.query(ExerciseProgram).filter(
+                        ExerciseProgram.columns.program_id == program_id[0]).delete()
+                    db.session.query(Program).filter(
+                        Program.user_id == user.id).delete()
+                    db.session.query(FavoriteProgram).filter(
+                        FavoriteProgram.columns.program_id == program_id[0]).delete()
+
+                # delete favorited programs
+                db.session.query(FavoriteProgram).filter(
+                    FavoriteProgram.columns.user_id == user.id).delete()
+
+                # delete user
+                db.session.query(User).filter(User.id == user.id).delete()
+
+                # commit
+                db.session.commit()
+
+                return redirect(url_for('views.home'))
+
+        Editform.username.data = current_user.username
+        # render the page
+        return render_template('account.html', user=user, programscreated=programscreated, Editform=Editform, DeleteForm=DeleteForm)
 
     # render the page
     return render_template('account.html', user=user, programscreated=programscreated)
@@ -336,106 +391,6 @@ def program(id):
 
     # render page
     return render_template('program.html', username=current_user.username, program_info=program_info, exercises=exercises, liked_by_user=liked_by_user, likes=likes)
-
-
-# route for delete account
-@ dashboard.route('/delete-account', methods=['POST'])
-@login_required
-def delete_account():
-    # get the user data
-    userdata = json.loads(request.get_data())
-
-    # check that the user that is logged in is the one that sends the request.
-
-    if current_user.username == userdata['username']:
-        # get the user info
-        user = db.session.query(User).filter(
-            User.username == current_user.username).first()
-        if check_password_hash(user.password, userdata['password']) == True:
-
-            # delete program
-            program_id = db.session.query(Program.id).filter(
-                Program.user_id == user.id).first()
-
-            # if user has created programs delete
-            if program_id:
-                db.session.query(ExerciseProgram).filter(
-                    ExerciseProgram.columns.program_id == program_id[0]).delete()
-                db.session.query(Program).filter(
-                    Program.user_id == user.id).delete()
-                db.session.query(FavoriteProgram).filter(
-                    FavoriteProgram.columns.program_id == program_id[0]).delete()
-
-            # delete favorited programs
-            db.session.query(FavoriteProgram).filter(
-                FavoriteProgram.columns.user_id == user.id).delete()
-
-            # delete user
-            db.session.query(User).filter(User.id == user.id).delete()
-
-            # commit
-            db.session.commit()
-
-            # log user out
-            return jsonify(True, 'Success')
-
-        else:
-            return jsonify(False, 'Incorect password')
-
-    else:
-        return jsonify(False, 'Something went wrong')
-
-
-# route for editing account info
-@ dashboard.route('/edit-account', methods=['POST'])
-@login_required
-def edit_account():
-    userdata = json.loads(request.get_data())
-
-    # check that the user that is logged in is the one that sends the request.
-    if current_user.username == userdata['username']:
-        # get the users accout info
-        user = db.session.query(User).filter(
-            User.username == current_user.username).first()
-
-        # if user doesnt exist
-        if not user:
-            return jsonify(False, 'Something went wrong')
-
-        # check password hash
-        if check_password_hash(user.password, userdata['password']) == True:
-
-            # assign the new userdata to variables
-            new_username = str(userdata['updateinfo']['username']).lower()
-
-            # create a check for the username
-            # if user has changed the username
-            if user.username != new_username:
-                check = User.query.filter(
-                    (User.username == new_username)).first()
-
-            # if user didnt change anything
-            else:
-                return jsonify(True, current_user.username)
-
-            # checks before updating the data
-            if check:
-                return jsonify(False, 'username already in use')
-            if len(new_username) <= 4:
-                return jsonify(False, 'usename must be longer than 4 charaters')
-            else:
-                # update the user info
-                user.username = (new_username)
-                db.session.commit()
-                current_user.username = new_username
-                return jsonify(True, new_username)
-
-        else:
-
-            return jsonify(False, 'Incorect password')
-
-    else:
-        return jsonify(False, 'Something went wrong')
 
 
 # route for load program

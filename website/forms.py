@@ -102,3 +102,20 @@ class BrowsePrograms(FlaskForm):
     filter = SelectField('filter', choices=[("", "Filter"),
                          ("newest", "Newest"), ("oldest", "Oldest"), ("most_liked", "Most liked"), ("least_liked", "Least liked")], default=("", "Filter"))
     submit = SubmitField('search')
+
+
+class AccountEditInfo(FlaskForm):
+    username = StringField('username', validators=[
+        DataRequired(), Length(min=4, max=150)], render_kw={"placeholder": "username"})
+
+    password = PasswordField('Password',
+                             validators=[DataRequired(), Length(max=150)], render_kw={"placeholder": "Password"})
+    edit = SubmitField('Edit')
+
+
+class AccountDelete(FlaskForm):
+
+    password = PasswordField('Password',
+                             validators=[DataRequired(), Length(max=150)], render_kw={"placeholder": "Password"})
+
+    delete = SubmitField('Delete')

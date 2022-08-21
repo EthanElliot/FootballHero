@@ -40,10 +40,15 @@
         <div class="dashboard-account-info-settings">
             <span class="iconify" data-icon="carbon:settings"></span>
             <a class="dashboard-account-info-settings-button" href="/signout">Log out</a>
+
+            {% if Editform %}
             <a id='dashboard-account-info-settings-editinfo' class="dashboard-account-info-settings-button">edit
                 info</a>
+            {% endif %}
+            {% if DeleteForm %}
             <a id='dashboard-account-info-settings-deleteaccount' class="dashboard-account-info-settings-button">delete
                 account</a>
+            {% endif %}
 
 
         </div>
@@ -77,8 +82,9 @@
 </div>
 
 
-
+{% if Editform or DeleteForm %}
 <div id="dashboard-account-modal" class="dashboard-modal-wrapper">
+    {% if Editform %}
     <div id='dashboard-account-modal-editinfo' class="dashboard-account-modal">
         <div id='dashboard-account-modal-editinfo-close' class="dashboard-account-modal-close">
             <p>&#9547;</p>
@@ -96,14 +102,16 @@
 
         <p class="dashboard-account-modal-form-paragraph">To Edit your account please enter your password. </p>
 
-        <input type="text" placeholder="username" class="dashboard-account-modal-form-input"
-            id='dashboard-account-modal-form-username' maxlength="150" value="{{user.username}}"><br>
-        <input type="password" placeholder="password" class="dashboard-account-modal-form-input"
-            id='dashboard-account-modal-form-password-edit' maxlength="150"><br>
-        <button class="button dashboard-account-modal-form-button" id='dashboard-account-modal-form-edit'>Edit</button>
-
+        <form method="post">
+            {{ Editform.csrf_token }}
+            {{ Editform.username( class="dashboard-account-modal-form-input") }}
+            {{ Editform.password( class="dashboard-account-modal-form-input") }}<br>
+            {{ Editform.edit( class="button dashboard-account-modal-form-button") }}
+        </form>
 
     </div>
+    {% endif %}
+    {% if DeleteForm %}
     <div id='dashboard-account-modal-deleteaccount' class="dashboard-account-modal">
         <div id='dashboard-account-modal-deleteaccount-close' class="dashboard-account-modal-close">
             <p>&#9547;</p>
@@ -119,13 +127,17 @@
         </div>
         <p class="dashboard-account-modal-form-paragraph">To delete your account please enter your password. </p>
 
-        <input type="password" placeholder="password" class="dashboard-account-modal-form-input"
-            id='dashboard-account-modal-form-password-delete' maxlength="150"><br>
-        <button class="button dashboard-account-modal-form-button"
-            id='dashboard-account-modal-form-delete'>delete</button>
+        <form method="post">
+            {{ DeleteForm.csrf_token }}
+            {{ DeleteForm.password( class="dashboard-account-modal-form-input" ) }}<br>
+            {{ DeleteForm.delete( class="button dashboard-account-modal-form-button" ) }}
+        </form>
+
 
     </div>
+    {% endif %}
 </div>
+{% endif %}
 
 <script>
     var username = ('{{ current_user.username }}')
@@ -134,6 +146,7 @@
 <script src="{{url_for('static' , filename='javascript/dashboard-account.js')}}"></script>
 
 <script src="{{url_for('static' , filename='javascript/dashboard-account-request.js')}}"></script>
+
 
 
 {% endblock %}
