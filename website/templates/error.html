@@ -18,9 +18,9 @@
             <p class="error-content-body-description">{{response.description}} </p>
             <div class="error-content-body-buttons">
                 <button class='error-content-body-error-button  button' onclick="history.back()">Go Back</button>
-                {%if session['user']%}
+                {%if current_user.username%}
                 <button class='error-content-body-error-button  button'
-                    onclick="location.href = '/account/{{session['user']}}'">Go
+                    onclick="location.href = '/account/{{current_user.username}}'">Go
                     home</button>
                 {% else %}
                 <button class='error-content-body-error-button  button' onclick="location.href = '/'">Go home</button>

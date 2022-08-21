@@ -58,7 +58,6 @@ class SignUpForm(FlaskForm):
             return False
 
         if not email or not username or not password or not confirm:
-            flash('plese fill out all required feilds')
             return False
         if len(email) <= 4:
             flash('email must be longer than 4 charaters')
