@@ -174,7 +174,6 @@ html {
 .home-hero {
   z-index: 1;
   height: 100vh;
-  width: 100vw;
   background-image: url("./images/william-smith-_Kp1WFKoCRk-unsplash.webp");
   background-repeat: no-repeat;
   background-size: cover;
@@ -1430,7 +1429,7 @@ html {
   height: 100%;
   width: 100%;
   border-radius: 15px;
-  padding: 20px;
+  padding: min( 5% , 20px);
   background-color: var(--secondary-color);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -1557,7 +1556,7 @@ html {
 
 .dashboard-browse-program-card-title {
   font-weight: bold;
-  font-size: 30px;
+  font-size: clamp(15px, 6vw, 30px);
   width: 100%;
   text-overflow: ellipsis;
   margin-bottom: 20px;
@@ -1597,9 +1596,6 @@ html {
   }
   .dashboard-browse-form-text {
     grid-column: span 2;
-  }
-  .dashboard-browse-program-card {
-    width: calc(100% - 20px);
   }
 }
 
