@@ -480,6 +480,13 @@ html {
   cursor: pointer;
 }
 
+
+@media screen and (max-width: 500px) { 
+  .sign{
+    min-width: initial;
+  }
+}
+
 /* ----- form error message stylesv ----- */
 .form_errormessage_wrapper {
   margin-top: -10px;
