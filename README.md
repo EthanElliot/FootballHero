@@ -12,31 +12,25 @@ The purpose of my project is a gym exercise program creator for footballers. It 
 ### Dependencies
 
 * install requirements using 
-``` 
+```
 pip install -r requirements.txt 
 ```
 
 ### Installing
 
-* How/where to download your program
-* Any modifications needed to be made to files/folders
-* make a copy of the "config_example.cfg" with the name "config.cfg. " In this file configure all your google password information.
+make a copy of the "config_example.cfg" with the name "config.cfg." In this file configure all your google password information.
 
 
 ### Executing program
 
-* How to run the program
-* Step-by-step bullets
+* install all dependencies
+* Configure the config.cfg file
+* Run the "main.py" file. In terminal:
 ```
-code blocks for commands
+flask run
 ```
+(NOTE: make sure that the FLASK_APP env variable is set to "main.py")
 
-## Help
-
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
 
 ## Authors
 
@@ -45,6 +39,5 @@ command to run if program contains helper info
 
 ## License
 
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
+This project is licensed under the MIT License License - see the LICENSE.md file for details
 
-## Acknowledgments
