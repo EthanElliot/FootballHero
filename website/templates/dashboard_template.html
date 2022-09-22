@@ -19,10 +19,10 @@
                 <p>FootballHero</p>
             </div>
 
-            <form class="dashboard-navsearch" id='dashboard-navsearch' action="/browse">
-                <input type="text" placeholder="Search" name='query' id='query' />
+            <form class="dashboard-navsearch" id='dashboard-navsearch' action="/browse" method="post">
+                <input type="text" placeholder="Search" name='nav_query' id='nav_query' />
                 <span class="iconify" data-icon="ant-design:search-outlined" style="font-size: 20px"
-                    onclick=" document.getElementById('dashboard-navsearch').submit();"></span>
+                    onclick=" document.getElementById('dashboard-navsearch').submit(); "></span>
             </form>
             <div id="dashboard-nav-hamburger" class="dashboard-nav-hamburger">
                 <span></span>

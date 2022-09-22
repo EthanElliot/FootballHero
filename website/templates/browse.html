@@ -6,7 +6,7 @@
 <div class="dashboard-body-element dashboard-body-first">
     <form method="post" class="dashboard-browse-form">
         {{ form.csrf_token }}
-        {{ form.query( class="dashboard-browse-form-text", id="dashboard-browse-form-text") }}
+        {{ form.query( class="dashboard-browse-form-text", id="dashboard-browse-form-text", value=query) }}
         {{ form.filter(class="dashboard-browse-form-select", id="dashboard-browse-form-order") }}
         {{ form.submit(class="button dashboard-browse-form-search") }}
     </form>

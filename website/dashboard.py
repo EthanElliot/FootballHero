@@ -33,18 +33,24 @@ def to_JSON(data):
 @login_required
 def browse():
     form = BrowsePrograms()
-    # if the user searches something
+
+    query = ""
+    orderby = ""
+
+    # if the user searches something from nav
+    if request.form.get('nav_query'):
+        query = request.form.get('nav_query')
+
+    # if the user searches something from form
     if form.validate_on_submit():
         query = form.query.data
         orderby = form.filter.data
 
-        form.filter.default = orderby
-        form.query.default = query
+    form.filter.default = orderby
+    form.query.default = query
+    print(query)
 
-        return render_template('browse.html', form=form, query=query, orderby=orderby)
-
-    else:
-        return render_template('browse.html', form=form)
+    return render_template('browse.html', form=form, query=query, orderby=orderby)
 
 
 # account route
