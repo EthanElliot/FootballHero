@@ -1,152 +1,134 @@
-{% extends 'dashboard_template.html' %}
-
-
-{% block content %}
-
+{% extends 'dashboard_template.html' %} {% block content %}
 
 <div class="dashboard-body-element dashboard-body-first dashboard-body-account-first">
-
     <div class="dashboard-body-icon dashboard-body-tag">
         <span class="iconify" data-icon="bx:user"></span>
     </div>
 
-    <div class='dashboard-account-info-wrapper'>
+    <div class="dashboard-account-info-wrapper">
+        <p class="dashboard-account-info-username">{{user.username}}</p>
 
-        <p class="dashboard-account-info-username">{{user.username | capitalize}}</p>
+        {% if current_user.username == user.username %} {% if programscreated
+        |length == 0 %}
+        <p class="dashboard-account-info-subtitle">You have created 0 programs.</p>
+        {% elif programscreated |length == 1 %}
+        <p class="dashboard-account-info-subtitle">You have created 1 program.</p>
+        {% else %}
+        <p class="dashboard-account-info-subtitle">
+            You have created {{programscreated |length}} programs
+        </p>
+        {% endif%} {% else %} {% if programscreated |length == 0 %}
+        <p class="dashboard-account-info-subtitle">
+            This user has created 0 programs.
+        </p>
 
-        {% if current_user.username == user.username %}
-        {% if programscreated |length == 0 %}<p class="dashboard-account-info-subtitle">You have created 0 programs.</p>
-        {% elif programscreated |length == 1 %} <p class="dashboard-account-info-subtitle">You have created 1 program.
+        {% elif programscreated|length == 1 %}
+        <p class="dashboard-account-info-subtitle">
+            This user has created 1 program.
         </p>
         {% else %}
-        <p class="dashboard-account-info-subtitle">You have created {{programscreated |length}} programs</p>
-        {% endif%}
-        {% else %}
-
-        {% if programscreated |length == 0 %}<p class="dashboard-account-info-subtitle">This user has created 0
-            programs.
+        <p class="dashboard-account-info-subtitle">
+            This user has created {{programscreated |length}} programs
         </p>
-
-        {% elif programscreated|length == 1 %} <p class="dashboard-account-info-subtitle">This user has created 1
-            program.
-        </p>
-        {% else %}
-        <p class="dashboard-account-info-subtitle">This user has created {{programscreated |length}} programs
-        </p>
-        {% endif%}
-        {% endif %}
-
-        {% if current_user.username == user.username %}
+        {% endif%} {% endif %} {% if current_user.username == user.username %}
         <div class="dashboard-account-info-settings">
             <span class="iconify" data-icon="carbon:settings"></span>
             <a class="dashboard-account-info-settings-button" href="/signout">Log out</a>
 
             {% if Editform %}
-            <a id='dashboard-account-info-settings-editinfo' class="dashboard-account-info-settings-button">edit
+            <a id="dashboard-account-info-settings-editinfo" class="dashboard-account-info-settings-button">edit
                 info</a>
-            {% endif %}
-            {% if DeleteForm %}
-            <a id='dashboard-account-info-settings-deleteaccount' class="dashboard-account-info-settings-button">delete
+            {% endif %} {% if DeleteForm %}
+            <a id="dashboard-account-info-settings-deleteaccount" class="dashboard-account-info-settings-button">delete
                 account</a>
             {% endif %}
-
-
         </div>
         {% endif %}
-
     </div>
 </div>
-
-
 
 <div class="dashboard-body-element dashboard-account-programs-wrapper">
     <div class="dashboard-account-programs">
         {% for program in programscreated%}
         <div class="dashboard-account-programs-card">
-            <p> {{program.name}}</p>
+            <p>{{program.name}}</p>
 
             {% if program.cnt == 1 %}
-            <p> {{program.cnt}} user favorited this program.</p>
+            <p>{{program.cnt}} user favorited this program.</p>
             {% else %}
-            <p> {{program.cnt}} users favorited this program.</p>
+            <p>{{program.cnt}} users favorited this program.</p>
             {% endif %}
             <a onclick="location.href= '/program/{{program.id}}'">more...</a>
         </div>
 
         {% endfor %}
     </div>
-
-
-
-
 </div>
-
 
 {% if Editform or DeleteForm %}
 <div id="dashboard-account-modal" class="dashboard-modal-wrapper">
     {% if Editform %}
-    <div id='dashboard-account-modal-editinfo' class="dashboard-account-modal">
-        <div id='dashboard-account-modal-editinfo-close' class="dashboard-account-modal-close">
+    <div id="dashboard-account-modal-editinfo" class="dashboard-account-modal">
+        <div id="dashboard-account-modal-editinfo-close" class="dashboard-account-modal-close">
             <p>&#9547;</p>
         </div>
 
         <p class="dashboard-account-modal-form-title">Edit info</p>
 
-        <div class="dashboard-account-modal-form-error-wrapper" id='dashboard-account-modal-form-error-edit-wrapper'>
-            <p class="dashboard-account-modal-form-error-message" id='dashboard-account-modal-form-error-edit-message'>
+        <div class="dashboard-account-modal-form-error-wrapper" id="dashboard-account-modal-form-error-edit-wrapper">
+            <p class="dashboard-account-modal-form-error-message" id="dashboard-account-modal-form-error-edit-message">
             </p>
-            <p class="dashboard-account-modal-form-error-close" id='dashboard-account-modal-form-error-edit-close'>
+            <p class="dashboard-account-modal-form-error-close" id="dashboard-account-modal-form-error-edit-close">
                 &#9547;
             </p>
         </div>
 
-        <p class="dashboard-account-modal-form-paragraph">To Edit your account please enter your password. </p>
+        <p class="dashboard-account-modal-form-paragraph">
+            To Edit your account please enter your password.
+        </p>
 
         <form method="post">
-            {{ Editform.csrf_token }}
-            {{ Editform.username( class="dashboard-account-modal-form-input") }}
-            {{ Editform.password( class="dashboard-account-modal-form-input") }}<br>
+            {{ Editform.csrf_token }} {{ Editform.username(
+            class="dashboard-account-modal-form-input") }} {{ Editform.password(
+            class="dashboard-account-modal-form-input") }}<br />
             {{ Editform.edit( class="button dashboard-account-modal-form-button") }}
         </form>
-
     </div>
-    {% endif %}
-    {% if DeleteForm %}
-    <div id='dashboard-account-modal-deleteaccount' class="dashboard-account-modal">
-        <div id='dashboard-account-modal-deleteaccount-close' class="dashboard-account-modal-close">
+    {% endif %} {% if DeleteForm %}
+    <div id="dashboard-account-modal-deleteaccount" class="dashboard-account-modal">
+        <div id="dashboard-account-modal-deleteaccount-close" class="dashboard-account-modal-close">
             <p>&#9547;</p>
         </div>
 
         <p class="dashboard-account-modal-form-title">Delete</p>
-        <div class="dashboard-account-modal-form-error-wrapper" id='dashboard-account-modal-form-error-delete-wrapper'>
+        <div class="dashboard-account-modal-form-error-wrapper" id="dashboard-account-modal-form-error-delete-wrapper">
             <p class="dashboard-account-modal-form-error-message"
-                id='dashboard-account-modal-form-error-delete-message'></p>
-            <p class="dashboard-account-modal-form-error-close" id='dashboard-account-modal-form-error-delete-close'>
+                id="dashboard-account-modal-form-error-delete-message"></p>
+            <p class="dashboard-account-modal-form-error-close" id="dashboard-account-modal-form-error-delete-close">
                 &#9547;
             </p>
         </div>
-        <p class="dashboard-account-modal-form-paragraph">To delete your account please enter your password. </p>
+        <p class="dashboard-account-modal-form-paragraph">
+            To delete your account please enter your password.
+        </p>
 
         <form method="post">
-            {{ DeleteForm.csrf_token }}
-            {{ DeleteForm.password( class="dashboard-account-modal-form-input" ) }}<br>
-            {{ DeleteForm.delete( class="button dashboard-account-modal-form-button" ) }}
+            {{ DeleteForm.csrf_token }} {{ DeleteForm.password(
+            class="dashboard-account-modal-form-input" ) }}<br />
+            {{ DeleteForm.delete( class="button dashboard-account-modal-form-button" )
+            }}
         </form>
-
-
     </div>
     {% endif %}
 </div>
 {% endif %}
 
 <script>
-    var username = ('{{ current_user.username }}')
+    var username = "{{ current_user.username }}";
 </script>
 
 <script src="{{url_for('static' , filename='javascript/dashboard-account.js')}}"></script>
 
 <script src="{{url_for('static' , filename='javascript/dashboard-account-request.js')}}"></script>
-
-
 
 {% endblock %}

@@ -76,6 +76,7 @@ html {
     transform: rotate(360deg);
   }
 }
+
 /* --------------- styles for error page --------------- */
 
 .error-content-body {
@@ -138,6 +139,7 @@ html {
   font-weight: bold;
   font-size: 20px;
 }
+
 .home-nav-image {
   width: 35px;
   height: 35px;
@@ -229,15 +231,18 @@ html {
   top: -20px;
   left: 0;
 }
+
 .home-section-image-wrapper {
   width: 50%;
 }
+
 .home-section-text-wrapper {
   width: 50%;
   display: flex;
   align-items: flex-end;
   flex-direction: column;
 }
+
 .home-section-image {
   width: 35vw;
   max-width: 400px;
@@ -248,7 +253,7 @@ html {
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  background-image: url("./images/newFile-2.jpg");
+  background-image: url("./images/newFile-2.webp");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -302,6 +307,7 @@ html {
 
 /* ---- media query for 768px ---- */
 @media screen and (max-width: 768px) {
+
   /* ---- nav styles ---- */
   .home-nav-hamburger {
     display: block;
@@ -318,6 +324,7 @@ html {
   .home-nav-hamburger.active span:nth-child(3) {
     transform: translateY(-8px) rotate(-45deg);
   }
+
   .home-nav-butons {
     position: fixed;
     left: 0;
@@ -342,25 +349,31 @@ html {
     box-shadow: inset 0px 1px 2px 0px rgba(60, 64, 67, 0.3),
       0px 1px 2px 0px rgba(60, 64, 67, 0.3);
   }
+
   .home-nav-butons ul {
     flex-direction: column;
     row-gap: 10px;
   }
+
   .home-nav-butons.active {
     top: 0;
   }
+
   /* ---- hero styles ---- */
   .home-hero {
     align-items: center;
     background-position: 70% 70%;
   }
+
   .home-hero-text {
     text-align: center;
   }
+
   /* ---- section styles ---- */
   .home-section {
     flex-direction: column;
   }
+
   .home-section-image-wrapper {
     display: flex;
     align-items: center;
@@ -368,6 +381,7 @@ html {
     width: 85%;
     margin-bottom: 5vh;
   }
+
   .home-section-image {
     width: 50vw;
     height: 50vw;
@@ -376,9 +390,11 @@ html {
   .home-section-text-wrapper {
     width: 85%;
   }
+
   .home-section-text-wrapper {
     align-items: center;
   }
+
   .home-section-text {
     text-align: center;
   }
@@ -422,6 +438,7 @@ html {
   max-height: 400px;
   min-height: 375px;
 }
+
 .sign-form {
   position: relative;
   flex-grow: 1;
@@ -436,6 +453,7 @@ html {
   padding-left: 15px;
   background-color: var(--secondary-color);
 }
+
 .sign-title {
   font-weight: bold;
   font-size: 20px;
@@ -480,9 +498,8 @@ html {
   cursor: pointer;
 }
 
-
-@media screen and (max-width: 500px) { 
-  .sign{
+@media screen and (max-width: 500px) {
+  .sign {
     min-width: initial;
   }
 }
@@ -533,6 +550,7 @@ html {
   font-size: 25px;
   color: var(--text-color-2);
 }
+
 .verify-content-body-description {
   font-size: 15px;
   margin-top: 10px;
@@ -906,6 +924,7 @@ html {
   transform: rotate(45deg);
   font-size: 15px;
 }
+
 .dashboard-create-form-removeexercise:hover {
   cursor: pointer;
 }
@@ -1102,11 +1121,13 @@ html {
 .dashboard-create-modal-exercisesbody-link:hover {
   cursor: pointer;
 }
+
 /* ---- media query for 768px ---- */
 @media screen and (max-width: 768px) {
   .create-form-display-grid {
     grid-template-columns: 1fr 1fr;
   }
+
   .create-form-text {
     width: 100%;
   }
@@ -1115,12 +1136,15 @@ html {
   .dashboard-create-modal-button {
     width: 70px;
   }
+
   .dashboard-create-modal-button-cancel {
     width: 70px;
   }
+
   .dashboard-create-modal-content {
     grid-template-rows: 90px auto 40px;
   }
+
   .dashboard-create-modal-forminputs {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -1130,13 +1154,16 @@ html {
   .dashboard-create-modal-forminputs p {
     display: none;
   }
+
   .dashboard-create-modal-text {
     grid-column: span 2;
   }
+
   .dashboard-create-modal-exercise {
     grid-template-columns: 1fr;
   }
 }
+
 /* ---- media query for 320px ---- */
 @media screen and (max-width: 340px) {
   .create-form-display-grid {
@@ -1203,6 +1230,7 @@ html {
 .dashboard-program-info-settings a:first-child {
   margin-left: 10px;
 }
+
 .dashboard-program-info-settings a:hover {
   cursor: pointer;
 }
@@ -1272,9 +1300,11 @@ html {
   .dashboard-program-info-wrapper {
     margin-left: 0;
   }
+
   .dashboard-program-exercises {
     grid-template-columns: 1fr 1fr;
   }
+
   .dashboard-program-info-wrapper {
     width: 100%;
   }
@@ -1293,6 +1323,7 @@ html {
   display: flex;
   align-items: center;
 }
+
 .dashboard-account-info-wrapper {
   display: flex;
   flex-direction: column;
@@ -1368,10 +1399,12 @@ html {
 .dashboard-account-modal-close:hover {
   cursor: pointer;
 }
+
 .dashboard-account-modal-close p {
   transform: rotate(45deg);
   font-size: 20px;
 }
+
 .dashboard-account-modal-form-title {
   font-weight: bold;
   font-size: 30px;
@@ -1396,6 +1429,7 @@ html {
 .dashboard-account-modal-form-input:first-child {
   margin-top: 30px;
 }
+
 .dashboard-account-modal-form-button {
   height: 40px;
   width: 90px;
@@ -1423,6 +1457,7 @@ html {
 .dashboard-account-modal-form-error-close {
   transform: rotate(45deg);
 }
+
 .dashboard-account-modal-form-error-close:hover {
   cursor: pointer;
 }
@@ -1432,11 +1467,12 @@ html {
   height: 60%;
   min-height: 400px;
 }
+
 .dashboard-account-programs {
   height: 100%;
   width: 100%;
   border-radius: 15px;
-  padding: min( 5% , 20px);
+  padding: min(5%, 20px);
   background-color: var(--secondary-color);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -1446,6 +1482,7 @@ html {
   grid-template-rows: repeat(auto-fill, 120px);
   overflow-y: scroll;
 }
+
 .dashboard-account-programs-card {
   background-color: var(--background-colour);
   height: 100%;
@@ -1514,6 +1551,7 @@ html {
 
   background-color: var(--secondary-color);
 }
+
 .dashboard-browse-form-text {
   height: 40px;
   width: 100%;
@@ -1526,6 +1564,7 @@ html {
 .dashboard-body-browse {
   margin-top: 20px;
 }
+
 .dashboard-browse-program {
   width: 100%;
   height: 100%;
@@ -1597,10 +1636,12 @@ html {
   .dashboard-browse-programs {
     grid-template-columns: 1fr;
   }
+
   .dashboard-browse-form {
     grid-template-columns: 2fr 1fr;
     grid-row-gap: 10px;
   }
+
   .dashboard-browse-form-text {
     grid-column: span 2;
   }
