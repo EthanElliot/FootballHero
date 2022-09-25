@@ -49,12 +49,13 @@ def create_app():
     from .views import views
     from .auth import auth
     from .dashboard import dashboard
-    from .models import User, Program, Exercise, Type, FavoriteProgram, ExerciseProgram
+    from .models import User, Program, Exercise,\
+        Type, FavoriteProgram, ExerciseProgram
 
     # configue login user
     @login_manager.user_loader
     def load_user(user_id):
-        # since the user_id is just the primary key of our user table, use it in the query for the user
+        # we use the primary key from our user table
         return User.query.get(int(user_id))
 
     # redgister the blueprints

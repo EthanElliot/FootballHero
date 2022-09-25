@@ -1,7 +1,9 @@
 # imports
 import logging
-from flask import Blueprint, flash, render_template, redirect, url_for, abort, request, jsonify, make_response
-from .models import User, Exercise, Type, Program, ExerciseProgram, FavoriteProgram
+from flask import Blueprint, flash, render_template,\
+    redirect, url_for, abort, request, jsonify, make_response
+from .models import User, Exercise, Type, Program, \
+    ExerciseProgram, FavoriteProgram
 from .import db
 import json
 from werkzeug.security import check_password_hash
@@ -50,7 +52,12 @@ def browse():
     form.query.default = query
     print(query)
 
-    return render_template('browse.html', form=form, query=query, orderby=orderby)
+    return render_template(
+        'browse.html',
+        form=form,
+        query=query,
+        orderby=orderby
+    )
 
 
 # account route
@@ -98,7 +105,7 @@ def account(username):
         if Editform.validate_on_submit() and Editform.edit.data:
             user = db.session.query(User).filter(
                 User.username == current_user.username).first()
-            if check_password_hash(user.password, DeleteForm.password.data) == True:
+            if check_password_hash(user.password, DeleteForm.password.data):
                 new_username = Editform.username.data
 
                 check = User.query.filter(
@@ -110,25 +117,42 @@ def account(username):
                     user.username = (new_username)
                     db.session.commit()
                     current_user.username = new_username
-                    return redirect(url_for('dashboard.account', username=new_username))
+                    return redirect(
+                        url_for(
+                            'dashboard.account',
+                            username=new_username
+                        )
+                    )
 
         # delete account
         if DeleteForm.validate_on_submit() and DeleteForm.delete.data:
             user = db.session.query(User).filter(
                 User.username == current_user.username).first()
-            if check_password_hash(user.password, DeleteForm.password.data) == True:
+            if check_password_hash(user.password, DeleteForm.password.data):
                 # delete program
                 program_id = db.session.query(Program.id).filter(
                     Program.user_id == user.id).first()
 
                 # if user has created programs delete
                 if program_id:
-                    db.session.query(ExerciseProgram).filter(
-                        ExerciseProgram.columns.program_id == program_id[0]).delete()
-                    db.session.query(Program).filter(
-                        Program.user_id == user.id).delete()
-                    db.session.query(FavoriteProgram).filter(
-                        FavoriteProgram.columns.program_id == program_id[0]).delete()
+                    db.session.\
+                        query(ExerciseProgram)\
+                        .filter(
+                            ExerciseProgram.columns.program_id == program_id[0]
+                        )\
+                        .delete()
+                    db.session\
+                        .query(Program)\
+                        .filter(
+                            Program.user_id == user.id
+                        )\
+                        .delete()
+                    db.session.\
+                        query(FavoriteProgram)\
+                        .filter(
+                            FavoriteProgram.columns.program_id == program_id[0]
+                        )\
+                        .delete()
 
                 # delete favorited programs
                 db.session.query(FavoriteProgram).filter(
@@ -144,10 +168,20 @@ def account(username):
 
         Editform.username.data = current_user.username
         # render the page
-        return render_template('account.html', user=user, programscreated=programscreated, Editform=Editform, DeleteForm=DeleteForm)
+        return render_template(
+            'account.html',
+            user=user,
+            programscreated=programscreated,
+            Editform=Editform,
+            DeleteForm=DeleteForm
+        )
 
     # render the page
-    return render_template('account.html', user=user, programscreated=programscreated)
+    return render_template(
+        'account.html',
+        user=user,
+        programscreated=programscreated
+    )
 
 
 # create route
@@ -156,7 +190,10 @@ def account(username):
 def create():
     # get the exercise types
     types = Type.query.all()
-    return render_template('create.html',  types=types)
+    return render_template(
+        'create.html',
+        types=types
+    )
 
 
 # exercise route
@@ -300,17 +337,27 @@ def delete_program():
     # check that user is logged in
     programdata = json.loads(request.get_data())
 
-    # check if the user deleting the program is the user logged in in session data
+    # check if the user is verified
     if current_user.username != programdata['username']:
         return jsonify(False)
 
     # delete data from all tables where id is the id sent.
-    # *not sure if this is the propprer way to do this some guidance would be appreciated*
-    db.session.query(ExerciseProgram).filter(
-        ExerciseProgram.columns.program_id == programdata['id']).delete()
-    db.session.query(FavoriteProgram).filter(
-        FavoriteProgram.columns.program_id == programdata['id']).delete()
-    Program.query.filter(Program.id == programdata['id']).delete()
+    db.session\
+        .query(ExerciseProgram)\
+        .filter(
+            ExerciseProgram.columns.program_id == programdata['id']
+        )\
+        .delete()
+    db.session\
+        .query(FavoriteProgram)\
+        .filter(
+            FavoriteProgram.columns.program_id == programdata['id']
+        )\
+        .delete()
+    Program.query.\
+        filter(Program.id == programdata['id']
+               )\
+        .delete()
     db.session.commit()
 
     return jsonify(True)
@@ -324,19 +371,30 @@ def like_program():
     programdata = json.loads(request.get_data())
     program_id = programdata['id']
 
-    # this is used to check if user has liked the program... returns true if they have and returns false if they havent
+    # this is used to check if user has liked the program.
 
     # get the id of the user
     user_id = current_user.id
 
-    # query the favoriteProgram relationship to see if the user id has liked the program with the id of the entered id.
-    user_like = db.session.query(FavoriteProgram).filter(
-        (FavoriteProgram.columns.user_id == int(user_id)) & (FavoriteProgram.columns.program_id == program_id)).first()
+    # query the favoriteProgram relationship to see if the user id has
+    # liked the program with the id of the entered.
+    user_like = db.session\
+        .query(FavoriteProgram)\
+        .filter(
+            (FavoriteProgram.columns.user_id == int(user_id)) &
+            (FavoriteProgram.columns.program_id == program_id)
+        )\
+        .first()
 
-    # create outcome and add the relationship if the user hasnt liked or remove if they have
+    # update user relationship
     if user_like:
-        db.session.query(FavoriteProgram).filter(
-            (FavoriteProgram.columns.user_id == int(user_id)) & (FavoriteProgram.columns.program_id == program_id)).delete()
+        db.session\
+            .query(FavoriteProgram)\
+            .filter(
+                (FavoriteProgram.columns.user_id == int(user_id)) &
+                (FavoriteProgram.columns.program_id == program_id)
+            )\
+            .delete()
         db.session.commit()
         liked_by_user = False
 
@@ -369,8 +427,16 @@ def like_program():
 def program(id):
 
     # get the program info
-    program_info = db.session.query(
-        Program.id, Program.name, Program.description, User.username).join(User).filter(Program.id == id).first()
+    program_info = db.session\
+        .query(
+            Program.id,
+            Program.name,
+            Program.description,
+            User.username
+        )\
+        .join(User)\
+        .filter(Program.id == id)\
+        .first()
 
     # if program dosent exist return 404
     if not program_info:
@@ -379,13 +445,19 @@ def program(id):
     # get the exercises from the program
     exercises = Program.query.filter(Program.id == id).first().exercises
 
-    # this is used to check if user has liked the program... returns true if they have and returns false if they havent
+    # this is used to check if user has liked the program
     # get the id of the user
     user_id = current_user.id
 
-    # query the favoriteProgram relationship to see if the user id has liked the program with the id of the entered id.
-    user_like = db.session.query(FavoriteProgram).filter(
-        (FavoriteProgram.columns.user_id == int(user_id)) & (FavoriteProgram.columns.program_id == int(id))).first()
+    # query the favoriteProgram relationship to see if
+    # the user id has liked the program
+    user_like = db.session\
+        .query(FavoriteProgram)\
+        .filter(
+            (FavoriteProgram.columns.user_id == int(user_id)) &
+            (FavoriteProgram.columns.program_id == int(id))
+        )\
+        .first()
 
     if user_like:
         liked_by_user = True
@@ -397,7 +469,14 @@ def program(id):
         (FavoriteProgram.columns.program_id == int(id))).count()
 
     # render page
-    return render_template('program.html', username=current_user.username, program_info=program_info, exercises=exercises, liked_by_user=liked_by_user, likes=likes)
+    return render_template(
+        'program.html',
+        username=current_user.username,
+        program_info=program_info,
+        exercises=exercises,
+        liked_by_user=liked_by_user,
+        likes=likes
+    )
 
 
 # route for load program
@@ -431,7 +510,8 @@ def load_programs():
              likes_query.c.programid == Program.id,
              isouter=True
              ).join(User).\
-        filter(Program.name.like(f'%{query}%'))
+        filter(Program.name.like(f'%{query}%')).\
+        subquery()
 
     if orderby == 'newest':
         programscreated = programscreated.order_by(

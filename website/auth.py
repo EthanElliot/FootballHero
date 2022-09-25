@@ -1,18 +1,14 @@
 # imports
-from flask import Blueprint, render_template, redirect, url_for, request, flash, abort
+from flask import Blueprint, render_template, redirect, url_for, request,\
+    flash, abort
 from itsdangerous import SignatureExpired, BadSignature
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import User
 from . import db, s, mail
 from flask_mail import Message
 from flask_login import login_required, login_user, logout_user, current_user
-from .forms import SignInForm, SignUpForm, SendForgotPasswordLink, ResetPassword
-
-
-# code for logging the sql queries (used for testing)
-import logging
-logging.basicConfig()
-logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+from .forms import SignInForm, SignUpForm, SendForgotPasswordLink,\
+    ResetPassword
 
 
 # flask blueprints
@@ -24,7 +20,12 @@ auth = Blueprint('auth', __name__)
 def signup():
     # check if user is logged in
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard.account', username=current_user.username))
+        return redirect(
+            url_for(
+                'dashboard.account',
+                username=current_user.username
+            )
+        )
 
     # create form
     form = SignUpForm()
@@ -34,6 +35,10 @@ def signup():
         email = form.email.data
         username = form.username.data
         password = str(form.password.data)
+
+        # make username lowrcase
+
+        username = username.lower()
 
         # send email with link
         try:
@@ -47,10 +52,14 @@ def signup():
             link = url_for('auth.verify_email',
                            token=token, _external=True)
 
-            msg.html = f'''<strong>Welcome to FootballHero,</strong> <br><br>
-                            To verify your account click the link below:<br><br>
-                            <a href={link}>verify</a> <br><br>
-                            If you did not create an account, no further action is required '''
+            msg.html = f'''<strong>Welcome to FootballHero,</strong>
+                            <br><br>
+                            To verify your account click the link below:
+                            <br><br>
+                            <a href={link}>verify</a>
+                            <br><br>
+                            If you did not create an account,
+                            no further action is required '''
 
             mail.send(msg)
 
@@ -65,9 +74,17 @@ def signup():
         db.session.add(new_user)
         db.session.commit()
 
-        return render_template("notify.html", message_header="Before you can access your account please validate your email", message_sub="to validate your account check your email.")
+        return render_template(
+            "notify.html",
+            message_header="""Before you can access your
+                            account please validate your email""",
+            message_sub="to validate your account check your email."
+        )
 
-    return render_template('signup.html', form=form)
+    return render_template(
+        'signup.html',
+        form=form
+    )
 
 
 # route to sign the user in
@@ -75,7 +92,12 @@ def signup():
 def signin():
     # check if user is logged in
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard.account', username=current_user.username))
+        return redirect(
+            url_for(
+                'dashboard.account',
+                username=current_user.username
+            )
+        )
 
     # create form
     form = SignInForm()
@@ -84,16 +106,25 @@ def signin():
     if form.validate_on_submit():
         # authenticate and log user in
         user = User.query.filter(
-            (User.email == form.identifier.data) | (User.username == form.identifier.data)).first()
+            (
+                User.email == form.identifier.data) |
+            User.username == form.identifier.data
+        )\
+            .first()
         # check if user is regestered
         if user:
             # check password hash
-            if check_password_hash(user.password, form.password.data) == True:
+            if check_password_hash(user.password, form.password.data):
                 # check if user is verified
-                if user.verified == True:
+                if user.verified:
                     # if requiremets are met log the user in
                     login_user(user)
-                    return redirect(url_for('dashboard.account', username=current_user.username))
+                    return redirect(
+                        url_for(
+                            'dashboard.account',
+                            username=current_user.username
+                        )
+                    )
 
                 else:
                     flash('email is not verified')
@@ -102,7 +133,10 @@ def signin():
         else:
             flash('no user registered with that email or username')
 
-    return render_template('signin.html', form=form)
+    return render_template(
+        'signin.html',
+        form=form
+    )
 
 
 # route to sign the user out
@@ -131,7 +165,13 @@ def verify_email(token):
 
     login_user(user)
 
-    return redirect(url_for('dashboard.account', username=current_user.username))
+    return redirect(
+        url_for
+        (
+            'dashboard.account',
+            username=current_user.username
+        )
+    )
 
 
 # route for user to request update to user password
@@ -139,7 +179,13 @@ def verify_email(token):
 def send_reset_email():
     # if user is logged in redirect to dashboard
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard.account', username=current_user.username))
+        return redirect(
+            url_for
+            (
+                'dashboard.account',
+                username=current_user.username
+            )
+        )
 
     form = SendForgotPasswordLink()
 
@@ -155,7 +201,10 @@ def send_reset_email():
             (User.email == email)).first()
         if not user:
             flash('no user registered with that email')
-            return render_template('reset_password_email.html', form=form)
+            return render_template(
+                'reset_password_email.html',
+                form=form
+            )
 
         # generate email
         else:
@@ -169,18 +218,29 @@ def send_reset_email():
                 link = url_for('auth.reset_user_password',
                                token=token, _external=True)
 
-                msg.html = f'''<strong>Reset password,</strong> <br><br>
-                                To reset your password click the link below:<br><br>
-                                <a href={link}>reset</a> <br><br>
-                                If you did try to reset your password, no further action is required '''
+                msg.html = f'''<strong>Reset password,</strong>
+                                <br><br>
+                                To reset your password click the link below:
+                                <br><br>
+                                <a href={link}>reset</a>
+                                <br><br>
+                                If you did try to reset your password,
+                                no further action is required '''
 
                 mail.send(msg)
             except:
                 abort(500)
 
-            return render_template("notify.html", message_header="To update your password", message_sub="check your email.")
+            return render_template(
+                "notify.html",
+                message_header="To update your password",
+                message_sub="check your email."
+            )
     else:
-        return render_template('reset_password_email.html', form=form)
+        return render_template(
+            'reset_password_email.html',
+            form=form
+        )
 
 
 # route for user to update password
@@ -222,4 +282,7 @@ def reset_user_password(token):
         flash('password updated')
         return redirect(url_for('auth.signin'))
     else:
-        return render_template('reset_password_form.html', form=form)
+        return render_template(
+            'reset_password_form.html',
+            form=form
+        )

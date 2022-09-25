@@ -4,18 +4,35 @@ from flask_login import UserMixin
 
 
 # FavoriteProgram table database model
-FavoriteProgram = db.Table('FavoriteProgram',
-                           db.Column('user_id', db.Integer,
-                                     db.ForeignKey('user.id')),
-                           db.Column('program_id', db.Integer, db.ForeignKey('program.id')))
+FavoriteProgram = db.Table(
+    'FavoriteProgram',
+    db.Column(
+        'user_id',
+        db.Integer,
+        db.ForeignKey('user.id')
+    ),
+    db.Column(
+        'program_id',
+        db.Integer,
+        db.ForeignKey('program.id')
+    )
+)
 
 
 # ExerciseProgram table database model
-ExerciseProgram = db.Table('ExerciseProgram',
-                           db.Column('program_id', db.Integer,
-                                     db.ForeignKey('program.id')),
-                           db.Column('exercise_id', db.Integer,
-                                     db.ForeignKey('exercise.id')))
+ExerciseProgram = db.Table(
+    'ExerciseProgram',
+    db.Column(
+        'program_id',
+        db.Integer,
+        db.ForeignKey('program.id')
+    ),
+    db.Column(
+        'exercise_id',
+        db.Integer,
+        db.ForeignKey('exercise.id')
+    )
+)
 
 
 # User table database model
@@ -28,7 +45,11 @@ class User(db.Model, UserMixin):
 
     programs = db.relationship('Program')
     favorites = db.relationship(
-        'Program', secondary=FavoriteProgram, backref=db.backref('favoriteprograms'),  lazy='dynamic')
+        'Program',
+        secondary=FavoriteProgram,
+        backref=db.backref('favoriteprograms'),
+        lazy='dynamic'
+    )
 
 
 # program table database model
@@ -38,9 +59,16 @@ class Program(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     description = db.Column(db.String(3000))
     exercises = db.relationship(
-        'Exercise', secondary=ExerciseProgram, backref='exercises')
+        'Exercise',
+        secondary=ExerciseProgram,
+        backref='exercises'
+    )
     favorited = db.relationship(
-        'User', secondary=FavoriteProgram, backref=db.backref('favirouted'),  lazy='dynamic')
+        'User',
+        secondary=FavoriteProgram,
+        backref=db.backref('favirouted'),
+        lazy='dynamic'
+    )
 
 
 # exercise table database model
