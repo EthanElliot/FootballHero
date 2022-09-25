@@ -106,11 +106,11 @@ def signin():
     if form.validate_on_submit():
         # authenticate and log user in
         user = User.query.filter(
-            (
-                User.email == form.identifier.data) |
-            User.username == form.identifier.data
-        )\
-            .first()
+            ((User.email == str(form.identifier.data)) |
+             (User.username == str(form.identifier.data))
+             )
+        ).first()
+        print(user)
         # check if user is regestered
         if user:
             # check password hash

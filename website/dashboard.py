@@ -106,7 +106,7 @@ def account(username):
             user = db.session.query(User).filter(
                 User.username == current_user.username).first()
             if check_password_hash(user.password, DeleteForm.password.data):
-                new_username = Editform.username.data
+                new_username = (Editform.username.data).lower()
 
                 check = User.query.filter(
                     (User.username == new_username)).first()
@@ -513,8 +513,7 @@ def load_programs():
              likes_query.c.programid == Program.id,
              isouter=True
              ).join(User).\
-        filter(Program.name.like(f'%{query}%')).\
-        subquery()
+        filter(Program.name.like(f'%{query}%'))
 
     if orderby == 'newest':
         programscreated = programscreated.order_by(

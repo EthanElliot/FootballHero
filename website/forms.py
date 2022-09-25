@@ -184,6 +184,40 @@ class AccountEditInfo(FlaskForm):
         render_kw={"placeholder": "Password"})
     edit = SubmitField('Edit')
 
+    def validate_on_submit(self):
+        username = str(self.username.data)
+
+        # make username lower case for checks
+        username = username.lower()
+
+        # query the database to check the username and email
+        check = User.query.filter(User.username == username).first()
+
+        if check:
+            return False
+
+        if not username:
+            return False
+
+        if len(username) <= 4:
+
+            return False
+
+        if len(username) > 150:
+            return False
+
+        for char in username:
+            if char not in [
+                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+                'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+                'u', 'v', 'w', 'x', 'y', 'z', '0', "1", '2', '3',
+                    '4', '5', '6', '7', '8', '9']:
+
+                return False
+
+        else:
+            return True
+
 
 class AccountDelete(FlaskForm):
 
