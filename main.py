@@ -16,7 +16,10 @@ def handle_exception(e):
         "description": e.description,
     }
 
-    return render_template('error.html', response=response)
+    return render_template(
+        'error.html',
+        response=response
+    )
 
 
 if __name__ == "__main__":

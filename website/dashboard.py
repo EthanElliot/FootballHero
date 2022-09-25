@@ -212,7 +212,10 @@ def exercise(id):
         first()
     # if exercise exists render the page
     if exercise:
-        return render_template('exercise.html', exercise=exercise)
+        return render_template(
+            'exercise.html',
+            exercise=exercise
+        )
     # if exercise doesnt exist return a error
     else:
         abort(404)
