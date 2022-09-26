@@ -26,7 +26,7 @@ def to_JSON(data):
     exercises = []
     for row in data:
         exercises.append([x for x in row])
-        # found from https://stackoverflow.com/questions/34715593/rows-returned-by-pyodbc-are-not-json-serializable
+        # found from https://stackoverflow.com/questions/34715593/rows-returned-by-pyodbc-are-not-json-serializable  # noqa E501
     return exercises
 
 
