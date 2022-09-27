@@ -63,12 +63,6 @@ class Program(db.Model):
         secondary=ExerciseProgram,
         backref='exercises'
     )
-    favorited = db.relationship(
-        'User',
-        secondary=FavoriteProgram,
-        backref=db.backref('favirouted'),
-        lazy='dynamic'
-    )
 
 
 # exercise table database model

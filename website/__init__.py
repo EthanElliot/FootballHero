@@ -1,12 +1,14 @@
 # imports
-from flask import Flask
+from flask import Flask, redirect, url_for
 import secrets
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_migrate import Migrate
 from flask_mail import Mail
 from itsdangerous import URLSafeSerializer
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 
 # db variables
 db = SQLAlchemy()
@@ -21,7 +23,19 @@ mail = Mail()
 # set up db migration
 migrate = Migrate()
 
+# set up login manager
 login_manager = LoginManager()
+
+# setup flask admin
+admin = Admin()
+
+
+class MyModelView(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for("auth.signin"))
 
 
 # create flask app function
@@ -65,6 +79,12 @@ def create_app():
 
     # create db
     create_database(app)
+
+    # configure flask admin
+    admin.init_app(app)
+    admin.add_view(MyModelView(User, db.session))
+    admin.add_view(MyModelView(Program, db.session))
+    admin.add_view(MyModelView(Exercise, db.session))
 
     # return app
     return app
