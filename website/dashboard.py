@@ -1,5 +1,4 @@
 # imports
-import logging
 from flask import Blueprint, flash, render_template,\
     redirect, url_for, abort, request, jsonify, make_response
 from .models import User, Exercise, Type, Program, \
@@ -14,11 +13,6 @@ from .forms import BrowsePrograms, AccountEditInfo, AccountDelete
 
 # make flask blueprint
 dashboard = Blueprint('dashboard', __name__)
-
-
-# code for logging the sql queries (used for testing)
-logging.basicConfig()
-logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 
 # function to make sqlalchemy responce jsonifyable
@@ -50,7 +44,6 @@ def browse():
 
     form.filter.default = orderby
     form.query.default = query
-    print(query)
 
     return render_template(
         'browse.html',
@@ -113,7 +106,6 @@ def account(username):
                 # checks before updating the data
                 if not check:
                     # update the user info
-                    print(new_username)
                     user.username = (new_username)
                     db.session.commit()
                     current_user.username = new_username

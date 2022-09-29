@@ -61,6 +61,7 @@ def signup():
                             If you did not create an account,
                             no further action is required '''
 
+            # send
             mail.send(msg)
 
         except:
@@ -110,7 +111,7 @@ def signin():
              (User.username == str(form.identifier.data))
              )
         ).first()
-        print(user)
+
         # check if user is regestered
         if user:
             # check password hash
@@ -191,8 +192,6 @@ def send_reset_email():
 
     # if form data is sent
     if form.validate_on_submit():
-        print('yesirr')
-
         # get form input
         email = form.email.data
 

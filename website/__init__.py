@@ -43,7 +43,7 @@ def create_app():
     # configure the flask app and secret keys
     app = Flask(__name__)
     app.config['SECRET_KEY'] = secrets.token_urlsafe(32)
-    
+
     # set up flask mail
     app.config.from_pyfile('config.cfg')
     mail.init_app(app)
@@ -79,8 +79,7 @@ def create_app():
     # create db
     create_database(app)
 
-    print( app.debug )
-    if app.debug == True:
+    if app.debug:
         # configure flask admin
         admin.init_app(app)
         admin.add_view(MyModelView(User, db.session))
